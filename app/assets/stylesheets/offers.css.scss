@@ -4,8 +4,7 @@
 
 div#offers {
 
-   background: url(semi-tsp.png) repeat;
-   width: 640px;
+   background: url(semi-tsp.png) repeat; width: 640px;
    float: left;
    border-radius: 5px;
    box-shadow:  0px 0px 2px $main-color;
@@ -230,3 +229,32 @@ div#offers {
   }
 
 }
+
+#pagination-top {
+  margin: 5px;
+    a {
+      display: inline-block;
+      padding: 3px 5px;
+      border: 1px solid $main-color;
+      color: white;
+      text-decoration: none;
+      border-radius: 3px;
+      background: -webkit-linear-gradient(#0299CC, #007FAC);
+      font-size: 12px;
+
+      &:hover {
+        background: $main-color;
+      }
+  }
+
+  .current {
+    display: inline-block;
+    padding: 3px 5px;
+    border: 1px solid $main-color;
+    color: white;
+    border-radius: 3px;
+    background: $main-color;
+    font-size: 12px;
+  }
+}
+

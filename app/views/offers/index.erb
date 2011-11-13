@@ -1,8 +1,10 @@
-<h1> Welcome to Kuponavt! </h1>
-
-<%= paginate @offers %>
-
 <div id='offers'>
+
+  <center>
+    <div id='pagination-top'>
+      <%= paginate @offers, :remote => true %>
+    </div>
+  </center>
 
   <div id='sort'>
       <h2>
@@ -14,9 +16,9 @@
       </p>
   </div>
 
-  <% @offers.each do |offer| %>
-    <%= render :partial => 'offers/offer', :locals => { :offer => offer } %>
-  <% end %>
+  <div id='all-offers'>
+    <%= render :partial => 'offers/offers' %>
+  </div>
 
 </div>
 
