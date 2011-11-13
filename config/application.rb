@@ -46,6 +46,7 @@ module Kuponavt
     config.autoload_paths += Dir["#{config.root}/lib"]
     config.autoload_paths += Dir["#{config.root}/lib/**/"]
     config.autoload_paths += Dir["#{config.root}/app/parsers"]
+    config.autoload_paths += Dir["#{config.root}/app/parsers/**/"]
 
     # Configure the default encoding used in templates for Ruby 1.9.
     config.encoding = "utf-8"
