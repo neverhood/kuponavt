@@ -7,3 +7,25 @@
 //= require jquery
 //= require jquery_ujs
 //= require_tree .
+
+$('document').ready(function() {
+
+    $('img.help').click( function() {
+        $('div#site-description').show();
+        $(this).addClass('high-opacity');
+    });
+
+    $('img.close-popup').click( function() {
+        $('div#site-description').hide();
+        $('img.help').removeClass('high-opacity');
+    });
+
+    $('#all-offers-check').hover(function() {
+        $('#all-categories').toggleClass('hover');
+    });
+
+    $('span.all-tags').hover(function() {
+        $(this).parent().next().toggleClass('hover');
+    });
+
+});

@@ -1,0 +1,45 @@
+<div class='offer' id='offer-<%= offer.id %>'>
+  <h2>
+    <%= link_to offer.title, offer_path(offer) %>
+  </h2>
+
+  <div class='offer-left-side'>
+    <%= image_tag offer.image_url %>
+  </div>
+
+  <div class='offer-right-side'>
+
+    <table>
+      <tr>
+        <td><%= t('offers.cost') %></td>
+        <td><%= t('offers.discount') %></td>
+        <td><%= t('offers.savings') %></td>
+      </tr>
+      <tr>
+        <td> <%= offer.cost %> </td>
+        <td> <%= offer.discount %>% </td>
+        <td> <%= offer.cost ? offer.cost/100 * offer.discount : '' %> </td>
+      </tr>
+    </table>
+
+    <p class='info'>
+      <%= t('offers.time_left') %>:
+    </p>
+    <p style="text-align: center;"> <%= offer.ends_at %> </p>
+    <br />
+
+    <p class='info'>
+      <%= t('offers.coupon_price') %>:
+    </p>
+    <p class="price"> <%= offer.price %> <span style="font-weight: normal;"> <%= t('common.hrn') %> </span></p>
+
+    <%= link_to t('offers.buy'), nil, :class => 'buy-button' %>
+
+
+  </div>
+
+    <%= link_to nil do %>
+      <div class='offer-bottom' title='Подробнее'> <center> <%= image_tag 'down-arrow.png' %> </center> </div>
+    <% end %>
+
+</div>

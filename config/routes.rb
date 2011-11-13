@@ -1,4 +1,9 @@
 Kuponavt::Application.routes.draw do
+
+  root :to => 'offers#index'
+
+  resources :offers
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

@@ -1,0 +1,23 @@
+<h1> Welcome to Kuponavt! </h1>
+
+<%= paginate @offers %>
+
+<div id='offers'>
+
+  <div id='sort'>
+      <h2>
+        Киев <span> <%= Time.now.to_date %> </span>
+      </h2>
+
+      <p><%= t('offers.checked') %> 2 <%= t('common.of') %> 350
+        <span><%= t('offers.price') %> | <%= t('offers.discount') %> | <%= t('offers.time_left') %></span>
+      </p>
+  </div>
+
+  <% @offers.each do |offer| %>
+    <%= render :partial => 'offers/offer', :locals => { :offer => offer } %>
+  <% end %>
+
+</div>
+
+<%= render :partial => 'offers/filter' %>

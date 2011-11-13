@@ -1,0 +1,54 @@
+#header {
+
+  width: 980px;
+  height: 80px;
+  margin: 0 auto;
+  background: url(semi-tsp.png) repeat;
+  border-radius: 0 0 5px 5px;
+  -webkit-border-radius: 0 0 5px 5px;
+  -moz-border-radius: 0 0 5px 5px;
+  box-shadow:  0px 0px 2px #007FAD;
+
+}
+
+#logo {
+  float: left;
+  margin: 15px 0 0 15px;
+  position: relative;
+}
+
+.help {
+  cursor: pointer;
+  margin-bottom: 37px;
+  opacity: .2;
+
+  &:hover {
+    opacity: .7;
+  }
+}
+
+#site-description {
+  @include rounder-corners(5px);
+
+  position: absolute;
+  left: 0px;
+  top: 55px;
+  width: 265px;
+  border: 1px solid $main-color;
+  background: #F7FCF7;
+  padding: 10px;
+  z-index: 10;
+}
+
+#city {
+  width:50;
+  height:40px;
+  float:left;
+  margin: 30px 0 0 100px;
+
+  select {
+    font-size: 16px;
+    background:#E2EDEA;
+  }
+}
+

@@ -38,15 +38,21 @@ module Kuponavt
 
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
-    # config.i18n.default_locale = :de
+    config.i18n.default_locale = :ru
+
     config.generators do |generator|
       generator.fixture_replacement :factory_girl
     end
 
     config.autoload_paths += Dir["#{config.root}/lib"]
-    config.autoload_paths += Dir["#{config.root}/lib/**/"]
+#    config.autoload_paths += Dir["#{config.root}/lib/**/"]
     config.autoload_paths += Dir["#{config.root}/app/parsers"]
     config.autoload_paths += Dir["#{config.root}/app/parsers/**/"]
+
+    requirements = [ './lib/patches/active_record/base/' ]
+    requirements.each do |req|
+      Dir.glob(req + '*.{rb}').each { |file| require file }
+    end
 
     # Configure the default encoding used in templates for Ruby 1.9.
     config.encoding = "utf-8"

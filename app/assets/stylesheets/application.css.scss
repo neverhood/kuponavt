@@ -1,0 +1,118 @@
+/*
+*= require_self
+*/
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var, dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td 
+{ margin: 0; padding: 0; border: 0; outline: 0;
+ font-weight: inherit;  font-style: inherit; font-size: 100%; font-family: inherit; vertical-align: baseline;}
+
+$main-color: #007FAD;
+
+@mixin rounder-corners($radius) {
+  border-radius: $radius;
+  -moz-border-radius: $radius;
+  -webkit-border-radius: $radius;
+}
+
+/* remember to define focus styles! */
+:focus { outline: 0;}
+ol, ul { list-style: none; }
+
+body {
+  background: white;
+	background: url(bg.png) repeat scroll 0 0 #D6CCB5;
+	font-family: 'Open Sans', Segoe UI, Arial, sans-serif;
+  line-height: 1;
+  color: black;
+}
+
+@import 'shared/header.css.scss';
+
+/* Shared */
+.hidden { display: none }
+.high-opacity { opacity: 0.7 }
+/* Shared */
+
+
+#login {
+	float:left;
+	margin: 15px 0 0 50px;
+	width: 320px;
+}
+
+#login a {
+	text-decoration: none;
+}
+
+#login .soc-button:hover {
+	box-shadow: 0 0 3px white;
+}
+
+#wrapper {
+  width: 980px;
+  margin: auto;
+	margin-top: 50px;
+}
+
+#footer {
+	clear: left;
+	background: url(footerbg.png);
+	color: white;
+	height: 335px;
+	border-top: 1px solid black;
+}
+
+#footer-info {
+	margin: 10px 0 0 40px;
+	float: left;
+}
+
+#footer ul a {
+	text-decoration: none;
+	color: white;
+}
+
+#vk_groups {
+	float: left;
+	margin: 10px 0 0 30px;
+	position: relative;
+	z-index: 5;
+}
+
+#vk-red {
+	border: 1px solid red;
+	display: none;
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	z-index: 6;
+	width: 298px;
+	height: 23px;
+}
+
+.fb-like-box {
+	background-color: white;
+}
+
+#fb {
+	float: left;
+	margin: 10px 0 0 20px;
+	position: relative;
+	z-index: 5;
+}
+
+#fb-red {
+	position: absolute;
+	top: 63px;
+	left: 60px;
+	display: none;
+	z-index: 6;
+	border: 1px solid red;
+	width: 99px;
+	height: 24px;
+}
+
+@import 'offers.css.scss';
