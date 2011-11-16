@@ -4,7 +4,7 @@ describe Category do
 
   before(:each) do
     @category = Factory :category
-    @nested_category = Factory :category, :parent_category_id => @category.id
+    @nested_category = Factory :category, :name => 'nested', :parent_category_id => @category.id
   end
 
   describe 'Validations' do
