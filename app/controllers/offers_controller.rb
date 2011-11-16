@@ -10,7 +10,7 @@ class OffersController < ApplicationController
       format.js do
         render :json => { :offers => render_to_string(:partial => 'offers/offers'),
           :pagination => render_to_string(:partial => 'offers/pagination')
-        }
+        }, :layout => false
       end
     end
   end
