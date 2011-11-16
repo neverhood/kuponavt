@@ -1,4 +1,4 @@
-	<div id="filter">
+<div id="filter">
 
     <p>
 
@@ -13,48 +13,24 @@
 
 	<div id="all-categories">	
 
-    <p class='type'>Развлечения | <span class='all-tags'>все</span></p>
+    <% Category.parent_categories.each do |parent_category| %>
 
+      <p class='type'> <%= parent_category.name %> | <span class='all-tags'> <%= t('offers.all_tags') %> </span> </p>
 
-		<ul>
+      <ul class='<%= parent_category.to_en %>'>
+        <% parent_category.nested_categories.each do |nested_category| %>
+          <li>
+            <label> <%= check_box_tag nested_category.id, nested_category.id, false, :name => nested_category.to_en %> <%= nested_category.name %> </label>
+            <span class='amount'>[<%= nested_category.offers.count %>]</span>
+          </li>
+        <% end %>
+      </ul>
 
-			<li><label><input name="tags" type="checkbox" />Кафе, бары</label><span class="amount">[13]</span></li>
-			<li><label><input name="tags" type="checkbox" />Вечеринки, клубы</label><span class="amount">[8]</span></li>
-			<li><label><input name="tags" type="checkbox" />Боулинг, бильярд</label><span class="amount">[3]</span></li>
-			<li><label><input name="tags" type="checkbox" />Активный отдых</label><span class="amount">[5]</span></li>
-			<li><label><input name="tags" type="checkbox" />Путешествия</label><span class="amount">[4]</span></li>
-			<li><label><input name="tags" type="checkbox" />Выставки</label><span class="amount">[2]</span></li>
+    <% end %>
 
-		</ul>
-
-
-
-		<p class="type">Здоровье, красота |<span class="all-tags">все</span></p>
-
-		<ul>
-			<li><label><input name="tags" type="checkbox" />Здоровье</label><span class="amount">[17]</span></li>
-			<li><label><input name="tags" type="checkbox" />Медицина</label><span class="amount">[6]</span></li>
-			<li><label><input name="tags" type="checkbox" />Спорт</label><span class="amount">[9]</span></li>
-			<li><label><input name="tags" type="checkbox" />Йога</label><span class="amount">[5]</span></li>		
-		</ul>
-
-
-
-		<p class="type">Обучение |<span class="all-tags">все</span></p>
-
-		<ul>
-
-			<li><label><input name="tags" type="checkbox" />Танцы</label><span class="amount">[5]</span></li>
-			<li><label><input name="tags" type="checkbox" />Уроки, занятия</label><span class="amount">[7]</span></li>
-			<li><label><input name="tags" type="checkbox" />Тренинги</label><span class="amount">[4]</span></li>
-			<li><label><input name="tags" type="checkbox" />Мастер-классы</label><span class="amount">[4]</span></li>		
-
-		</ul>
-
-		
 
 	</div>
 
 	
 
-	</div>
+</div>

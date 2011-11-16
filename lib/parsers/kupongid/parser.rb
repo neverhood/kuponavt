@@ -13,6 +13,7 @@ require File.expand_path('../../init.rb', __FILE__)
 require 'app/parsers/parser'
 require 'app/parsers/kupongid/kupongid_parser'
 require 'app/models/kupongid'
+require 'app/models/category'
 
 #$agent = Mechanize.new
 
@@ -64,6 +65,13 @@ end
    end
 
    offer[:subway] = nil if offer[:subway] && offer[:subway].gsub(/[ ,-\\"'`]*/, '').empty?
+
+   category_name = $agent.page.parser.xpath('//div[contains(@class,"deal")]/div/div/noindex/p/a[1]').last.text
+   category = Category.where(:name => category_name).first
+
+   offer[:category_id] = category.id if category
+
+   binding.pry if category.nil?
 
   rescue Exception
   end

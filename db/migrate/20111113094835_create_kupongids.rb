@@ -3,6 +3,7 @@ class CreateKupongids < ActiveRecord::Migration
     create_table :kupongid, :primary_key => false do |t|
     #  t.integer :site_id, :null => false
       t.integer :kupongid_id, :null => false
+      t.integer :category_id
       t.string :provider
       t.string :country, :default => 'ukraine'
       t.string :city, :default => 'kyiv'

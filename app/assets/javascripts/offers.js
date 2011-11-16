@@ -10,4 +10,32 @@ $('document').ready(function() {
         $('#pagination-top').html( attributes.pagination );
     });
 
+    $('#all-offers-check').hover(function() {
+        $('#all-categories').toggleClass('hover');
+    }).click(function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        $('div#filter').find('input[type="checkbox"]').prop('checked', true);
+    });
+
+    $('#all-offers-clear').click(function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        $('div#filter').find('input[type="checkbox"]').prop('checked', false);
+    });
+
+    $('span.all-tags').hover(function() {
+        $(this).parent().next().toggleClass('hover');
+    }).click(function() {
+        var $this = $(this);
+        if ( $this.data('checked-all') ) {
+            $this.data('checked-all', !$this.data('checked-all'));
+        } else {
+            $this.data('checked-all', true);
+        }
+        $this.parent().next().find('input[type="checkbox"]').prop('checked', $this.data('checked-all'));
+    });
+
 });
