@@ -8,6 +8,8 @@ $('document').ready(function() {
         var attributes = $.parseJSON( xhr.responseText );
         $('#all-offers').html( attributes.offers );
         $('#pagination-top').html( attributes.pagination );
+
+        $("body").animate({ scrollTop: 25 }, 500);
     });
 
     $('#all-offers-check').hover(function() {

@@ -231,30 +231,37 @@ div#offers {
 }
 
 #pagination-top {
-  margin: 5px;
+    margin: 5px auto 15px;
+    width: 590px;
+    font-size: 80%;
+
+    .page {
+      margin: 0 -1px;
+    }
+
     a {
-      display: inline-block;
       padding: 3px 5px;
-      border: 1px solid $main-color;
-      color: white;
       text-decoration: none;
-      border-radius: 3px;
-      background: -webkit-linear-gradient(#0299CC, #007FAC);
-      font-size: 12px;
+      color: black;
+      @include rounded-corners(3px);
 
       &:hover {
         background: $main-color;
+        color: white;
+      }
+      &:active {
+        box-shadow: 0 0 2px #007fad;
       }
   }
 
   .current {
-    display: inline-block;
-    padding: 3px 5px;
+    padding: 2px 8px 3px 7px;
     border: 1px solid $main-color;
     color: white;
-    border-radius: 3px;
-    background: $main-color;
-    font-size: 12px;
+    @include rounded-corners(3px);
+    background: #007fad;
+    border-right: 1px solid #00a1d6;
+    border-bottom: 1px solid #00a1d6;
   }
 }
 

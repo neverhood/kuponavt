@@ -33,7 +33,7 @@
 }
 
 #site-description {
-  @include rounder-corners(5px);
+  @include rounded-corners(5px);
 
   position: absolute;
   left: 365px;
