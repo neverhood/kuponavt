@@ -20,12 +20,4 @@ $('document').ready(function() {
         $('img.help').removeClass('high-opacity');
     });
 
-    $('#all-offers-check').hover(function() {
-        $('#all-categories').toggleClass('hover');
-    });
-
-    $('span.all-tags').hover(function() {
-        $(this).parent().next().toggleClass('hover');
-    });
-
 });
