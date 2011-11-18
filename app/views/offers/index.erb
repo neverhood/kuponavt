@@ -1,11 +1,5 @@
 <div id='offers'>
 
-  <center>
-    <div id='pagination-top'>
-      <%= paginate @offers, :remote => true %>
-    </div>
-  </center>
-
   <div id='sort'>
       <h2>
         Киев <span> <%= Time.now.to_date %> </span>
@@ -20,6 +14,13 @@
     <%= render :partial => 'offers/offers' %>
   </div>
 
+  <center>
+    <div id='pagination-top'>
+      <%= paginate @offers, :remote => true %>
+    </div>
+  </center>
+
 </div>
+
 
 <%= render :partial => 'offers/filter' %>
