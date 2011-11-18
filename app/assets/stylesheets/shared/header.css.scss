@@ -27,12 +27,17 @@
   }
 }
 
+.close-popup {
+  float: right;
+  cursor: pointer;
+}
+
 #site-description {
   @include rounder-corners(5px);
 
   position: absolute;
-  left: 0px;
-  top: 55px;
+  left: 365px;
+  top: 65px;
   width: 265px;
   border: 1px solid $main-color;
   background: #F7FCF7;
