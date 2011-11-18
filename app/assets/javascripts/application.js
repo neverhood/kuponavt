@@ -10,6 +10,8 @@
 
 $('document').ready(function() {
 
+    Cufon.replace('.time-left');
+
     $('img.help').click( function() {
         $('div#site-description').show();
         $(this).addClass('high-opacity');

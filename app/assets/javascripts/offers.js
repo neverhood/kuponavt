@@ -9,6 +9,8 @@ $('document').ready(function() {
         $('#all-offers').html( attributes.offers );
         $('#pagination-top').html( attributes.pagination );
 
+        Cufon.replace('.time-left');
+
         $("body").animate({ scrollTop: 25 }, 500);
     });
 

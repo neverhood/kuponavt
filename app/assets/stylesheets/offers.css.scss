@@ -166,6 +166,7 @@ div#offers {
   z-index: 1;
   margin-right: 20px;
   margin-bottom: 70px;
+  padding-bottom: 7px;
   clear: right;
 
   p {
@@ -196,11 +197,13 @@ div#offers {
   }
 
   #all-categories {
-    margin: 10px 5px 13px;
+    margin: 3px 10px;
     padding: 3px;
+    border-radius: 4px;
   }
 
   ul {
+    padding: 4px 3px 3px;
     border-radius: 3px;
 
     li {
