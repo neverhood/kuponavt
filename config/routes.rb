@@ -8,7 +8,7 @@ Kuponavt::Application.routes.draw do
 
   scope ':city' do
     resources :offers, :only => :index do
-      get 'page/:page' => 'offers#index', :on => :collection
+      get ':page' => 'offers#index', :on => :collection
     end
   end
 
