@@ -6,7 +6,7 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require jquery.pjax
+//= require history
 //= require cufon
 //= require transponder
 //= require countdown

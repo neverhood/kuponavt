@@ -2,8 +2,10 @@ class OffersController < ApplicationController
 
   layout Proc.new { |controller| controller.request.xhr?? false : 'application' }
 
+  before_filter :validate_city
+
   def index
-    @offers = Kupongid.page( params[:page] || 1 )
+    @offers = @city.offers.page( params[:page] || 1 )
 
     respond_to do |format|
       format.html
@@ -17,6 +19,14 @@ class OffersController < ApplicationController
 
   def show
     @offer = Offer.find params[:id]
+  end
+
+
+  private
+
+  def validate_city
+    @city = City.where(:name => params[:city]).first
+    redirect_to root_path unless @city
   end
 
 

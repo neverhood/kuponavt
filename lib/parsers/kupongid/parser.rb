@@ -59,6 +59,8 @@ end
    offer[:subway], offer[:address] = $agent.page.parser.css("div.deal .address").text.strip.gsub(/\s*-\s*показать/, '').split('|').map(&:strip)
    offer[:provider] = $agent.page.parser.css("div.deal a[href*='deal/out']").text.gsub(/Купить на /, '')
 
+   offer[:city_id], offer[:country_id] = 1, 1
+
    if offer[:price].nil?
      offer[:price] = offer[:cost]
      offer[:cost] = nil
@@ -79,6 +81,7 @@ end
   begin
     $agent.get @engine.authentication_details[:address] + "deal/out/#{offer[:kupongid_id]}"
     offer[:provider_url] = $agent.page.parser.css('b').text
+    binding.pry
   rescue Exception
   end
   unless offer.nil?

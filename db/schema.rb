@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111120135223) do
+ActiveRecord::Schema.define(:version => 20111120145210) do
 
   create_table "categories", :force => true do |t|
     t.string   "name"
@@ -34,12 +34,10 @@ ActiveRecord::Schema.define(:version => 20111120135223) do
   add_index "countries", ["name"], :name => "index_countries_on_name", :unique => true
 
   create_table "kupongid", :force => true do |t|
-    t.integer  "kupongid_id",                         :null => false
+    t.integer  "kupongid_id",  :null => false
     t.integer  "category_id"
     t.string   "provider"
-    t.string   "country",      :default => "ukraine"
-    t.string   "city",         :default => "kyiv"
-    t.string   "url",                                 :null => false
+    t.string   "url",          :null => false
     t.string   "title"
     t.integer  "discount"
     t.string   "image_url"
@@ -52,6 +50,8 @@ ActiveRecord::Schema.define(:version => 20111120135223) do
     t.string   "provider_url"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "country_id"
+    t.integer  "city_id"
   end
 
   add_index "kupongid", ["kupongid_id"], :name => "index_kupongid_on_kupongid_id", :unique => true

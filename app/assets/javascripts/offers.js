@@ -5,12 +5,13 @@
 $('document').ready(function() {
 
     $('.pagination a').live('ajax:complete', function( event, xhr, status ) {
-        var attributes = $.parseJSON( xhr.responseText );
+        var attributes = $.parseJSON( xhr.responseText ),
+            url = $(this).attr('href');
+
         $('#all-offers').html( attributes.offers );
         $('#pagination-bottom').html( attributes.pagination );
 
         Cufon.replace('.time-left');
-        history.pushState(null, 'Kupikava', $(this).attr('href'));
         $("body").animate({ scrollTop: 25 }, 500);
     });
 

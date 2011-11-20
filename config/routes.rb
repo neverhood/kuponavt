@@ -1,8 +1,23 @@
 Kuponavt::Application.routes.draw do
 
-  root :to => 'offers#index'
+  root :to => 'welcome#index'
 
-  resources :offers
+  resources :countries, :only => :index
+  resources :cities, :only => :index
+  resources :offers, :only => :show
+
+  scope ':city' do
+    resources :offers, :only => :index do
+      get 'page/:page' => 'offers#index', :on => :collection
+    end
+  end
+
+#  match ':city/offers' => 'offers#index', :as => 'city_offers'
+#  match ':city/offers/:page' => 'offers#index', :as => 'city_offers_page'
+
+#  resource :city, :only => :show do
+#    resources :offers, :only => :index
+#  end
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
