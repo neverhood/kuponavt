@@ -17,6 +17,10 @@ div#offers {
     box-shadow: 0px 0px 2px $main-color;
     margin-bottom: 15px;
 
+    #offers-selected-count {
+      padding: 5px;
+    }
+
     h2 {
      font-size: 22px;
     }
