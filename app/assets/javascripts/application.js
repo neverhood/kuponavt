@@ -6,6 +6,10 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require jquery.pjax
+//= require cufon
+//= require transponder
+//= require countdown
 //= require_tree .
 
 $('document').ready(function() {

@@ -7,10 +7,10 @@ $('document').ready(function() {
     $('.pagination a').live('ajax:complete', function( event, xhr, status ) {
         var attributes = $.parseJSON( xhr.responseText );
         $('#all-offers').html( attributes.offers );
-        $('#pagination-top').html( attributes.pagination );
+        $('#pagination-bottom').html( attributes.pagination );
 
         Cufon.replace('.time-left');
-
+        history.pushState(null, 'Kupikava', $(this).attr('href'));
         $("body").animate({ scrollTop: 25 }, 500);
     });
 
@@ -41,5 +41,10 @@ $('document').ready(function() {
         }
         $this.parent().next().find('input[type="checkbox"]').prop('checked', $this.data('checked-all'));
     });
+
+    // Pjax
+    //
+
+//    $('.pagination a').pjax('[data-pjax-container]');
 
 });

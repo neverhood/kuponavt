@@ -66,6 +66,9 @@ gem 'jquery-rails'
 # Authentication
 gem 'devise'
 
+# Async
+gem 'rack-pjax'
+
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
 

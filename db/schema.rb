@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111116181845) do
+ActiveRecord::Schema.define(:version => 20111120135223) do
 
   create_table "categories", :force => true do |t|
     t.string   "name"
@@ -19,6 +19,19 @@ ActiveRecord::Schema.define(:version => 20111116181845) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "cities", :force => true do |t|
+    t.string   "name"
+    t.integer  "country_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "countries", :force => true do |t|
+    t.string "name"
+  end
+
+  add_index "countries", ["name"], :name => "index_countries_on_name", :unique => true
 
   create_table "kupongid", :force => true do |t|
     t.integer  "kupongid_id",                         :null => false
