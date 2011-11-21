@@ -15,7 +15,7 @@
 
     <% Category.parent_categories.each do |parent_category| %>
 
-      <p class='type'> <%= parent_category.name %> | <span class='all-tags'> <%= t('offers.all_tags') %> </span> </p>
+      <p class='type'> <%= parent_category.name %> | <span class='all-tags' id='<%= parent_category.id %>'> <%= t('offers.all_tags') %> </span> </p>
 
       <ul class='<%= parent_category.to_en %>'>
         <% parent_category.nested_categories.each do |nested_category| %>

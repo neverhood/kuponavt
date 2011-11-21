@@ -5,7 +5,7 @@ describe City do
   before(:each) do
     @country = Factory(:country)
     @city = Factory(:city, :country_id => @country.id)
-    @category = Factory(:category)
+    @category = Factory(:category_with_nested_category).nested_categories.first
     @offer = Factory(:offer, :category_id => @category.id, :city_id => @city.id, :country_id => @country.id)
   end
 

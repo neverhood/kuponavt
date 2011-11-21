@@ -8,7 +8,7 @@ end
 
 Factory.define(:category) do |category|
   category.sequence(:name) { |n| "Parent-Category#{n}" }
-  category.after_create { |c| (1 + rand(3)).times { Factory(:nested_category, :parent_category_id => c.id) } }
+  category.after_create { |c| (5 + rand(3)).times { Factory(:nested_category, :parent_category_id => c.id) } }
 end
 
 Factory.define(:standalone_category, :class => Category) do |category|
