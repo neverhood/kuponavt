@@ -1,7 +1,5 @@
 # Read about factories at http://github.com/thoughtbot/factory_girl
-
-FactoryGirl.define do
-  factory :country do
-      name "MyString"
-    end
+Factory.define(:country) do |country|
+  country.name 'ukraine'
 end
+
