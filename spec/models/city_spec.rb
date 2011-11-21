@@ -6,7 +6,7 @@ describe City do
     @country = Factory(:country)
     @city = Factory(:city, :country_id => @country.id)
     @category = Factory(:category)
-    @offer = Factory(:kupongid, :category_id => @category.id, :city_id => @city.id, :country_id => @country.id)
+    @offer = Factory(:offer, :category_id => @category.id, :city_id => @city.id, :country_id => @country.id)
   end
 
   describe 'Validations' do
