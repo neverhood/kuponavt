@@ -13,12 +13,14 @@ Spork.prefork do
   require 'capybara/rspec'
   require 'factory_girl'
   require 'database_cleaner'
+  require File.dirname(__FILE__) + '/matchers/custom_matchers.rb'
 
   Dir[Rails.root.join('spec/support/**/*.rb')].each { |file| require file }
 
   Rspec.configure do |config|
     config.mock_with :rspec
     config.use_transactional_fixtures = true
+    config.include(CustomMatchers)
     DatabaseCleaner.strategy = :truncation
 
     config.treat_symbols_as_metadata_keys_with_true_values = true
