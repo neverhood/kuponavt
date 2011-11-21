@@ -42,6 +42,7 @@ group :development, :test do
   gem 'spork', '~> 0.9.0.rc'
   gem 'guard-rspec'
   gem 'guard-spork'
+  gem 'faker'
   # Some spork info:
   #   spork --bootstrap
   #   edit spec_helper.rb: wrap the old contents in prefork or each_run blocks

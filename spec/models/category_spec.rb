@@ -3,8 +3,7 @@ require 'spec_helper'
 describe Category do
 
   before(:each) do
-    @category = Factory :category
-    @nested_category = Factory :category, :name => 'nested', :parent_category_id => @category.id
+    @category = Factory(:category_with_nested_category)
   end
 
   describe 'Validations' do
@@ -19,10 +18,18 @@ describe Category do
 
   end
 
+  describe 'Associations' do
+
+    it 'should not return any offers by calling #offers on parent category' do
+      @category.offers.count.should == 0
+    end
+
+  end
+
   describe 'Instance Methods' do
 
     it 'should return nested categories list when #nested_categories method is called' do
-      @category.nested_categories.count.should == 1
+      @category.nested_categories.count.should > 0
     end
 
     it 'should return "true" when #parent? method is called on parent category' do
@@ -30,7 +37,7 @@ describe Category do
     end
 
     it 'should return "false" when #parent? method is called on nested category' do
-      @nested_category.parent?.should === false
+      @category.nested_categories.first.parent?.should === false
     end
 
   end

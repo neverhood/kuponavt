@@ -16,7 +16,7 @@ describe Country do
     end
 
     it 'should be able to retrieve a list of offers by #offers association' do
-      @country.offers.count.should == 1
+      @country.offers.count.should > 0
     end
 
   end

@@ -20,7 +20,9 @@
       <ul class='<%= parent_category.to_en %>'>
         <% parent_category.nested_categories.each do |nested_category| %>
           <li>
-            <label> <%= check_box_tag nested_category.id, nested_category.id, (@categories && @categories.include?(nested_category.id.to_s)), :name => nested_category.to_en %> <%= nested_category.name %> </label>
+            <label> <%= check_box_tag nested_category.id, nested_category.id, (@categories && @categories.include?(nested_category.id.to_s)),
+                         :name => nested_category.to_en %> <%= nested_category.name %>
+            </label>
             <span class='amount'>[<%= nested_category.offers.count %>]</span>
           </li>
         <% end %>

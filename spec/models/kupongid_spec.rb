@@ -12,15 +12,15 @@ describe Kupongid do
   describe 'Associations' do
 
     it 'should retrieve city object by #city association' do
-      @offer.city.should == @city
+      @offer.city.id.should == @city.id
     end
 
     it 'should retrieve country object by #country association' do
-      @offer.country.should == @country
+      @offer.country.id.should == @country.id
     end
 
     it 'should retrieve category object by #category association' do
-      @offer.category.should == @category
+      @offer.category.id.should == @category.id
     end
 
   end
