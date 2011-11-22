@@ -1,10 +1,10 @@
-<div class='offer' id='offer-<%= offer.id %>' data-category='<%= offer.category_id %>'>
+<div class='offer' id='offer-id' data-category='offer-category'>
   <h2>
-    <%= link_to offer.title, offer_path(offer), :class => 'offer-url' %>
+    <%= link_to nil, nil, :class => 'offer-url' %>
   </h2>
 
   <div class='offer-left-side'>
-    <%= image_tag offer.image_url, :class => 'offer-image' %>
+    <%= image_tag 'bg.png', :class => 'offer-image' %>
   </div>
 
   <div class='offer-right-side'>
@@ -16,22 +16,22 @@
         <td><%= t('offers.savings') %></td>
       </tr>
       <tr>
-        <td class='offer-cost'> <%= offer.cost %> </td>
-        <td class='offer-discount'> <%= offer.discount %>% </td>
-        <td class='offer-savings'> <%= offer.cost ? offer.cost/100 * offer.discount : '' %> </td>
+        <td class='offer-cost'></td>
+        <td class='offer-discount'></td>
+        <td class='offer-savings'></td>
       </tr>
     </table>
 
     <p class='info'>
       <%= t('offers.time_left') %>:
     </p>
-    <p class='time-left' style="text-align: center;"> <%= offer.ends_at %> </p>
+    <p class='time-left' style="text-align: center;"></p>
     <br />
 
     <p class='info'>
       <%= t('offers.coupon_price') %>:
     </p>
-    <p class="price"> <span class='offer-price'> <%= offer.price %> </span> <span class='hrn'> <%= t('common.hrn') %> </span></p>
+    <p class="price"> <span class='offer-price'></span> <span class='hrn'> <%= t('common.hrn') %> </span></p>
 
     <%= link_to t('offers.buy'), nil, :class => 'buy-button' %>
 

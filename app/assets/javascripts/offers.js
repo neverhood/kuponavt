@@ -31,11 +31,33 @@ $.offers.utils.url = function() {
     }
 };
 
+$.offers.utils.renderOffers = function(offers) {
+    $('#all-offers').html('');
+    var offerTemplate = $('div#offer-id'),
+        allOffersContainer = $('#all-offers');
+
+    $.each( offers, function() {
+        var offer = offerTemplate.clone().
+            attr('id', this['id']).
+            attr('data-category', this.category_id);
+        offer.find('a.offer-url').attr('href', this.url).text(this.title);
+        offer.find('img.offer-image').attr('src', this.image_url);
+        offer.find('td.offer-cost').text(this.cost);
+        offer.find('td.offer-discount').text(this.discount);
+        offer.find('td.offer-savings').text( this.cost ? this.cost/100 * this.discount : '' );
+        offer.find('p.time-left').text(this.ends_at);
+        offer.find('span.offer-price').text(this.price);
+
+        allOffersContainer.append( offer );
+    });
+}
+
 $.offers.utils.retrieveOffers = function() {
     $.offers.latestCategoriesUpdate = $.offers.utils.checkedCategories();
 
     $.getJSON($.offers.utils.url(), function(data) {
-        $( $.offers.sections.offers ).html( data.offers );
+        $.offers.utils.renderOffers( $.parseJSON(data.offers) );
+        // $( $.offers.sections.offers ).html( data.offers );
         $( $.offers.sections.pagination ).html( data.pagination );
         $( $.offers.sections.selectedCount ).html( data.count );
     });
@@ -92,9 +114,6 @@ $('document').ready(function() {
         var $this = $(this),
             checked = $this.prop('checked');
 
-        if ( ! checked ) {
-            $('.offer[data-category="' + $this.attr('id') + '"]').hide();
-        }
         $.offers.utils.retrieveOffers();
     });
 

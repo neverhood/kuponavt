@@ -13,9 +13,13 @@ class OffersController < ApplicationController
     respond_to do |format|
       format.html
       format.js do
-        render :json => { :offers => render_to_string(:partial => 'offers/offers'),
-          :pagination => render_to_string(:partial => 'offers/pagination'), :count => @offers_selected_count
-        }, :layout => false
+        render :json => { :offers => @offers.to_json,
+          :pagination => render_to_string(:partial => 'offers/pagination'),
+          :count => @offers_selected_count
+        }
+       # render :json => { :offers => render_to_string(:partial => 'offers/offers'),
+       #   :pagination => render_to_string(:partial => 'offers/pagination'), :count => @offers_selected_count
+       # }, :layout => false
       end
     end
   end
