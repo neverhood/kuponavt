@@ -29,12 +29,14 @@ describe "OffersMainPages" do
     ['#all-offers-check', '#all-offers-clear'].each do |selector|
       offers_cleaner.call
       find(selector).click
+      sleep 1
       page.should match_exactly(25, '.offer')
     end
 
     ["input##{@offers.first.category_id}", ".all-tags##{@offers.first.category.parent_category_id}"].each do |selector|
       offers_cleaner.call
       find(selector).click
+      sleep 1
       page.has_css?("#offer-#{@offers.first.id}").should === true
     end
 
