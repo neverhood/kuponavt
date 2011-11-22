@@ -2,6 +2,8 @@ class OffersController < ApplicationController
 
   layout Proc.new { |controller| controller.request.xhr?? false : 'application' }
 
+  caches_action :index, :cache_path => Proc.new { |controller| controller.params }, :if => proc { |controller| controller.request.xhr? }
+
   before_filter :validate_city
   before_filter :prepare_categories_array
 
@@ -13,13 +15,13 @@ class OffersController < ApplicationController
     respond_to do |format|
       format.html
       format.js do
-        render :json => { :offers => @offers.to_json,
-          :pagination => render_to_string(:partial => 'offers/pagination'),
-          :count => @offers_selected_count
-        }
-       # render :json => { :offers => render_to_string(:partial => 'offers/offers'),
-       #   :pagination => render_to_string(:partial => 'offers/pagination'), :count => @offers_selected_count
-       # }, :layout => false
+        #render :json => { :offers => @offers.to_json,
+        #  :pagination => render_to_string(:partial => 'offers/pagination'),
+        #  :count => @offers_selected_count
+        #}
+        render :json => { :offers => render_to_string(:partial => 'offers/offers'),
+          :pagination => render_to_string(:partial => 'offers/pagination'), :count => @offers_selected_count
+        }, :layout => false
       end
     end
   end

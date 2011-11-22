@@ -56,8 +56,8 @@ $.offers.utils.retrieveOffers = function() {
     $.offers.latestCategoriesUpdate = $.offers.utils.checkedCategories();
 
     $.getJSON($.offers.utils.url(), function(data) {
-        $.offers.utils.renderOffers( $.parseJSON(data.offers) );
-        // $( $.offers.sections.offers ).html( data.offers );
+        // $.offers.utils.renderOffers( $.parseJSON(data.offers) );
+        $( $.offers.sections.offers ).html( data.offers );
         $( $.offers.sections.pagination ).html( data.pagination );
         $( $.offers.sections.selectedCount ).html( data.count );
     });
