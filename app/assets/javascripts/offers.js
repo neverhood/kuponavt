@@ -133,7 +133,8 @@ $('document').ready(function() {
     $('span.all-tags').hover(function() {
         $(this).parent().next().toggleClass('hover');
     }).click(function() {
-        var $this = $(this);
+        var $this = $(this),
+            categories;
 
         if ( typeof $this.data('checked-all') != 'undefined' ) {
             $this.data('checked-all', !$this.data('checked-all'));
@@ -141,7 +142,11 @@ $('document').ready(function() {
             $this.data('checked-all', true);
         }
         $this.parent().next().find('input[type="checkbox"]').prop('checked', $this.data('checked-all'));
-        $.offers.utils.retrieveOffers();
+        categories = $.map( $this.parent().next().find('input[type="checkbox"]').filter(':checked'), function(element) {
+            return element.id; }
+        );
+
+        $.offers.utils.retrieveOffersNew(categories.join(','));
     });
 
     // Categories
