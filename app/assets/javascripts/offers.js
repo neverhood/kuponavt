@@ -22,10 +22,18 @@ $.offers.utils.checkedCategories = function() {
 
 $.offers.utils.url = function() {
     var city = $.offers.utils.city(),
-        categories = $.offers.utils.checkedCategories().join(','),
+        checkedCategories = $.offers.utils.checkedCategories(),
+        categories = [],
         url = '/' + city + '/offers';
-    if ( categories.length ) {
-        return url + '?categories=' + categories;
+
+    if ( checkedCategories.length ) {
+        console.log(checkedCategories);
+
+        $.each( checkedCategories, function() {
+            categories.push( parseInt(this) );
+        });
+
+        return url + '?categories=' + categories.sort(function(a,b) { return a - b }).join(',');
     } else {
         return url;
     }
@@ -53,8 +61,6 @@ $.offers.utils.renderOffers = function(offers) {
 }
 
 $.offers.utils.retrieveOffers = function() {
-    $.offers.latestCategoriesUpdate = $.offers.utils.checkedCategories();
-
     $('div.loader').show(50);
 
     $.getJSON($.offers.utils.url(), function(data) {
@@ -99,18 +105,22 @@ $('document').ready(function() {
         $.offers.utils.retrieveOffers();
     });
 
-    $('span.all-tags').hover(function() {
-        $(this).parent().next().toggleClass('hover');
-    }).click(function() {
-        var $this = $(this);
+    $('span.all-tags').bind({
+        hover: function() {
+            $(this).parent().next().toggleClass('hover');
+        },
+        click: function() {
+            var $this = $(this),
+                ul = $this.parent().next(),
+                checkboxes = ul.find('input[type="checkbox"]'),
+                check = true;
 
-        if ( typeof $this.data('checked-all') != 'undefined' ) {
-            $this.data('checked-all', !$this.data('checked-all'));
-        } else {
-            $this.data('checked-all', true);
+            if ( checkboxes.filter(':checked').length == checkboxes.length ) check = false;
+
+            checkboxes.prop('checked', check)
+
+            $.offers.utils.retrieveOffers();
         }
-        $this.parent().next().find('input[type="checkbox"]').prop('checked', $this.data('checked-all'));
-        $.offers.utils.retrieveOffers();
     });
 
     // Categories
