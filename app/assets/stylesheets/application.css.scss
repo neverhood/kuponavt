@@ -75,44 +75,11 @@ body {
 	color: white;
 }
 
-#vk_groups {
-	float: left;
-	margin: 10px 0 0 30px;
-	position: relative;
-	z-index: 5;
+.loader {
+  height: 130px;
+  background: url('loader.gif') no-repeat center;
 }
 
-#vk-red {
-	border: 1px solid red;
-	display: none;
-	position: absolute;
-	left: 0;
-	bottom: 0;
-	z-index: 6;
-	width: 298px;
-	height: 23px;
-}
 
-.fb-like-box {
-	background-color: white;
-}
-
-#fb {
-	float: left;
-	margin: 10px 0 0 20px;
-	position: relative;
-	z-index: 5;
-}
-
-#fb-red {
-	position: absolute;
-	top: 63px;
-	left: 60px;
-	display: none;
-	z-index: 6;
-	border: 1px solid red;
-	width: 99px;
-	height: 24px;
-}
 
 @import 'offers.css.scss';

@@ -9,6 +9,7 @@
 //= require cufon
 //= require transponder
 //= require countdown
+//= require cookie
 //= require api
 //= require_tree .
 

@@ -55,11 +55,16 @@ $.offers.utils.renderOffers = function(offers) {
 $.offers.utils.retrieveOffers = function() {
     $.offers.latestCategoriesUpdate = $.offers.utils.checkedCategories();
 
+    $('div.loader').show(50);
+
     $.getJSON($.offers.utils.url(), function(data) {
-        // $.offers.utils.renderOffers( $.parseJSON(data.offers) );
+
         $( $.offers.sections.offers ).html( data.offers );
         $( $.offers.sections.pagination ).html( data.pagination );
         $( $.offers.sections.selectedCount ).html( data.count );
+
+        Cufon.replace('.time-left');
+        $('div.loader').hide();
     });
 }
 
