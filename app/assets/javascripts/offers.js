@@ -3,7 +3,6 @@
 
 $.offers = {
     latestCategoriesUpdate: [],
-    offersPerPage: 25,
     sections: {
         offers: '#all-offers',
         pagination: '#pagination-bottom',
@@ -69,41 +68,6 @@ $.offers.utils.retrieveOffers = function() {
     });
 }
 
-$.offers.utils.paginate = function(offersCount) {
-}
-
-$.offers.utils.retrieveOffersNew = function(categoryIds) {
-    var url = '/' + $.offers.utils.city() + '/offers',
-        offersContainer = $('#all-offers'),
-        categoriesCount = $('#all-categories').find('input[type="checkbox"]').filter(':checked').length, // Checked categories
-        existentOffers;
-
-    if ( categoriesCount == 1 ) { // No categories selected ( besides of `this` one )
-        existentOffers = [];
-    } else {
-        existentOffers = $('div.offer');
-    }
-
-    if (categoryIds.length)
-        url = url + '?categories=' + categoryIds;
-
-    $.getJSON(url, function(data) {
-        var offers = $(data.offers).filter('div.offer'),
-            offersCount = offers.length,
-            existentOffersCount = existentOffers.length,
-            offersToRemoveCount;
-
-        if ( existentOffersCount == 0 || offersCount >= 25 ) offersContainer.html('');
-
-        if ( $.offers.offersPerPage < ( offersCount + existentOffersCount ) && offersCount < 25 ) { // Need to delete some offers to free space for new ones
-           existentOffers.slice( ($.offers.offersPerPage - offersCount), existentOffers.length ).remove();
-        }
-
-        offersContainer.prepend( data.offers ); // And celebrate!
-
-    });
-}
-
 $('document').ready(function() {
 
     $('.pagination a').live('ajax:complete', function( event, xhr, status ) {
@@ -138,8 +102,7 @@ $('document').ready(function() {
     $('span.all-tags').hover(function() {
         $(this).parent().next().toggleClass('hover');
     }).click(function() {
-        var $this = $(this),
-            categories;
+        var $this = $(this);
 
         if ( typeof $this.data('checked-all') != 'undefined' ) {
             $this.data('checked-all', !$this.data('checked-all'));
@@ -147,19 +110,16 @@ $('document').ready(function() {
             $this.data('checked-all', true);
         }
         $this.parent().next().find('input[type="checkbox"]').prop('checked', $this.data('checked-all'));
-        categories = $.map( $this.parent().next().find('input[type="checkbox"]').filter(':checked'), function(element) {
-            return element.id; }
-        );
-
-        $.offers.utils.retrieveOffersNew(categories.join(','));
+        $.offers.utils.retrieveOffers();
     });
 
     // Categories
 
     $('#all-categories input[type="checkbox"]').change(function() {
-        var checked = $(this).prop('checked');
+        var $this = $(this),
+            checked = $this.prop('checked');
 
-        $.offers.utils.retrieveOffersNew( this.id );
+        $.offers.utils.retrieveOffers();
     });
 
 
