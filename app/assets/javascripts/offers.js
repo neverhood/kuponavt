@@ -142,7 +142,6 @@ $('document').ready(function() {
 
     // Search
     //
-    
     $('#search_field').bind({
         focus: function() {
             if ( this.value == $(this).attr('data-value') ) this.value = '';
