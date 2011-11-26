@@ -3,6 +3,7 @@
 
 $.offers = {
     latestCategoriesUpdate: [],
+    offersPerPage: 25,
     sections: {
         offers: '#all-offers',
         pagination: '#pagination-bottom',
@@ -27,7 +28,6 @@ $.offers.utils.url = function() {
         url = '/' + city + '/offers';
 
     if ( checkedCategories.length ) {
-        console.log(checkedCategories);
 
         $.each( checkedCategories, function() {
             categories.push( parseInt(this) );
@@ -60,7 +60,7 @@ $.offers.utils.renderOffers = function(offers) {
     });
 }
 
-$.offers.utils.retrieveOffers = function() {
+$.offers.utils.retrieveOffers = function() { // Retrieves offers, count and pagination
     $('div.loader').show(50);
 
     $.getJSON($.offers.utils.url(), function(data) {
@@ -72,6 +72,72 @@ $.offers.utils.retrieveOffers = function() {
         Cufon.replace('.time-left');
         $('div.loader').hide();
     });
+}
+
+$.offers.utils.getOffers = function(categoryIds) { // Retrieves just offers
+    var url = '/' + $.offers.utils.city() + '/offers?categories=' + categoryIds,
+        offersContainer = $( $.offers.sections.offers ),
+        categoriesCount = $('#all-categories').find('input[type="checkbox"]').filter(':checked').length, // Checked categories
+        existentOffers;
+
+    if ( categoriesCount == 1 ) { // No categories selected ( besides of `this` one )
+        existentOffers = [];
+    } else {
+        existentOffers = $('div.offer');
+    }
+
+    $.getJSON(url, function(data) {
+        var offers = $(data.offers).filter('div.offer'),
+            offersCount = offers.length,
+            existentOffersCount = existentOffers.length,
+            offersToRemoveCount,
+            totalOffersCount = $.offers.utils.selectedOffersCount();
+
+        if ( existentOffersCount == 0 || offersCount >= 25 ) offersContainer.html('');
+
+        if ( $.offers.offersPerPage < ( offersCount + existentOffersCount ) && offersCount < 25 ) { // Need to delete some offers to free space for new ones
+           existentOffers.slice( ($.offers.offersPerPage - offersCount), existentOffers.length ).remove();
+        }
+
+        offersContainer.prepend( data.offers ); // And celebrate!
+        $('#offers-selected-count').text( totalOffersCount );
+        $.offers.utils.paginate( totalOffersCount );
+    });
+}
+
+$.offers.utils.selectedOffersCount = function() {
+    var categories = $('#all-categories').find('input[type="checkbox"]').filter(':checked'),
+        totalCount = 0;
+
+    $.each( categories, function() {
+        totalCount += parseInt( $(this).parent().next().text().replace(/\D/, '') );
+    });
+
+    return totalCount;
+}
+
+$.offers.utils.paginate = function(offersCount) {
+    var rawCount = offersCount/$.offers.offersPerPage,
+        template = $('.pagination-template').clone().removeClass('pagination-template'),
+        pagesCount = ( rawCount > parseInt( rawCount ) ) ? (parseInt( rawCount ) + 1) : rawCount,
+        paginationContainer = $('#pagination-bottom').html('');
+
+    if ( pagesCount > 1 ) {
+        $.each( template.find('.page'), function() {
+            var $this = $(this);
+
+            if ( typeof $this.find('a').attr('data-page') != 'undefined' ) {
+                if ( parseInt( $this.find('a').attr('data-page') ) > pagesCount ) {
+                    $this.remove();
+                }
+            }
+        });
+        var lastPage = template.find('.last').find('a');
+        lastPage.attr('href', lastPage.attr('href').replace('LAST_PAGE', pagesCount));
+
+        paginationContainer.html( template );
+    }
+
 }
 
 $('document').ready(function() {
@@ -87,14 +153,20 @@ $('document').ready(function() {
         $("body").animate({ scrollTop: 25 }, 500);
     });
 
-    $('#all-offers-check').hover(function() {
-        $('#all-categories').toggleClass('hover');
-    }).click(function(event) {
-        event.preventDefault();
-        event.stopPropagation();
+    $('#all-offers-check').bind({
+        hover: function() {
+            $( $.offers.sections.offers ).toggleClass('hover');
+        },
+        click: function(event) {
+            event.preventDefault();
+            event.stopPropagation();
 
-        $('div#filter').find('input[type="checkbox"]').prop('checked', true);
-        $.offers.utils.retrieveOffers();
+            var checkboxes = $('div#filter').find('input[type="checkbox"]');
+            if ( checkboxes.length != checkboxes.filter(':checked').length ) {
+                checkboxes.prop('checked', true)
+                $.offers.utils.retrieveOffers();
+            }
+        }
     });
 
     $('#all-offers-clear').click(function(event) {
@@ -102,7 +174,8 @@ $('document').ready(function() {
         event.stopPropagation();
 
         $('div#filter').find('input[type="checkbox"]').prop('checked', false);
-        $.offers.utils.retrieveOffers();
+        $( $.offers.sections.offers ).html('');
+        $( $.offers.sections.pagination ).html('');
     });
 
     $('span.all-tags').bind({
@@ -119,7 +192,13 @@ $('document').ready(function() {
 
             checkboxes.prop('checked', check)
 
-            $.offers.utils.retrieveOffers();
+            if ( check ) {
+                var categoryIds = $.map( checkboxes, function(category) { return category.id } );
+
+                $.offers.utils.getOffers( categoryIds.join(',') );
+            } else {
+                $.offers.utils.retrieveOffers();
+            }
         }
     });
 
@@ -137,11 +216,14 @@ $('document').ready(function() {
         var $this = $(this),
             checked = $this.prop('checked');
 
-        $.offers.utils.retrieveOffers();
+        if ( checked ) {
+            $.offers.utils.getOffers(this.id);
+        } else {
+            $.offers.utils.retrieveOffers();
+        }
     });
 
     // Search
-    //
     $('#search_field').bind({
         focus: function() {
             if ( this.value == $(this).attr('data-value') ) this.value = '';

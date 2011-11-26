@@ -2,23 +2,13 @@
 
   <div id='sort'>
     <div id='sort-buttons'>
-      <% [ 'freshness', 'price', 'discount', 'time_left' ].each do |sort_link| -%>
-        <% link_to nil do -%>
-          <span class="sort-button"><%= t("offers.#{sort_link}") %><span class='sort-arrow-inactive'></span></span>
-        <% end %>
-      <% end %>
-        <ul class="sort-buttons">
-          <li>Новизна</li><li>Цена</li><li>Скидка</li><li>Времени Осталось</li>
-        </ul>
+      <ul class='sort-buttons'>
+        <% [ 'freshness', 'price', 'discount', 'time_left' ].each do |sort_link| %><li><%= t("offers.#{sort_link}") %></li><% end %>
+      </ul>
     </div>
-
-
   </div>
 
   <div id='all-offers' data-city='<%= @city.name %>' data-page='<%= params[:page] || false %>'>
-    <div>
-      <%= t('offers.checked') %><span id='offers-selected-count'><%= @offers_selected_count %></span> <%= t('common.of') %> <%= @offers_total_count %>
-    </div>
     <%= render 'offers' %>
   </div>
 

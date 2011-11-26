@@ -1,10 +1,10 @@
-<nav class='pagination'>
-<span class='page current'>1</span>
-<span class='page'> <%= link_to 2, page_offers_path(:city => @city, :page => 2), :rel => 'next' %> </span>
-<% (3..5).each do |page_index| %>
-  <span class='page'> <%= link_to page_index, page_offers_path(:city => @city, :page => page_index) %> </span>
-<% end %>
-<span class='page gap'>...</span>
-<span class='next'> <%= link_to t('views.pagination.next'), page_offers_path(:city => @city, :page => 2), :rel => 'next' %> </span>
-<span class='last'> <%= link_to t('views.pagination.last'), page_offers_path(:city => @city, :page => 100) %> </span>
+<nav class='pagination pagination-template'>
+  <span class='page current'>1</span>
+  <span class='page'> <%= link_to 2, page_offers_path(:city => @city, :page => 2), :rel => 'next', 'data-page' => 2 %> </span>
+  <% (3..5).each do |page_index| %>
+    <span class='page'> <%= link_to page_index, page_offers_path(:city => @city, :page => page_index), 'data-page' => page_index %> </span>
+  <% end %>
+  <span class='page gap'>...</span>
+  <span class='next'> <%= link_to t('views.pagination.next'), page_offers_path(:city => @city, :page => 2), :rel => 'next' %> </span>
+  <span class='last'> <%= link_to t('views.pagination.last'), page_offers_path(:city => @city, :page => 'LAST_PAGE') %> </span>
 </nav>
