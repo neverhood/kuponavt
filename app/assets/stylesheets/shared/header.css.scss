@@ -1,6 +1,7 @@
 #header {
 
-  width: 980px;
+  position: relative;
+  width: 960px;
   height: 80px;
   margin: 0 auto;
   background: url(semi-tsp.png) repeat;
@@ -8,6 +9,17 @@
   -webkit-border-radius: 0 0 5px 5px;
   -moz-border-radius: 0 0 5px 5px;
   box-shadow:  0px 0px 2px #007FAD;
+
+  .selected-deals-link {
+    float: left;
+    margin: 31px 0 0 147px;
+    a {
+      text-shadow: 0px 1px 1px white;
+      font-size: 18px;
+      color: #007FAD;
+      font-weight: bold;
+    }
+  }
 
 }
 
@@ -36,7 +48,7 @@
   @include rounded-corners(5px);
 
   position: absolute;
-  left: 350px;
+  left: 13px;
   top: 65px;
   width: 265px;
   border: 1px solid $main-color;

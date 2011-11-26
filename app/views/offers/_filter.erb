@@ -1,29 +1,33 @@
 <div id="filter">
 
-    <p>
+  <p>
 
-    <%= link_to nil, :class => 'all-categories-links', :id => 'all-offers-check' do %>
-      <span> <%= t('offers.all_offers') %> </span>
-    <% end %>
-    <%= link_to nil, :class => 'all-categories-links', :id => 'all-offers-clear' do %>
-      <span> <%= t('offers.clear_filter') %> </span>
-    <% end %>
+  <%= link_to nil, :class => 'all-categories-links', :id => 'all-offers-check' do %>
+    <span> <%= t('offers.all_offers') %> </span>
+  <% end %>
+  <%= link_to nil, :class => 'all-categories-links', :id => 'all-offers-clear' do %>
+    <span> <%= t('offers.clear_filter') %> </span>
+  <% end %>
 
-		</p>
+  </p>
 
-	<div id="all-categories">	
+  <div id="all-categories">	
 
     <% Category.parent_categories.each do |parent_category| %>
 
-      <p class='type'> <%= parent_category.name %> | <span class='all-tags' id='<%= parent_category.id %>'> <%= t('offers.all_tags') %> </span> </p>
+      <% if Category.parent_categories.index(parent_category) == 0 %>
+        <p class='type first-category'> <%= parent_category.name %> | <span class='all-tags' id='<%= parent_category.id %>'> <%= t('offers.all_tags') %> </span> </p>
+      <% else %>
+        <p class='type'> <%= parent_category.name %> | <span class='all-tags' id='<%= parent_category.id %>'> <%= t('offers.all_tags') %> </span> </p>
+      <% end %>
 
       <ul class='<%= parent_category.to_en %>'>
         <% parent_category.nested_categories.each do |nested_category| %>
           <li>
-            <label> <%= check_box_tag nested_category.id, nested_category.id, (@categories && @categories.include?(nested_category.id.to_s)),
-                         :name => nested_category.to_en %> <%= nested_category.name %>
-            </label>
-            <span class='amount'>[<%= nested_category.offers.count %>]</span>
+          <label> <%= check_box_tag nested_category.id, nested_category.id, (@categories && @categories.include?(nested_category.id.to_s)),
+            :name => nested_category.to_en %><%= nested_category.name %>
+          </label>
+          <span class='amount'>[<%= nested_category.offers.count %>]</span>
           </li>
         <% end %>
       </ul>
@@ -31,8 +35,14 @@
     <% end %>
 
 
-	</div>
+  </div>
 
-	
+  <div id='search'>
+    <p> <%= t('offers.offers_search') %> </p>
+    <%= text_field_tag :search_field, t('offers.search_watermark'), 'data-value' => t('offers.search_watermark') %>
+    <span id='search-button'></span>
+  </div>
+
 
 </div>
+

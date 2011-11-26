@@ -5,6 +5,13 @@
 
   <div class='offer-left-side'>
     <%= image_tag offer.image_url, :class => 'offer-image' %>
+      <div class="offer-image-bottom">
+        <div class="subway"></div>
+        <span class="subway-station"><%= offer.subway =%></span>
+        <img class="provider" src="groupon.png" />
+      </div>
+
+
   </div>
 
   <div class='offer-right-side'>
@@ -32,14 +39,13 @@
       <%= t('offers.coupon_price') %>:
     </p>
     <p class="price"> <span class='offer-price'> <%= offer.price %> </span> <span class='hrn'> <%= t('common.hrn') %> </span></p>
-
+    <div class="add-button"></div>
     <%= link_to t('offers.buy'), nil, :class => 'buy-button' %>
 
 
   </div>
 
-    <%= link_to nil do %>
+  <div class="offer-details"><%= simple_format offer.description =%></div>
       <div class='offer-bottom' title='<%= t('offers.details') %>'> <center> <%= image_tag 'down-arrow.png' %> </center> </div>
-    <% end %>
 
 </div>

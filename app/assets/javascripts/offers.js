@@ -113,6 +113,14 @@ $('document').ready(function() {
         $.offers.utils.retrieveOffers();
     });
 
+    // Offer-bottom-more
+
+    $(".offer-bottom").live('click', function(){
+        $(this).prev().toggle('1s');
+    });
+
+
+
     // Categories
 
     $('#all-categories input[type="checkbox"]').change(function() {
@@ -121,6 +129,21 @@ $('document').ready(function() {
 
         $.offers.utils.retrieveOffers();
     });
+
+    // Search
+    //
+    
+    $('#search_field').bind({
+        focus: function() {
+            if ( this.value == $(this).attr('data-value') ) this.value = '';
+        },
+        blur: function() {
+            if ( this.value.length == 0 ) {
+                $(this).val( $(this).attr('data-value') );
+            }
+        }
+    });
+
 
 
 //    $('.pagination a').pjax('[data-pjax-container]');

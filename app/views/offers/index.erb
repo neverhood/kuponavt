@@ -1,17 +1,24 @@
 <div id='offers'>
 
   <div id='sort'>
-      <h2>
-        Киев <span> <%= Time.now.to_date %> </span>
-      </h2>
+    <div id='sort-buttons'>
+      <% [ 'freshness', 'price', 'discount', 'time_left' ].each do |sort_link| -%>
+        <% link_to nil do -%>
+          <span class="sort-button"><%= t("offers.#{sort_link}") %><span class='sort-arrow-inactive'></span></span>
+        <% end %>
+      <% end %>
+        <ul class="sort-buttons">
+          <li>Новизна</li><li>Цена</li><li>Скидка</li><li>Времени Осталось</li>
+        </ul>
+    </div>
 
-      <div>
-        <%= t('offers.checked') %><span id='offers-selected-count'><%= @offers_selected_count %></span> <%= t('common.of') %> <%= @offers_total_count %>
-        <span><%= t('offers.price') %> | <%= t('offers.discount') %> | <%= t('offers.time_left') %></span>
-      </div>
+
   </div>
 
   <div id='all-offers' data-city='<%= @city.name %>' data-page='<%= params[:page] || false %>'>
+    <div>
+      <%= t('offers.checked') %><span id='offers-selected-count'><%= @offers_selected_count %></span> <%= t('common.of') %> <%= @offers_total_count %>
+    </div>
     <%= render 'offers' %>
   </div>
 

@@ -17,4 +17,8 @@
     <%= select_tag 'city-selection', options_for_select(City.all.map { |city| [t('cities.' + city.name), city.name] } ) %>
   </div>
 
+  <div class='selected-deals-link'>
+    <%= link_to t('offers.selected_coupons'), nil %>
+  </div>
+
 </div>

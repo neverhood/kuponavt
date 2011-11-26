@@ -18,15 +18,19 @@ ru:
     price: Цена
     discount: Скидка
     time_left: Времени Осталось
+    freshness: Новизна
     checked: Выбрано
     cost: Стоимость
     savings: Экономия
     coupon_price: Цена купона
     buy: Приобрести
     clear_filter: Очистить
-    all_offers: Все купоны
+    all_offers: Все категории
     all_tags: все
     details: Подробнее
+    selected_coupons: Отобранные купоны
+    offers_search: Поиск по купонам
+    search_watermark: Введите слово
 
   cities:
     your_city: Ваш Город
