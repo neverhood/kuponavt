@@ -3,7 +3,7 @@
   <div id='sort'>
     <div id='sort-buttons'>
       <ul class='sort-buttons'>
-        <% [ 'freshness', 'price', 'discount', 'time_left' ].each do |sort_link| %><li><%= t("offers.#{sort_link}") %></li><% end %>
+        <% [ 'freshness', 'price', 'discount', 'time_left' ].each do |sort_link| %><li id='<%= "sort-by-#{sort_link}" %>'><%= t("offers.#{sort_link}") %></li><% end %>
       </ul>
     </div>
   </div>

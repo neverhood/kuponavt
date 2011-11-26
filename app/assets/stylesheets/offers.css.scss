@@ -30,7 +30,8 @@ div#offers {
 
       li {
         display: inline-block;
-        padding: 5px 10px 7px;
+        position: relative;
+        padding: 6px 10px 7px;
         font-size: 16px;
         color: white;
         cursor: pointer;
@@ -39,19 +40,51 @@ div#offers {
         border-left: 1px solid #73BACC;
         -moz-transition: box-shadow 70ms linear, padding .1s linear;
         -webkit-transition: box-shadow 70ms linear, padding .1s linear;
-        
+
         &:hover {
           background-image: url(sort-tsp-current.png);
           border-left: 1px solid #64A2B2;
         }
 
         &:active {
-position: relative;
+          position: relative;
           bottom: -1px;
           box-shadow: inset 0px 1px 8px rgba(0,0,0,0.45);
         }
-       }
 
+
+      }
+
+      .current-sort {
+        position: relative;
+        top: 1px;
+        padding: 7px 20px 6px 6px;
+        color: white;
+        background-image: url(current-sort-tsp.png);
+        box-shadow: inset 0px 1px 8px rgba(0,0,0,0.45);
+        border: 1px solid #296577;
+      }
+
+      .asc {
+        position: absolute;
+        top: 6px;
+        right: 6px;
+        background: url(sort-arrows.png);
+        background-position: -10px 50%;
+        z-index: 1;
+        width: 10px;
+        height: 17px;
+      }
+
+      .desc {
+        position: absolute;
+        top: 6px;
+        right: 6px;
+        background: url(sort-arrows.png);
+        z-index: 1;
+        width: 10px;
+        height: 17px;
+      }
 
 
       .sort-arrow-inactive {

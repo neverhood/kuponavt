@@ -4,6 +4,7 @@
 $.offers = {
     latestCategoriesUpdate: [],
     offersPerPage: 25,
+    latestSort: '',
     sections: {
         offers: '#all-offers',
         pagination: '#pagination-bottom',
@@ -235,8 +236,30 @@ $('document').ready(function() {
         }
     });
 
+    // Sort
 
+    $('#sort-buttons li').click(function() {
+        var $this = $(this),
+            ul = $this.parent(),
+            inverseSortDirection = function(direction) {
+                return ( direction == 'asc' ? 'desc' : 'asc' );
+            };
 
-//    $('.pagination a').pjax('[data-pjax-container]');
+        ul.find('li').removeClass('current-sort');
+        ul.find('.asc, .desc').remove();
+
+        $this.addClass('current-sort');
+
+        if ( $.offers.latestSort == this.id ) {
+            $this.data('sort', inverseSortDirection( $this.data('sort') ));
+        } else {
+            $this.data('sort', 'asc')
+        }
+
+        $.offers.latestSort = this.id;
+
+        $this.append('<span class="' + $this.data('sort') + '"></span>');
+
+    });
 
 });
