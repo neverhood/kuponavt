@@ -173,6 +173,8 @@ $('document').ready(function() {
         event.preventDefault();
         event.stopPropagation();
 
+        $('#offers-selected-count').text('0');
+
         $('div#filter').find('input[type="checkbox"]').prop('checked', false);
         $( $.offers.sections.offers ).html('');
         $( $.offers.sections.pagination ).html('');
