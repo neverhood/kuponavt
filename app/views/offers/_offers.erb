@@ -1,7 +1,3 @@
-<div>
-  <%= t('offers.checked') %><span id='offers-selected-count'><%= @offers_selected_count %></span> <%= t('common.of') %> <%= @offers_total_count %>
-</div>
-
 <% @offers.each do |offer| %>
   <%= render :partial => 'offers/offer', :locals => { :offer => offer } %>
 <% end %>

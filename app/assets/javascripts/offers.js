@@ -6,7 +6,7 @@ $.offers = {
     offersPerPage: 25,
     latestSort: '',
     sections: {
-        offers: '#all-offers',
+        offers: '#offers-section',
         pagination: '#pagination-bottom',
         selectedCount: '#offers-selected-count'
     },
@@ -41,9 +41,8 @@ $.offers.utils.url = function() {
 };
 
 $.offers.utils.renderOffers = function(offers) {
-    $('#all-offers').html('');
     var offerTemplate = $('div#offer-id'),
-        allOffersContainer = $('#all-offers');
+        allOffersContainer = $('#offers-section').html('');
 
     $.each( offers, function() {
         var offer = offerTemplate.clone().
@@ -147,7 +146,7 @@ $('document').ready(function() {
         var attributes = $.parseJSON( xhr.responseText ),
             url = $(this).attr('href');
 
-        $('#all-offers').html( attributes.offers );
+        $('#offers-section').html( attributes.offers );
         $('#pagination-bottom').html( attributes.pagination );
 
         Cufon.replace('.time-left');
