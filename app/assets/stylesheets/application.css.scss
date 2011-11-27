@@ -76,8 +76,8 @@ body {
 }
 
 .loader {
-  height: 130px;
-  background: url('loader.gif') no-repeat center;
+  position: absolute;
+  margin: -5px 0 0 5px;
 }
 
 

@@ -4,12 +4,22 @@
 
 div#offers {
 
-   background: url(semi-tsp.png) repeat;
-   width: 700px;
-   float: left;
-   border-radius: 5px;
-   box-shadow:  0px 0px 2px $main-color;
-   margin-bottom: 70px;
+  background: url(semi-tsp.png) repeat;
+  width: 700px;
+  float: left;
+  border-radius: 5px;
+  box-shadow:  0px 0px 2px $main-color;
+  margin-bottom: 70px;
+
+  div#current-offers-count {
+    margin: 10px;
+    text-align: center;
+    text-shadow: 0 1px 1px white;
+
+    #offers-selected-count {
+      color: $main-color;
+    }
+  }
 
   div#sort {
     position: relative;
@@ -99,10 +109,10 @@ div#offers {
     }
 
     h2 {
-     font-size: 22px;
+      font-size: 22px;
     }
     span {
-     font-size: 14px;
+      font-size: 14px;
     }
 
     p {
@@ -115,191 +125,191 @@ div#offers {
   }
 
   div.offer {
-     display: inline-block;
-     width: 640px;
-     margin: 0 0 15px 15px;
-     padding: 15px 15px 30px;
-     position: relative;
-     border-radius: 5px 5px 10px 10px;
-     box-shadow:  0 0 3px $main-color;
-     background: url(offer-tsp.png);
+    display: inline-block;
+    width: 640px;
+    margin: 0 0 15px 15px;
+    padding: 15px 15px 30px;
+    position: relative;
+    border-radius: 5px 5px 10px 10px;
+    box-shadow:  0 0 3px $main-color;
+    background: url(offer-tsp.png);
 
-     &:hover {
-       box-shadow: 0 0 7px $main-color;
-     }
+    &:hover {
+      box-shadow: 0 0 7px $main-color;
+    }
 
-     h2 {
-       padding-bottom: 20px;
-       text-align: justify;
-       text-shadow: 0px 1px 1px white;
+    h2 {
+      padding-bottom: 20px;
+      text-align: justify;
+      text-shadow: 0px 1px 1px white;
 
-       a {
-         font-size: 18px;
-         text-decoration: none;
-         color: $main-color;
-         font-weight: bold;
-       }
-     }
+      a {
+        font-size: 18px;
+        text-decoration: none;
+        color: $main-color;
+        font-weight: bold;
+      }
+    }
 
 
-     .offer-left-side {
-       float: left;
-       position: relative;
+    .offer-left-side {
+      float: left;
+      position: relative;
 
-       .offer-image {
-         border: 1px solid #F3F3F3;
-         padding: 2px;
-         width: 360px;
-       }
+      .offer-image {
+        border: 1px solid #F3F3F3;
+        padding: 2px;
+        width: 360px;
+      }
 
-       .offer-image-bottom {
-         opacity: .7;
-         position: absolute;
-         left: 3px;
-         bottom: 5px;
-         width: 360px;
-         height: 24px;
-         background: url(metro-tsp.png);
+      .offer-image-bottom {
+        opacity: .7;
+        position: absolute;
+        left: 3px;
+        bottom: 5px;
+        width: 360px;
+        height: 24px;
+        background: url(metro-tsp.png);
 
-         .subway {
-           margin: 2px 0 0 3px;
-           float: left;
-           background: url(metro-red.png);
-           width: 20px;
-           height: 20px;
-         } 
+        .subway {
+          margin: 2px 0 0 3px;
+          float: left;
+          background: url(metro-red.png);
+          width: 20px;
+          height: 20px;
+        } 
 
-         .subway-station {
-           float: left;
-           max-width: 220px;
-           margin: 3px 0 0 6px;
-         }
-
-         .provider {
-           float: right;
-           width: auto;
-           height: 24px;
-         } 
-       }
-
-     }
-
-     .offer-right-side {
-        float: left;
-        margin-left: 20px;
-        width: 235px;
-        height: 237px;
-        position: relative;
-        margin-bottom: 25px;
-
-        .price {
-          color: green;
-          font-weight: bold;
-          text-align: center;
-          font-size: 130%;
-          .hrn { font-weight: normal; }
+        .subway-station {
+          float: left;
+          max-width: 220px;
+          margin: 3px 0 0 6px;
         }
 
-        .info {
-           font-size: 80%;
-           color: grey;
-           text-align: center;
-         }
+        .provider {
+          float: right;
+          width: auto;
+          height: 24px;
+        } 
+      }
 
-         table {
-           text-align: center;
-           font-size: 80%;
-           margin: 10px auto;
-           color: grey;
+    }
 
-           td {
-             padding: 0 10px;
-           }
+    .offer-right-side {
+      float: left;
+      margin-left: 20px;
+      width: 235px;
+      height: 237px;
+      position: relative;
+      margin-bottom: 25px;
 
-           tr {
-             border-left: 1px solid grey;
-           }
-         } /* Table */
+      .price {
+        color: green;
+        font-weight: bold;
+        text-align: center;
+        font-size: 130%;
+        .hrn { font-weight: normal; }
+      }
 
-         .add-button {
-           position: absolute;
-           bottom: 7px;
-           left: 5px;
-           width: 35px;
-           height: 35px;
-           background: url(add-icons.png);
-           cursor: pointer;
+      .info {
+        font-size: 80%;
+        color: grey;
+        text-align: center;
+      }
 
-           &:hover {
-             background: url(add-icons.png);
-             background-position: -35px; 
-           }
+      table {
+        text-align: center;
+        font-size: 80%;
+        margin: 10px auto;
+        color: grey;
 
-           &:active {
-             bottom: 6px;
-             background: url(add-icons.png);
-             background-position: -70px; 
-           }
-         }
+        td {
+          padding: 0 10px;
+        }
 
-         .buy-button {
-           display: block;
-           text-align: center;
-           text-decoration: none;
-           font-weight: bold;
-           color: white;
-           padding: 8px;
-           width: 150px;
-           line-height: 30px;
-           position: absolute;
-           bottom: 0px;
-           left: 60px;
-           background: $main-color;
-           background:-webkit-linear-gradient(#47AACC,#007fac);
-           background:-moz-linear-gradient(#47AACC,#007fac);
-           background:-o-linear-gradient(#47AACC,#007fac);
-           border: 1px solid $main-color;
-           border-top: 1px solid #47AACC;
-           border-radius: 4px;
-           text-shadow: 0px 1px 1px $main-color;
+        tr {
+          border-left: 1px solid grey;
+        }
+      } /* Table */
 
-           &:hover {
-             border: 1px solid #006f91;
-             border-right: 1px solid #00a1d6;
-             border-bottom: 1px solid #00a1d6;
-             background: #007fac;
-             text-shadow: 0 0 10px #7addff;
-           }
+      .add-button {
+        position: absolute;
+        bottom: 7px;
+        left: 5px;
+        width: 35px;
+        height: 35px;
+        background: url(add-icons.png);
+        cursor: pointer;
 
-           &:active {
-             bottom: -1px;
-             box-shadow:  inset 0px 1px 8px rgba(0,0,0,0.6);
-           }
-         }
-     } /* Right Side */
+        &:hover {
+          background: url(add-icons.png);
+          background-position: -35px; 
+        }
 
-     .offer-details {
-       clear: left;
-       float: left;
-       display: none;
-     }
+        &:active {
+          bottom: 6px;
+          background: url(add-icons.png);
+          background-position: -70px; 
+        }
+      }
 
-     div.offer-bottom {
-       position: absolute;
-       width: 672px;
-       bottom: 0px;
-       left: 0px;
-       border-radius: 0 0 10px 10px;
-       border-top: 1px solid #97D0C9;
-       padding: 0;
+      .buy-button {
+        display: block;
+        text-align: center;
+        text-decoration: none;
+        font-weight: bold;
+        color: white;
+        padding: 8px;
+        width: 150px;
+        line-height: 30px;
+        position: absolute;
+        bottom: 0px;
+        left: 60px;
+        background: $main-color;
+        background:-webkit-linear-gradient(#47AACC,#007fac);
+        background:-moz-linear-gradient(#47AACC,#007fac);
+        background:-o-linear-gradient(#47AACC,#007fac);
+        border: 1px solid $main-color;
+        border-top: 1px solid #47AACC;
+        border-radius: 4px;
+        text-shadow: 0px 1px 1px $main-color;
 
-       img {
-         width: 20px;
-         margin: 0;
-         border: none;
-       }
+        &:hover {
+          border: 1px solid #006f91;
+          border-right: 1px solid #00a1d6;
+          border-bottom: 1px solid #00a1d6;
+          background: #007fac;
+          text-shadow: 0 0 10px #7addff;
+        }
 
-     }
+        &:active {
+          bottom: -1px;
+          box-shadow:  inset 0px 1px 8px rgba(0,0,0,0.6);
+        }
+      }
+    } /* Right Side */
+
+    .offer-details {
+      clear: left;
+      float: left;
+      display: none;
+    }
+
+    div.offer-bottom {
+      position: absolute;
+      width: 672px;
+      bottom: 0px;
+      left: 0px;
+      border-radius: 0 0 10px 10px;
+      border-top: 1px solid #97D0C9;
+      padding: 0;
+
+      img {
+        width: 20px;
+        margin: 0;
+        border: none;
+      }
+
+    }
 
   } /* Offer */
 
@@ -399,8 +409,8 @@ div#offers {
       color: grey;
       &:focus {
         box-shadow: inset 0 1px 2px rgba(0,0,0,.5);
-				color: black;
-				text-shadow: 0 1px 1px white
+        color: black;
+        text-shadow: 0 1px 1px white
       }
     }
 
@@ -427,27 +437,27 @@ div#offers {
 
 
 #pagination-bottom {
-    margin: 5px auto 15px;
-    width: 590px;
-    font-size: 80%;
+  margin: 5px auto 15px;
+  width: 590px;
+  font-size: 80%;
 
-    .page {
-      margin: 0 -1px;
+  .page {
+    margin: 0 -1px;
+  }
+
+  a {
+    padding: 2px 7px 3px;
+    text-decoration: none;
+    color: black;
+    @include rounded-corners(3px);
+
+    &:hover {
+      background: $main-color;
+      color: white;
     }
-
-    a {
-      padding: 2px 7px 3px;
-      text-decoration: none;
-      color: black;
-      @include rounded-corners(3px);
-
-      &:hover {
-        background: $main-color;
-        color: white;
-      }
-      &:active {
-        box-shadow: 0 0 2px #007fad;
-      }
+    &:active {
+      box-shadow: 0 0 2px #007fad;
+    }
   }
 
   .current {

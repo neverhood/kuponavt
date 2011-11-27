@@ -70,6 +70,7 @@ $.offers.utils.renderOffers = function(offers) {
 
 $.offers.utils.retrieveOffers = function(page) { // Retrieves offers, count and pagination
     $('div.loader').show(50);
+    $('#current-offers-count').append( $.api.loader() );
 
     $.getJSON($.offers.utils.url(page), function(data) {
 
@@ -78,17 +79,20 @@ $.offers.utils.retrieveOffers = function(page) { // Retrieves offers, count and 
         $( $.offers.sections.selectedCount ).html( data.count );
 
         Cufon.replace('.time-left');
-        $('div.loader').hide();
+        $('#current-offers-count').find('.loader').remove();
     });
 }
 
 $.offers.utils.getOffers = function(categoryIds) { // Retrieves just offers
+    // This craziness was crafted to reproduce the server ORDER BY logic
+    // It allows us to avoid redundant ajax requests
     var selectedCategories = $('#all-categories').find('input[type="checkbox"]').filter(':checked'),
         selectedCategoryIds = $.map(selectedCategories, function(category) { return parseInt(category.id) }),
         selectedCategoriesCount = selectedCategories.length;
 
     if ( categoryIds.equals( selectedCategoryIds ) ) {
         $( $.offers.sections.offers ).html('');
+        $( $.offers.sections.pagination ).html('');
     }
 
     var existingOffers = $('div.offer'),
@@ -109,11 +113,14 @@ $.offers.utils.getOffers = function(categoryIds) { // Retrieves just offers
 
     if ( offersAheadCount >= $.offers.offersPerPage ) {
         $('#offers-selected-count').text( totalSelectedOffersCount );
+        $.offers.utils.paginate( totalSelectedOffersCount );
     } else {
         var url = '/' + $.offers.utils.city() + '/offers?categories=' + categoryIds.join(',');
+        $('#current-offers-count').append( $.api.loader() );
 
         $.getJSON( url, function(data) {
             var offers = $(data.offers).filter('div.offer');
+
 
             if ( existingOffers.length == 0 ) {
                 $( $.offers.sections.offers ).append( offers );
@@ -132,11 +139,12 @@ $.offers.utils.getOffers = function(categoryIds) { // Retrieves just offers
                 var updatedOffers = $('div.offer');
                 updatedOffers.slice($.offers.offersPerPage, updatedOffers.length).remove();
             }
+            $('#current-offers-count').find('.loader').remove();
+            $.offers.utils.paginate( totalSelectedOffersCount );
         });
     }
 
     $('#offers-selected-count').text( totalSelectedOffersCount );
-    $.offers.utils.paginate( totalSelectedOffersCount );
 }
 
 $.offers.utils.selectedOffersCount = function() {

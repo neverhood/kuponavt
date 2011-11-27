@@ -10,7 +10,7 @@
 
   <div id='all-offers' data-city='<%= @city.name %>' data-page='<%= params[:page] || false %>'>
     <div id='current-offers-count'>
-      <%= t('offers.checked') %><span id='offers-selected-count'><%= @offers_selected_count %></span> <%= t('common.of') %> <%= @offers_total_count %>
+      <%= t('offers.checked') -%> <span id='offers-selected-count'><%= @offers_selected_count %></span> <%= t('common.of') -%> <%= @offers_total_count -%>
     </div>
 
     <div id='offers-section'>

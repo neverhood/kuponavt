@@ -24,6 +24,8 @@ $.api.utils.appendNotification = function(notification) {
     $( $.api.sections.notifications[ notification.type ] ).text( notification.text );
 }
 
+$.api.loader = function() { return $('#loader .loader').clone() } ;
+
 Array.prototype.include = function(element) {
     for ( var i = 0; i <= this.length; i++ ) {
         if ( this[i] == element ) return true;
