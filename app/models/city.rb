@@ -4,8 +4,7 @@ class City < ActiveRecord::Base
   has_many :offers, :class_name => 'Kupongid' do
 
     def by_categories(categories)
-      joins(:category).
-        where(['categories.id IN (:category_ids)', :category_ids => categories])
+      joins(:category).where(['categories.id IN (:category_ids)', { :category_ids => categories }])
     end
 
   end

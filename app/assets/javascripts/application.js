@@ -10,6 +10,7 @@
 //= require transponder
 //= require countdown
 //= require cookie
+//= require animate-colors
 //= require api
 //= require_tree .
 
@@ -29,6 +30,17 @@ Array.prototype.include = function(element) {
     }
 
     return false;
+}
+
+Array.prototype.equals = function(array) {
+    if ( this.length != array.length )
+        return false;
+
+    for (var i = 0; i < this.length; i++) {
+        if ( this[i] != array[i] ) return false;
+    };
+
+    return true;
 }
 
 Array.prototype.unique = function() {

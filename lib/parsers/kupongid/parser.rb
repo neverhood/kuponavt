@@ -69,6 +69,8 @@ end
    offer[:subway] = nil if offer[:subway] && offer[:subway].gsub(/[ ,-\\"'`]*/, '').empty?
 
    category_name = $agent.page.parser.xpath('//div[contains(@class,"deal")]/div/div/noindex/p/a[1]').last.text
+   category_name = 'Отели, путешествия' if category_name == 'Авиабилеты'
+
    category = Category.where(:name => category_name).first
 
    offer[:category_id] = category.id if category
@@ -80,8 +82,7 @@ end
 
   begin
     $agent.get @engine.authentication_details[:address] + "deal/out/#{offer[:kupongid_id]}"
-    offer[:provider_url] = $agent.page.parser.css('b').text
-    binding.pry
+    offer[:provider_url] = $agent.page.links.last.href
   rescue Exception
   end
   unless offer.nil?
