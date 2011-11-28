@@ -8,17 +8,22 @@ class OffersController < ApplicationController
   before_filter :prepare_categories_array
 
   def index
-    @offers = (@categories ? @city.offers.by_categories(@categories) : @city.offers).page( params[:page] )
+    if request.xhr?
+      @offers = ( @categories ? @city.offers.by_categories(@categories).page( params[:page] ) : [] )
+    else
+      @offers = (@categories ? @city.offers.by_categories(@categories) : @city.offers).page( params[:page ] )
+    end
     @offers_total_count = @city.offers.count
     @offers_selected_count = @categories ? @city.offers.by_categories(@categories).count : @city.offers.count
 
     respond_to do |format|
       format.html
       format.js do
-        render :json => { :offers => @offers.to_json,
-          :pagination => render_to_string(:partial => 'offers/pagination'),
-          :count => @offers_selected_count
-        }
+        if params[:page] && params[:page].to_i > 1
+          render :json => { :offers => @offers.to_json, :pagination => render_to_string(:partial => 'offers/pagination'), :count => @offers_selected_count }
+        else
+          render :json => { :offers => @offers.to_json }
+        end
         #render :json => { :offers => render_to_string(:partial => 'offers/offers'),
         #  :pagination => render_to_string(:partial => 'offers/pagination'), :count => @offers_selected_count
         #}, :layout => false
