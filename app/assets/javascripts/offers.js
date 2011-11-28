@@ -18,7 +18,9 @@ $.offers.utils.city = function() {
 }
 
 $.offers.utils.page = function() {
-    return parseInt($('#pagination-bottom .current').text());
+    var currentPage = $('#pagination-bottom .current').text();
+
+    return currentPage.length ? parseInt(currentPage) : 1
 }
 
 $.offers.utils.checkedCategories = function() {
@@ -37,15 +39,13 @@ $.offers.utils.url = function(page) {
     }
 
     if ( checkedCategories.length ) {
-
         $.each( checkedCategories, function() {
             categories.push( parseInt(this) );
         });
-
-        return url + '?categories=' + categories.sort(function(a,b) { return a - b }).join(',');
-    } else {
-        return url;
+        url += '?categories=' + categories.sort(function(a,b) { return a - b }).join(',');
     }
+
+    return url;
 };
 
 $.offers.utils.renderOffers = function(offers) {
@@ -59,13 +59,39 @@ $.offers.utils.renderOffers = function(offers) {
         offer.find('a.offer-url').attr('href', this.url).text(this.title);
         offer.find('img.offer-image').attr('src', this.image_url);
         offer.find('td.offer-cost').text(this.cost);
-        offer.find('td.offer-discount').text(this.discount);
-        offer.find('td.offer-savings').text( this.cost ? this.cost/100 * this.discount : '' );
+        offer.find('td.offer-discount').text(this.discount); offer.find('td.offer-savings').text( this.cost ? this.cost/100 * this.discount : '' );
         offer.find('p.time-left').text(this.ends_at);
         offer.find('span.offer-price').text(this.price);
 
         allOffersContainer.append( offer );
     });
+}
+
+$.offers.utils.offersAheadCount = function(categoryIds) {
+    var count = 0;
+        existingOffers = $('div.offer'),
+        existingOffersCategories = $.map( existingOffers, function(offer) {
+            return parseInt( $(offer).attr('data-category') )
+        }).unique();
+
+    var counted = [];
+    for (var i = 0; i < categoryIds.length; i++) {
+        for (var j = 0; j < existingOffersCategories.length; j++) {
+            if ( categoryIds[i] > existingOffersCategories[j] && !counted.include(existingOffersCategories[j]) ) { // j goes ahead of i
+                counted.push( existingOffersCategories[j] );
+                count += $('div.offer[data-category="' + existingOffersCategories[j] + '"]').length;
+            }
+        };
+    };
+
+    return count;
+}
+
+$.offers.utils.changeCounterAndPaginate = function() {
+    var totalSelectedOffersCount = $.offers.utils.selectedOffersCount();
+
+    $.offers.utils.paginate( totalSelectedOffersCount );
+    $('#offers-selected-count').text( totalSelectedOffersCount );
 }
 
 $.offers.utils.retrieveOffers = function(page) { // Retrieves offers, count and pagination
@@ -87,33 +113,39 @@ $.offers.utils.getOffers = function(categoryIds) { // Retrieves just offers
     // This craziness was crafted to reproduce the server ORDER BY logic
     // It allows us to avoid redundant ajax requests
     var selectedCategories = $('#all-categories').find('input[type="checkbox"]').filter(':checked'),
-        selectedCategoryIds = $.map(selectedCategories, function(category) { return parseInt(category.id) }),
-        selectedCategoriesCount = selectedCategories.length;
+        selectedCategoryIds = $.map(selectedCategories, function(category) { return parseInt(category.id) });
+        // selectedCategoriesCount = selectedCategories.length;
 
     if ( categoryIds.equals( selectedCategoryIds ) ) {
         $( $.offers.sections.offers ).html('');
         $( $.offers.sections.pagination ).html('');
     }
 
-    var existingOffers = $('div.offer'),
-        existingOffersCategories = $.map( existingOffers, function(offer) {
-            return parseInt( $(offer).attr('data-category') );
-        }).unique(),
-        offersAheadCount = 0,
-        totalSelectedOffersCount = $.offers.utils.selectedOffersCount();
+    var offersAheadCount = $.offers.utils.offersAheadCount(categoryIds),
+        totalSelectedOffersCount = $.offers.utils.selectedOffersCount(),
+        existingOffers = $('div.offer');
+
+    // var existingOffers = $('div.offer'),
+    //     existingOffersCategories = $.map( existingOffers, function(offer) {
+    //         return parseInt( $(offer).attr('data-category') );
+    //     }).unique(),
+    //     offersAheadCount = 0,
 
 
-    $.each( categoryIds, function(i) {
-        $.each( existingOffersCategories, function(j) {
-            if ( categoryIds[i] > existingOffersCategories[j] ) { // j goes ahead of i
-                offersAheadCount += $('div.offer[data-category="' + existingOffersCategories[j] + '"]').length;
-            }
-        });
-    });
+    // $.each( categoryIds, function(i) {
+    //     $.each( existingOffersCategories, function(j) {
+    //         if ( categoryIds[i] > existingOffersCategories[j] ) { // j goes ahead of i
+    //             offersAheadCount += $('div.offer[data-category="' + existingOffersCategories[j] + '"]').length;
+    //         }
+    //     });
+    // });
 
-    if ( offersAheadCount >= $.offers.offersPerPage ) {
+    if ( offersAheadCount >= $.offers.offersPerPage ) { // No need to get any offers, they wouldn't fit into page anyway. just simulate
         $('#offers-selected-count').text( totalSelectedOffersCount );
         $.offers.utils.paginate( totalSelectedOffersCount );
+    } else if (categoryIds.length > 1 && offersAheadCount > 0 && offersAheadCount != $.offers.offersPerPage) {
+        // Too complex, just get offers from server
+        $.offers.utils.retrieveOffers(1);
     } else {
         var url = '/' + $.offers.utils.city() + '/offers?categories=' + categoryIds.join(',');
         $('#current-offers-count').append( $.api.loader() );
@@ -139,6 +171,7 @@ $.offers.utils.getOffers = function(categoryIds) { // Retrieves just offers
                 var updatedOffers = $('div.offer');
                 updatedOffers.slice($.offers.offersPerPage, updatedOffers.length).remove();
             }
+            Cufon.replace('.time-left');
             $('#current-offers-count').find('.loader').remove();
             $.offers.utils.paginate( totalSelectedOffersCount );
         });
@@ -249,18 +282,31 @@ $('document').ready(function() {
         },
         click: function() {
             var $this = $(this),
-                ul = $this.parent().next(),
-                checkboxes = ul.find('input[type="checkbox"]'),
-                check = true;
+            ul = $this.parent().next(),
+            checkboxes = ul.find('input[type="checkbox"]'),
+            check = true;
 
             if ( checkboxes.filter(':checked').length == checkboxes.length ) check = false;
 
             checkboxes.prop('checked', check)
 
-            if ( check ) {
+            if ( $.offers.utils.page() == 1 ) {
                 var categoryIds = $.map( checkboxes, function(category) { return parseInt(category.id) } );
 
-                $.offers.utils.getOffers( categoryIds );
+                if ( check ) {
+                    $.offers.utils.getOffers( categoryIds );
+                } else {
+                    var count = 0;
+                    $.each( categoryIds, function(id) {
+                        count += $('div.offer[data-category="' + categoryIds[id] + '"]').length
+                    });
+
+                    if ( count > 0 ) {
+                        $.offers.utils.retrieveOffers(1);
+                    } else {
+                        $.offers.utils.changeCounterAndPaginate();
+                    }
+                }
             } else {
                 $.offers.utils.retrieveOffers(1);
             }
@@ -279,10 +325,18 @@ $('document').ready(function() {
 
     $('#all-categories input[type="checkbox"]').change(function() {
         var $this = $(this),
-            checked = $this.prop('checked');
+        checked = $this.prop('checked');
 
-        if ( checked && $.offers.utils.page() == 1 ) {
-            $.offers.utils.getOffers( [parseInt( this.id )] );
+        if ( $.offers.utils.page() == 1 ) {
+            if ( checked ) {
+                $.offers.utils.getOffers( [parseInt( this.id )] );
+            } else {
+                if ( $('div.offer[data-category="' + this.id + '"]').length > 0 ) {
+                    $.offers.utils.retrieveOffers(1);
+                } else {
+                    $.offers.utils.changeCounterAndPaginate();
+                }
+            }
         } else {
             $.offers.utils.retrieveOffers(1);
         }
