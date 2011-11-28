@@ -19,14 +19,18 @@ class OffersController < ApplicationController
     respond_to do |format|
       format.html
       format.js do
+        # if params[:page] && params[:page].to_i > 1
+        #   render :json => { :offers => @offers.to_json, :pagination => render_to_string(:partial => 'offers/pagination'), :count => @offers_selected_count }
+        # else
+        #   render :json => { :offers => @offers.to_json }
+        # end
         if params[:page] && params[:page].to_i > 1
-          render :json => { :offers => @offers.to_json, :pagination => render_to_string(:partial => 'offers/pagination'), :count => @offers_selected_count }
+          render :json => { :offers => render_to_string(:partial => 'offers/offers'),
+            :pagination => render_to_string(:partial => 'offers/pagination'), :count => @offers_selected_count
+          }, :layout => false
         else
-          render :json => { :offers => @offers.to_json }
+          render :json => { :offers => render_to_string(:partial => 'offers/offers') }
         end
-        #render :json => { :offers => render_to_string(:partial => 'offers/offers'),
-        #  :pagination => render_to_string(:partial => 'offers/pagination'), :count => @offers_selected_count
-        #}, :layout => false
       end
     end
   end

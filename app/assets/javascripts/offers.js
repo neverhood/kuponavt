@@ -108,8 +108,8 @@ $.offers.utils.retrieveOffers = function(page) { // Retrieves offers, count and 
     var checkedCategories = $.offers.utils.checkedCategories();
     if ( checkedCategories.length ) {
         $.getJSON($.offers.utils.url(page), function(data) {
-            // $( $.offers.sections.offers ).html( data.offers );
-            $( $.offers.sections.offers ).html( $.offers.utils.renderOffers( $.parseJSON( data.offers ) ) );
+            $( $.offers.sections.offers ).html( data.offers );
+            // $( $.offers.sections.offers ).html( $.offers.utils.renderOffers( $.parseJSON( data.offers ) ) );
 
             if ( page > 1 ) {
                 $( $.offers.sections.pagination ).html( data.pagination );
@@ -133,7 +133,6 @@ $.offers.utils.getOffers = function(categoryIds) { // Retrieves just offers
     // It allows us to avoid redundant ajax requests
     var selectedCategories = $('#all-categories').find('input[type="checkbox"]').filter(':checked'),
         selectedCategoryIds = $.map(selectedCategories, function(category) { return parseInt(category.id) });
-        // selectedCategoriesCount = selectedCategories.length;
 
     if ( categoryIds.equals( selectedCategoryIds ) ) {
         $( $.offers.sections.offers ).html('');
@@ -155,9 +154,8 @@ $.offers.utils.getOffers = function(categoryIds) { // Retrieves just offers
         $('#current-offers-count').append( $.api.loader() );
 
         $.getJSON( url, function(data) {
-            // var offers = $(data.offers).filter('div.offer');
-            var offers = $.offers.utils.renderOffers( $.parseJSON(data.offers) );
-
+            var offers = data.offers; //).filter('div.offer');
+            // var offers = $.offers.utils.renderOffers( $.parseJSON(data.offers) );
             if ( existingOffers.length == 0 ) {
                 $( $.offers.sections.offers ).append( offers );
             } else {
