@@ -10,46 +10,46 @@ $.offers = {
         pagination: '#pagination-bottom',
         selectedCount: '#offers-selected-count'
     },
-    sortMethods: {
-        asc: {
-            freshness: function(a,b) {
-            },
-            time_left: function(a,b) {
-                return $(a).find('.time-left').text() > $(b).find('.time-left').text() ? 1 : -1;
-            },
-            price: function(a,b) {
-                var attrA = parseInt( $(a).find('.offer-price').text() ),
-                    attrB = parseInt( $(b).find('.offer-price').text() );
-                    return attrA > attrB ? 1 : -1;
-            },
-            discount: function(a,b) {
-                var attrA = parseInt( $(a).find('.offer-discount').text() ),
-                    attrB = parseInt( $(b).find('.offer-discount').text() );
-                    return attrA > attrB ? 1 : -1;
-            }
-        },
-        desc: {
-            freshness: function(a,b) {
-            },
-            time_left: function(a,b) {
-                return $(a).find('.time-left').text() > $(b).find('.time-left').text() ? -1 : 1;
-            },
-            price: function(a,b) {
-                var attrA = parseInt( $(a).find('.offer-price').text() ),
-                    attrB = parseInt( $(b).find('.offer-price').text() );
-                    return attrA > attrB ? -1 : 1;
+    // sortMethods: {
+    //     asc: {
+    //         freshness: function(a,b) {
+    //         },
+    //         time_left: function(a,b) {
+    //             return $(a).find('.time-left').text() > $(b).find('.time-left').text() ? 1 : -1;
+    //         },
+    //         price: function(a,b) {
+    //             var attrA = parseInt( $(a).find('.offer-price').text() ),
+    //                 attrB = parseInt( $(b).find('.offer-price').text() );
+    //                 return attrA > attrB ? 1 : -1;
+    //         },
+    //         discount: function(a,b) {
+    //             var attrA = parseInt( $(a).find('.offer-discount').text() ),
+    //                 attrB = parseInt( $(b).find('.offer-discount').text() );
+    //                 return attrA > attrB ? 1 : -1;
+    //         }
+    //     },
+    //     desc: {
+    //         freshness: function(a,b) {
+    //         },
+    //         time_left: function(a,b) {
+    //             return $(a).find('.time-left').text() > $(b).find('.time-left').text() ? -1 : 1;
+    //         },
+    //         price: function(a,b) {
+    //             var attrA = parseInt( $(a).find('.offer-price').text() ),
+    //                 attrB = parseInt( $(b).find('.offer-price').text() );
+    //                 return attrA > attrB ? -1 : 1;
 
-            },
-            discount: function(a,b) {
-                var attrA = parseInt( $(a).find('.offer-discount').text() ),
-                    attrB = parseInt( $(b).find('.offer-discount').text() );
-                    return attrA > attrB ? -1 : 1;
-            }
-        }
-    },
-    sort: function(method, direction) {
-        return $.offers.sortMethods[direction][method];
-    },
+    //         },
+    //         discount: function(a,b) {
+    //             var attrA = parseInt( $(a).find('.offer-discount').text() ),
+    //                 attrB = parseInt( $(b).find('.offer-discount').text() );
+    //                 return attrA > attrB ? -1 : 1;
+    //         }
+    //     }
+    // },
+    // sort: function(method, direction) {
+    //     return $.offers.sortMethods[direction][method];
+    // },
     utils: {}
 }
 
@@ -83,6 +83,14 @@ $.offers.utils.url = function(page) {
             categories.push( parseInt(this) );
         });
         url += '?categories=' + categories.sort(function(a,b) { return a - b }).join(',');
+    }
+
+    if ( $( $.offers.sections.offers ).attr('data-sort-by') ) {
+        var sortParams = $( $.offers.sections.offers ).attr('data-sort-by').split('|'),
+            sortBy = sortParams[0],
+            sortDirection = sortParams[1];
+
+        url += ( '&sort[attribute]=' + sortBy + '&sort[direction]=' + sortDirection );
     }
 
     return url;
@@ -172,6 +180,11 @@ $.offers.utils.retrieveOffers = function(page) { // Retrieves offers, count and 
 
 $.offers.utils.getOffers = function(categoryIds) { // Retrieves just offers
     $('.notification').hide();
+
+    if ( $( $.offers.sections.offers ).attr('data-sort-by') ) {
+        $.offers.utils.retrieveOffers( $.offers.utils.page() );
+        return false;
+    }
 
     // This craziness was crafted to reproduce the server ORDER BY logic
     // It allows us to avoid redundant ajax requests
@@ -421,18 +434,36 @@ $('document').ready(function() {
             else $this.data('sort', 'asc');
 
             var sortBy = this.id.replace('sort-by-', ''),
-                direction = $this.data('sort'),
-                offersSection = $( $.offers.sections.offers ),
-                existentOffers = $('#offers-section div.offer'),
-                sortedOffers = existentOffers.sort( $.offers.sort(sortBy, direction) );
+                direction = $this.data('sort');
 
-            existentOffers.remove();
-            $('#offers-section').append( sortedOffers );
+            $('#offers-section').attr('data-sort-by', sortBy + '|' + direction );
+                // offersSection = $( $.offers.sections.offers ),
+                // existentOffers = $('#offers-section div.offer'),
+                // sortedOffers = existentOffers.sort( $.offers.sort(sortBy, direction) );
+
+            // existentOffers.remove();
+            // $('#offers-section').append( sortedOffers );
 
             $.offers.latestSort = this.id;
             $this.append('<span class="' + $this.data('sort') + '"></span>');
+
+            $.offers.utils.retrieveOffers(1);
         } else {
             $('#sort-buttons .notification').show();
+        }
+    });
+
+    $('#sort-reset').click(function() {
+        if ( $( $.offers.sections.offers ).attr('data-sort-by') ) {
+            var sortButtons = $('ul.sort-buttons');
+
+            sortButtons.find('.asc, .desc').remove();
+            sortButtons.find('li').removeClass('current-sort');
+
+            $.offers.latestSort = '';
+            $( $.offers.sections.offers ).removeAttr('data-sort-by');
+
+            $.offers.utils.retrieveOffers(1);
         }
     });
 

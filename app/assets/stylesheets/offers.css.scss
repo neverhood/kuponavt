@@ -33,6 +33,13 @@ div#offers {
       padding: 5px;
     }
 
+    #sort-reset {
+      color: $main-color;
+      font-weight: bold;
+      cursor: pointer;
+      padding: 0 10px;
+    }
+
     #sort-buttons {
       position: absolute;
       bottom: -1px;

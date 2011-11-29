@@ -5,6 +5,7 @@ ru:
   common:
     of: из
     hrn: грн
+    reset: Сброс
 
   views:
     pagination:
@@ -17,7 +18,7 @@ ru:
   offers:
     price: Цена
     discount: Скидка
-    time_left: Времени Осталось
+    ends_at: Времени Осталось
     freshness: Новизна
     checked: Выбрано
     cost: Стоимость
