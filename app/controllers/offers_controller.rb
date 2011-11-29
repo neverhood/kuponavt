@@ -4,10 +4,12 @@ class OffersController < ApplicationController
 
   caches_action :index, :cache_path => Proc.new { |controller| controller.params }, :if => proc { |controller| controller.request.xhr? }
 
-  before_filter :validate_city
-  before_filter :prepare_categories_array
-  before_filter :prepare_sort_attributes
-  before_filter :prepare_page_index
+  before_filter :validate_city, :only => :index
+  before_filter :prepare_categories_array, :only => :index
+  before_filter :prepare_sort_attributes, :only => :index
+  before_filter :prepare_page_index, :only => :index
+
+  before_filter :validate_favourites, :only => :favourites, :if => lambda { |controller| controller.request.xhr? }
 
   def index
     @offers = if request.xhr?
@@ -38,6 +40,15 @@ class OffersController < ApplicationController
     end
   end
 
+  def favourites
+    respond_to do |format|
+      format.html
+      format.js do
+        render :json => { :offers => render_to_string(:partial => 'offers/offers'), :count => @offers.count }
+      end
+    end
+  end
+
   def show
     @offer = Offer.find params[:id]
   end
@@ -63,6 +74,13 @@ class OffersController < ApplicationController
 
   def prepare_page_index
     @page = params[:page] ? params[:page].to_i : 1
+  end
+
+  def validate_favourites
+    offers = params[:offers].split(',').keep_if { |offer_id| offer_id =~ /^\d+$/ }
+    @offers = Kupongid.where(['`kupongid`.`id` IN (?)', offers])
+
+    render(:json => { :count => 0 }) unless @offers.count >= 1
   end
 
 end

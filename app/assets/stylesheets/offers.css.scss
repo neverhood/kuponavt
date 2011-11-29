@@ -249,14 +249,20 @@ div#offers {
 
         &:hover {
           background: url(add-icons.png);
-          background-position: -35px; 
+          background-position: -35px;
         }
 
         &:active {
           bottom: 6px;
           background: url(add-icons.png);
-          background-position: -70px; 
+          background-position: -70px;
         }
+      }
+
+      .add-button-added {
+        bottom: 6px;
+        background: url(add-icons.png);
+        background-position: -70px;
       }
 
       .buy-button {

@@ -10,47 +10,18 @@ $.offers = {
         pagination: '#pagination-bottom',
         selectedCount: '#offers-selected-count'
     },
-    // sortMethods: {
-    //     asc: {
-    //         freshness: function(a,b) {
-    //         },
-    //         time_left: function(a,b) {
-    //             return $(a).find('.time-left').text() > $(b).find('.time-left').text() ? 1 : -1;
-    //         },
-    //         price: function(a,b) {
-    //             var attrA = parseInt( $(a).find('.offer-price').text() ),
-    //                 attrB = parseInt( $(b).find('.offer-price').text() );
-    //                 return attrA > attrB ? 1 : -1;
-    //         },
-    //         discount: function(a,b) {
-    //             var attrA = parseInt( $(a).find('.offer-discount').text() ),
-    //                 attrB = parseInt( $(b).find('.offer-discount').text() );
-    //                 return attrA > attrB ? 1 : -1;
-    //         }
-    //     },
-    //     desc: {
-    //         freshness: function(a,b) {
-    //         },
-    //         time_left: function(a,b) {
-    //             return $(a).find('.time-left').text() > $(b).find('.time-left').text() ? -1 : 1;
-    //         },
-    //         price: function(a,b) {
-    //             var attrA = parseInt( $(a).find('.offer-price').text() ),
-    //                 attrB = parseInt( $(b).find('.offer-price').text() );
-    //                 return attrA > attrB ? -1 : 1;
-
-    //         },
-    //         discount: function(a,b) {
-    //             var attrA = parseInt( $(a).find('.offer-discount').text() ),
-    //                 attrB = parseInt( $(b).find('.offer-discount').text() );
-    //                 return attrA > attrB ? -1 : 1;
-    //         }
-    //     }
-    // },
-    // sort: function(method, direction) {
-    //     return $.offers.sortMethods[direction][method];
-    // },
     utils: {}
+}
+
+$.offers.utils.showFavourites = function() {
+
+    if ( $.cookie('favourites') ) {
+        var offers = $.cookie('favourites').split(',');
+
+        $.each( offers, function() {
+            $('div#offer-' + this).find('.add-button').addClass('add-button-added');
+        });
+    }
 }
 
 $.offers.utils.city = function() {
@@ -170,6 +141,7 @@ $.offers.utils.retrieveOffers = function(page) { // Retrieves offers, count and 
 
             Cufon.replace('.time-left');
             $('#current-offers-count').find('.loader').remove();
+            $.offers.utils.showFavourites();
         });
     } else {
         $('#all-offers').find('.loader').remove();
@@ -233,6 +205,7 @@ $.offers.utils.getOffers = function(categoryIds) { // Retrieves just offers
             Cufon.replace('.time-left');
             $('#current-offers-count').find('.loader').remove();
             $.offers.utils.paginate( totalSelectedOffersCount );
+            $.offers.utils.showFavourites();
         });
     }
 
@@ -464,6 +437,73 @@ $('document').ready(function() {
             $( $.offers.sections.offers ).removeAttr('data-sort-by');
 
             $.offers.utils.retrieveOffers(1);
+        }
+    });
+
+    // Favourites
+
+    if ( /\/offers\/favourites/.test(window.location.href) && $.cookie('favourites') ) {
+        var favouritedOffers = $.cookie('favourites');
+
+        $.getJSON( '/offers/favourites?offers=' + $.cookie('favourites'), function(data) {
+            var countContainer = $('#offers-selected-count');
+
+            $( $.offers.sections.offers ).append( data.offers );
+
+            countContainer.append( $.api.loader() );
+            countContainer.text( data.count );
+            countContainer.find('.loader').remove();
+
+            $.offers.utils.showFavourites();
+
+            $('div.offer div.add-button-added').bind('click', function(event) {
+                var addedOffers = $.cookie('favourites').split(','),
+                    offer = $(this).parents('div.offer'),
+                    offerId = offer.attr('id').replace('offer-', ''),
+                    index = addedOffers.indexOf(offerId),
+                    currentCount = parseInt( countContainer.text() );
+
+                if ( index != -1 ) {
+                    addedOffers.splice(index, 1);
+                    $.cookie( 'favourites', addedOffers.unique(), { expires: 7, path: '/' } );
+                    offer.fadeOut();
+                    countContainer.text( currentCount - 1 );
+                }
+
+                event.preventDefault();
+                event.stopPropagation();
+            });
+        });
+    }
+
+    $.offers.utils.showFavourites();
+
+    $('div.offer div.add-button').live({
+        click: function() {
+            var $this = $(this),
+            offerId = $this.parents('div.offer').attr('id').replace('offer-', ''),
+            options = { expires: 7, path: '/' };
+
+            if ( $.cookie('favourites') ) {
+                var addedOffers = $.cookie('favourites').split(',');
+
+                if ( addedOffers.include(offerId) ) {
+                    var index = addedOffers.indexOf(offerId);
+
+                    if ( index != -1 ) addedOffers.splice(index, 1);
+                    $this.removeClass('add-button-added');
+
+                } else {
+                    addedOffers.push(offerId);
+                    $this.addClass('add-button-added');
+                }
+                $.cookie( 'favourites', addedOffers.unique(), options );
+
+            } else {
+                $.cookie( 'favourites', offerId, options );
+                $this.addClass('add-button-added');
+            }
+
         }
     });
 

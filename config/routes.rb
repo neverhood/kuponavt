@@ -4,7 +4,9 @@ Kuponavt::Application.routes.draw do
 
   resources :countries, :only => :index
   resources :cities, :only => :index
-  resources :offers, :only => :show
+  resources :offers, :only => :show do
+    get 'favourites', :on => :collection
+  end
 
   scope ':city' do
     resources :offers, :only => :index do
