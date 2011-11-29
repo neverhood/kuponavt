@@ -16,4 +16,11 @@ module ApplicationHelper
     url
   end
 
+  def notification(text)
+    %Q(<div class='hidden notification'>
+        #{image_tag 'close.png', :class => 'close-popup'}
+        #{text}
+       </div>).html_safe
+  end
+
 end

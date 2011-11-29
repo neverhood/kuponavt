@@ -31,6 +31,7 @@ ru:
     selected_coupons: Отобранные купоны
     offers_search: Поиск по купонам
     search_watermark: Введите слово
+    no_categories_selected: Не выбрано ни одной категории
 
   cities:
     your_city: Ваш Город

@@ -80,6 +80,18 @@ body {
   margin: -5px 0 0 5px;
 }
 
+.notification {
+  @include rounded-corners(5px);
+
+  position: absolute;
+  left: 13px;
+  top: 65px;
+  width: 265px;
+  border: 1px solid $main-color;
+  background: #F7FCF7;
+  padding: 10px;
+  z-index: 10;
+}
 
 
 @import 'offers.css.scss';

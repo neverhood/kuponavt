@@ -64,14 +64,18 @@ $('document').ready(function() {
 
     Cufon.replace('.time-left');
 
-    $('img.help').click( function() {
+    $('#site-description-help').click( function() {
         $('div#site-description').show();
         $(this).addClass('high-opacity');
     });
 
-    $('img.close-popup').click( function() {
+    $('#site-description img.close-popup').click( function() {
         $('div#site-description').hide();
         $('img.help').removeClass('high-opacity');
+    });
+
+    $('img.close-popup').click(function() {
+        $(this).parent().hide();
     });
 
 });

@@ -10,6 +10,46 @@ $.offers = {
         pagination: '#pagination-bottom',
         selectedCount: '#offers-selected-count'
     },
+    sortMethods: {
+        asc: {
+            freshness: function(a,b) {
+            },
+            time_left: function(a,b) {
+                return $(a).find('.time-left').text() > $(b).find('.time-left').text() ? 1 : -1;
+            },
+            price: function(a,b) {
+                var attrA = parseInt( $(a).find('.offer-price').text() ),
+                    attrB = parseInt( $(b).find('.offer-price').text() );
+                    return attrA > attrB ? 1 : -1;
+            },
+            discount: function(a,b) {
+                var attrA = parseInt( $(a).find('.offer-discount').text() ),
+                    attrB = parseInt( $(b).find('.offer-discount').text() );
+                    return attrA > attrB ? 1 : -1;
+            }
+        },
+        desc: {
+            freshness: function(a,b) {
+            },
+            time_left: function(a,b) {
+                return $(a).find('.time-left').text() > $(b).find('.time-left').text() ? -1 : 1;
+            },
+            price: function(a,b) {
+                var attrA = parseInt( $(a).find('.offer-price').text() ),
+                    attrB = parseInt( $(b).find('.offer-price').text() );
+                    return attrA > attrB ? -1 : 1;
+
+            },
+            discount: function(a,b) {
+                var attrA = parseInt( $(a).find('.offer-discount').text() ),
+                    attrB = parseInt( $(b).find('.offer-discount').text() );
+                    return attrA > attrB ? -1 : 1;
+            }
+        }
+    },
+    sort: function(method, direction) {
+        return $.offers.sortMethods[direction][method];
+    },
     utils: {}
 }
 
@@ -105,6 +145,8 @@ $.offers.utils.retrieveOffers = function(page) { // Retrieves offers, count and 
     $('div.loader').show(50);
     $('#current-offers-count').append( $.api.loader() );
 
+    $('.notification').hide();
+
     var checkedCategories = $.offers.utils.checkedCategories();
     if ( checkedCategories.length ) {
         $.getJSON($.offers.utils.url(page), function(data) {
@@ -129,6 +171,8 @@ $.offers.utils.retrieveOffers = function(page) { // Retrieves offers, count and 
 }
 
 $.offers.utils.getOffers = function(categoryIds) { // Retrieves just offers
+    $('.notification').hide();
+
     // This craziness was crafted to reproduce the server ORDER BY logic
     // It allows us to avoid redundant ajax requests
     var selectedCategories = $('#all-categories').find('input[type="checkbox"]').filter(':checked'),
@@ -360,26 +404,36 @@ $('document').ready(function() {
 
     $('#sort-buttons li').click(function() {
         var $this = $(this),
-            ul = $this.parent(),
+            ul = $this.parent();
+
+        if ( $('#all-categories input[type="checkbox"]').filter(':checked').length > 0 ) {
             inverseSortDirection = function(direction) {
                 return ( direction == 'asc' ? 'desc' : 'asc' );
             };
 
-        ul.find('li').removeClass('current-sort');
-        ul.find('.asc, .desc').remove();
+            ul.find('li').removeClass('current-sort');
+            ul.find('.asc, .desc').remove();
 
-        $this.addClass('current-sort');
+            $this.addClass('current-sort');
 
-        if ( $.offers.latestSort == this.id ) {
-            $this.data('sort', inverseSortDirection( $this.data('sort') ));
+            if ( $.offers.latestSort == this.id )
+                $this.data('sort', inverseSortDirection( $this.data('sort') ));
+            else $this.data('sort', 'asc');
+
+            var sortBy = this.id.replace('sort-by-', ''),
+                direction = $this.data('sort'),
+                offersSection = $( $.offers.sections.offers ),
+                existentOffers = $('#offers-section div.offer'),
+                sortedOffers = existentOffers.sort( $.offers.sort(sortBy, direction) );
+
+            existentOffers.remove();
+            $('#offers-section').append( sortedOffers );
+
+            $.offers.latestSort = this.id;
+            $this.append('<span class="' + $this.data('sort') + '"></span>');
         } else {
-            $this.data('sort', 'asc')
+            $('#sort-buttons .notification').show();
         }
-
-        $.offers.latestSort = this.id;
-
-        $this.append('<span class="' + $this.data('sort') + '"></span>');
-
     });
 
 });
