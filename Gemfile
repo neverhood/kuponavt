@@ -8,6 +8,7 @@ gem 'rack' , '1.3.3' # Bye Bye warning
 
 # Db
 gem 'sqlite3'
+gem 'mysql2'
 
 # Xml & Html parser
 gem 'hpricot'
@@ -24,6 +25,9 @@ gem 'mechanize'
 # REPL
 gem 'pry-rails'
 
+# YAML DB
+gem 'yaml_db'
+
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
@@ -36,7 +40,7 @@ group :development do
   gem 'rails3-generators'
 end
 
-group :development, :test do 
+group :development, :test do
   gem 'rspec-rails'
   gem 'capybara'
   gem 'spork', '~> 0.9.0.rc'
