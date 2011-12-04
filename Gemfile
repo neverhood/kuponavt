@@ -14,7 +14,8 @@ gem 'mysql2'
 gem 'hpricot'
 
 # Image processor
-gem 'paperclip'
+gem 'carrierwave'
+gem 'rmagick'
 
 # Pagination
 gem 'kaminari'

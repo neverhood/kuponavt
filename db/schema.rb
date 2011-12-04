@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111120145210) do
+ActiveRecord::Schema.define(:version => 20111204172529) do
 
   create_table "categories", :force => true do |t|
     t.string   "name"
@@ -55,5 +55,38 @@ ActiveRecord::Schema.define(:version => 20111120145210) do
   end
 
   add_index "kupongid", ["kupongid_id"], :name => "index_kupongid_on_kupongid_id", :unique => true
+
+  create_table "offers", :force => true do |t|
+    t.integer  "provider_id"
+    t.string   "provided_id"
+    t.integer  "category_id"
+    t.integer  "country_id"
+    t.integer  "city_id"
+    t.string   "title"
+    t.integer  "discount"
+    t.integer  "price"
+    t.integer  "cost"
+    t.string   "image"
+    t.date     "ends_at"
+    t.text     "description"
+    t.string   "subway"
+    t.string   "address"
+    t.string   "url"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.boolean  "retail"
+    t.integer  "retail_price"
+    t.integer  "price_starts_at"
+  end
+
+  create_table "providers", :force => true do |t|
+    t.string   "name"
+    t.string   "url"
+    t.string   "auth_url"
+    t.text     "auth_params"
+    t.string   "logo_url"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
 end
