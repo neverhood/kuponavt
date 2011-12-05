@@ -33,9 +33,20 @@ categories = {
     '57' => 18
   },
   :goods => {
-
+    '13' => 16,
+    '14' => 16,
+    '18' => 16,
+    '19' => 16,
+    '15' => 11,
+    '16' => 17,
+    '17' => 20
   },
-  :travel => {}
+  :travel => {
+    '4' => 8,
+    '5' => 8,
+    '6' => 8,
+    '7' => 8
+  }
 }
 
 
@@ -63,38 +74,47 @@ retrieve_attributes = lambda do |offers|
 
   offers.each do |offer|
     offer_attributes = {}
+    offer = offer.first if offer.is_a?(Nokogiri::XML::NodeSet)
 
-    offer_attributes[:provided_id] = offer.css('.photo a').first.attr(:rel) || offer.attr(:id)
+    begin
+      offer_attributes[:provided_id] = offer.css('.photo a').first.attr(:rel) || offer.attr(:id)
 
-    next if Offer.where(provided_id: offer_attributes[:provided_id], provider_id: PROVIDER.id).any?
+      next if Offer.where(provided_id: offer_attributes[:provided_id], provider_id: PROVIDER.id).any?
 
-    offer_attributes[:url] = offer.css('.actionsItemHeadding a').first.attr :href
+      offer_attributes[:url] = offer.css('.actionsItemHeadding a').first.attr :href
 
-    bot.get offer_attributes[:url]
-    offer = bot.page.parser.css('.offer').first
-    img_url = (bot.page.parser.css('script').inner_html.scan(/photos_big\s*=\s*\[(.*)\]\;/m).flatten.
-      first.split(',').first.strip.gsub('\'', ''))
+      bot.get offer_attributes[:url]
+      offer = bot.page.parser.css('.offer').first
+      img_url = (bot.page.parser.css('script').inner_html.scan(/photos_big\s*=\s*\[(.*)\]\;/m).flatten.
+                 first.split(',').first.strip.gsub('\'', ''))
 
-    if img_url.blank?
-      img_url = bot.page.parser.css('script').inner_html.scan(/var image_big(.*);/)[0][0].gsub(/"/, '').gsub(/.*http/, 'http')
+      if img_url.blank?
+        img_url = bot.page.parser.css('script').inner_html.scan(/var image_big(.*);/)[0][0].gsub(/"/, '').gsub(/.*http/, 'http')
+      end
+
+      offer_attributes[:image] = open( image_bot.get(img_url).uri ) unless img_url.blank?
+      offer_attributes[:title] = offer.css('h1').text
+      offer_attributes.merge! retrieve_price(offer)
+      offer_attributes[:cost] = offer.css('table').last.css('tr td b').first.text.to_i
+      if offer.css('table').last.css('tr td b')[1] #.text.to_i #NIL
+        offer_attributes[:discount] = offer.css('table').last.css('tr td b')[1].text.to_i
+      else
+        offer_attributes[:discount] = offer_attributes[:cost]
+        offer_attributes[:cost] = 0 # UNLIMITED
+      end
+      # bitches!!
+      if offer.css('.offer-contact .links').count > 0
+        offer_attributes[:subway] = offer.css('.offer-contact .links div div div').text.strip
+        offer_attributes[:address] = offer.css('.offer-contact .links div div').first.children.first.text.strip
+      end
+      if offer.css('.ppOffer-info ul li span').count > 0
+        offer_attributes[:ends_at] = offer.css('.ppOffer-info ul li span').first.text.gsub(/[^\.\d]/, '')
+      end
+      offer.css('.ppOffer-info a').remove
+      offer_attributes[:description] = offer.css('.ppOffer-info').inner_html
+    rescue Exception => e
+      binding.pry
     end
-
-    offer_attributes[:image] = open( image_bot.get(img_url).uri ) unless img_url.blank?
-    offer_attributes[:title] = offer.css('h1').text
-    offer_attributes.merge! retrieve_price(offer)
-    offer_attributes[:cost] = offer.css('table').last.css('tr td b').first.text.to_i
-    if offer.css('table').last.css('tr td b')[1] #.text.to_i #NIL
-      offer_attributes[:discount] = offer.css('table').last.css('tr td b')[1].text.to_i
-    else
-      offer_attributes[:discount] = offer_attributes[:cost]
-      offer_attributes[:cost] = 0 # UNLIMITED
-    end
-    # bitches!!
-    offer_attributes[:subway] = offer.css('.offer-contact .links div div div').text.strip
-    offer_attributes[:address] = offer.css('.offer-contact .links div div').first.children.first.text.strip
-    offer_attributes[:ends_at] = offer.css('.ppOffer-info ul li span').first.text.gsub(/[^\.\d]/, '')
-    offer.css('.ppOffer-info a').remove
-    offer_attributes[:description] = offer.css('.ppOffer-info').inner_html
 
     attributes << offer_attributes
 
@@ -118,7 +138,7 @@ cities.each do |city|
     category_url = "#{base_url}/#{category.to_s}"
     bot.get category_url
 
-    if category == :list
+    if category == :list || category == :travel
       biglion_categories = bot.page.parser.css('.menu_item[data]').map { |c| c.attr :data }.
         keep_if { |element| element =~ /\d+/ }
 
@@ -136,6 +156,31 @@ cities.each do |city|
         end
       end
     else
+      # FUCKING STUPID!!!
+      deal_offer_values = bot.page.parser.css('script').inner_html.scan(/deal_offer_values\s*=\s*(.*)/)[0][0].gsub(';','')
+      offer_ids_to_category_ids = JSON.parse( deal_offer_values )
+
+      offers = []
+      offer_ids_to_category_ids.each do |offer_and_categories|
+        offers << bot.page.parser.css("##{offer_and_categories.first}")
+      end
+
+      biglion_offers = retrieve_attributes.call(offers)
+      biglion_offers.each do |offer_attributes|
+        begin
+          if offer_ids_to_category_ids[ offer_attributes[:provided_id] ]
+            offer_categories = offer_ids_to_category_ids[ offer_attributes[:provided_id] ]
+            offer_category = offer_categories.is_a?(Array) ? offer_categories.first : offer_categories
+            if offer_category
+              offer_attributes.merge! category_id: categories[category][offer_category]
+            end
+          end
+          offer_attributes.merge! city_id: city_model.id, country_id: country_model.id, provider_id: PROVIDER.id
+          Offer.create(offer_attributes) || binding.pry
+        rescue
+          binding.pry
+        end
+      end
     end
 
   end
