@@ -37,11 +37,7 @@ categories = {
   },
   :travel => {}
 }
-categories = {
-  :list => {},
-  :goods => {},
-  :travel => {}
-}
+
 
 def retrieve_price(offer) # This is redicolous...
   if offer.css('.price .num')
@@ -97,6 +93,7 @@ retrieve_attributes = lambda do |offers|
     offer_attributes[:subway] = offer.css('.offer-contact .links div div div').text.strip
     offer_attributes[:address] = offer.css('.offer-contact .links div div').first.children.first.text.strip
     offer_attributes[:ends_at] = offer.css('.ppOffer-info ul li span').first.text.gsub(/[^\.\d]/, '')
+    offer.css('.ppOffer-info a').remove
     offer_attributes[:description] = offer.css('.ppOffer-info').inner_html
 
     attributes << offer_attributes
@@ -133,35 +130,14 @@ cities.each do |city|
 
         biglion_offers = retrieve_attributes.call(offers.flatten)
         biglion_offers.each do |offer_attributes|
-          binding.pry
           offer_attributes.merge! category_id: categories[category][biglion_category], city_id: city_model.id,
             country_id: country_model.id, provider_id: PROVIDER.id
-          Offer.create(offer_attributes)
+          Offer.create(offer_attributes) || binding.pry
         end
       end
     else
     end
 
   end
-
-  # current_page = bot.page.parser.css(matchers[:current_page]).first.text.to_i
-  # offers = bot.page.parser.css(matchers[:offers])
-
-
-
-
-  # offers.each do |offer|
-  #   biglion_id = offer.attr :id
-  #   url = offer.css('.actionsItemHeadding a').first.attr :href
-  #   image_url = offer.css('.photo a img').first.attr :src
-
-  #   bot.get url
-
-
-
-  #   # title = offer.css('.actionsItemHeadding a').text
-  #   # price = offer.css('.price span').first.children.first.text.to_i
-  # end
-
 
 end

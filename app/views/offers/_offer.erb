@@ -1,6 +1,6 @@
 <div class='offer' id='offer-<%= offer.id %>' data-category='<%= offer.category_id %>'>
   <h2>
-    <%= link_to offer.title, offer.provider_url, :class => 'offer-url' %>
+    <%= link_to offer.title, offer.url, :class => 'offer-url' %>
   </h2>
 
   <div class='offer-left-side'>
@@ -10,7 +10,7 @@
       <span class="subway-station">
         <%= offer.subway %>
       </span>
-      <%= image_tag 'groupon.png', :class => 'provider' %>
+      <%= image_tag offer.provider.logo_url, :class => 'provider' %>
     </div>
   </div>
 
@@ -38,14 +38,21 @@
     <p class='info'>
     <%= t('offers.coupon_price') %>:
     </p>
-    <p class="price"> <span class='offer-price'> <%= offer.price %> </span> <span class='hrn'> <%= t('common.hrn') %> </span></p>
+
+    <p class="price">
+      <span class='offer-price'>
+        <%= offer.price_starts_at ? t('common.starts_at') : '' %> <%= offer.price %>
+      </span>
+      <span class='hrn'> <%= t('common.rub') %> </span>
+    </p>
+
     <div class="add-button"></div>
     <%= link_to t('offers.buy'), nil, :class => 'buy-button' %>
 
 
   </div>
 
-  <div class="offer-details"><%= simple_format offer.description %></div>
+  <div class="offer-details"><%= raw offer.description %></div>
   <div class='offer-bottom' title='<%= t('offers.details') %>'>
     <center> <%= image_tag 'down-arrow.png' %> </center>
   </div>

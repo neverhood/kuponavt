@@ -61,10 +61,10 @@ class OffersController < ApplicationController
   end
 
   def prepare_sort_attributes
-    return Kupongid.default_sort if params[:sort].nil?
+    return Offer.default_sort if params[:sort].nil?
 
     @sort_direction, @sort_attribute = params[:sort][:direction], params[:sort][:attribute]
-    @sort_by = (@sort_attribute && @sort_direction) ? "kupongid.#{@sort_attribute} #{@sort_direction}" : Kupongid.default_sort
+    @sort_by = (@sort_attribute && @sort_direction) ? "kupongid.#{@sort_attribute} #{@sort_direction}" : Offer.default_sort
   end
 
   def validate_city
@@ -78,7 +78,7 @@ class OffersController < ApplicationController
 
   def validate_favourites
     offers = params[:offers].split(',').keep_if { |offer_id| offer_id =~ /^\d+$/ }
-    @offers = Kupongid.where(['`kupongid`.`id` IN (?)', offers])
+    @offers = Offer.where(['`offers`.`id` IN (?)', offers])
 
     render(:json => { :count => 0 }) unless @offers.count >= 1
   end

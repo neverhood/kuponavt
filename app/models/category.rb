@@ -2,7 +2,7 @@ class Category < ActiveRecord::Base
 
   validates :name, :presence => true, :length => { :within => (3..50) }, :uniqueness => true
 
-  has_many :offers, :class_name => 'Kupongid', :dependent => :destroy
+  has_many :offers, :dependent => :destroy
   has_many :nested_categories, :class_name => 'Category', :foreign_key => 'parent_category_id', :dependent => :destroy
 
   scope :parent_categories, where(:parent_category_id => nil)
