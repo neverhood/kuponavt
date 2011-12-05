@@ -36,6 +36,7 @@ ru:
     search_watermark: Введите слово
     no_categories_selected: Не выбрано ни одной категории
     unlimited: Неограничено
+    time_left: Времени осталось
 
   cities:
     your_city: Ваш Город

@@ -5,6 +5,7 @@ class Offer < ActiveRecord::Base
   belongs_to :city
   belongs_to :country
   belongs_to :provider
+  belongs_to :category
 
   mount_uploader :image, PictureUploader
 
@@ -17,10 +18,6 @@ class Offer < ActiveRecord::Base
     "category_id, offers.ends_at DESC"
   end
 
-
-  def cost
-    read_attribute(:cost) == 0 ? I18n.t('offers.unlimited') : read_attribute(:cost)
-  end
 
   def price
     return read_attribute(:price) if read_attribute(:price)
