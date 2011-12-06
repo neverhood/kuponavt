@@ -9,6 +9,8 @@ class Offer < ActiveRecord::Base
 
   mount_uploader :image, PictureUploader
 
+  after_destroy :destroy_image_and_folder
+
   scope :by_categories, lambda { |categories|
     joins(:category).
       where(['categories.name IN (:category_names)', :category_names => categories.join(',')])
@@ -23,6 +25,14 @@ class Offer < ActiveRecord::Base
     return read_attribute(:price) if read_attribute(:price)
 
     retail ? retail_price : price_starts_at
+  end
+
+  private
+
+  def destroy_image_and_folder
+    directory = "public/#{File.dirname(image_url)}"
+    remove_image!
+    FileUtils.rm_rf(directory)
   end
 
 

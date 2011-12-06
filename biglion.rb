@@ -14,7 +14,7 @@ image_bot = Mechanize.new
 #   password_4: 'cdtnbr1988'
 # }
 
-cities = %w( moscow )
+cities = %w( kiev moscow )
 
 matchers = {
   :pagination => '.main_pagination_block',
