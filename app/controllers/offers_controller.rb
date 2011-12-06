@@ -70,9 +70,16 @@ class OffersController < ApplicationController
     return Offer.default_sort if params[:sort].nil?
 
     @sort_direction, @sort_attribute = params[:sort][:direction], params[:sort][:attribute]
-    @sort_attribute = 'category_id, offers.created_at' if @sort_attribute == 'category_id'
 
-    @sort_by = (@sort_attribute && @sort_direction) ? "offers.#{@sort_attribute} #{@sort_direction}" : Offer.default_sort
+    if @sort_attribute && @sort_direction
+      if @sort_attribute == 'category_id'
+        @sort_by = "offers.category_id #{@sort_direction}, offers.created_at desc"
+      else
+        @sort_by = "offers.#{@sort_attribute} #{@sort_direction}"
+      end
+    else
+      @sort_by = Offer.default_sort
+    end
   end
 
   def validate_city
