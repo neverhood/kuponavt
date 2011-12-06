@@ -39,20 +39,24 @@
     <%= t('offers.coupon_price') %>:
     </p>
 
-    <p class="price">
+    <p class='price'>
       <span class='offer-price'>
         <%= offer.price_starts_at ? t('common.starts_at') : '' %> <%= offer.price %>
       </span>
       <span class='hrn'> <%= t('common.rub') %> </span>
     </p>
 
-    <div class="add-button"></div>
+    <div class='add-button'></div>
     <%= link_to t('offers.buy'), nil, :class => 'buy-button' %>
 
 
   </div>
 
-  <div class="offer-details"><%= raw offer.description %></div>
+  <div class='offer-details'>
+    <div class='offer-address'></div>
+    <div class='offer-description'></div>
+  </div>
+
   <div class='offer-bottom' title='<%= t('offers.details') %>'>
     <center> <%= image_tag 'down-arrow.png' %> </center>
   </div>

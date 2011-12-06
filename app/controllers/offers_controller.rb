@@ -2,12 +2,15 @@ class OffersController < ApplicationController
 
   layout Proc.new { |controller| controller.request.xhr?? false : 'application' }
 
-  caches_action :index, :cache_path => Proc.new { |controller| controller.params }, :if => proc { |controller| controller.request.xhr? }
+  caches_action :index, :cache_path => Proc.new { |controller| "#{controller.params}.#{request.format.symbol.to_s}" }
+  caches_action :show, :cache_path => Proc.new { |controller| "offers/show/#{controller.params[:id]}.#{request.format.symbol.to_s}" }
 
   before_filter :validate_city, :only => :index
   before_filter :prepare_categories_array, :only => :index
   before_filter :prepare_sort_attributes, :only => :index
   before_filter :prepare_page_index, :only => :index
+
+  before_filter :validate_offer, :only => :show
 
   before_filter :validate_favourites, :only => :favourites, :if => lambda { |controller| controller.request.xhr? }
 
@@ -50,7 +53,10 @@ class OffersController < ApplicationController
   end
 
   def show
-    @offer = Offer.find params[:id]
+    respond_to do |format|
+      format.html
+      format.json { render :json => { description: @offer.description, address: @offer.address } }
+    end
   end
 
 
@@ -64,9 +70,8 @@ class OffersController < ApplicationController
     return Offer.default_sort if params[:sort].nil?
 
     @sort_direction, @sort_attribute = params[:sort][:direction], params[:sort][:attribute]
-    if @sort_attribute == 'category_id'
-      @sort_attribute = 'category_id, offers.created_at'
-    end
+    @sort_attribute = 'category_id, offers.created_at' if @sort_attribute == 'category_id'
+
     @sort_by = (@sort_attribute && @sort_direction) ? "offers.#{@sort_attribute} #{@sort_direction}" : Offer.default_sort
   end
 
@@ -84,6 +89,13 @@ class OffersController < ApplicationController
     @offers = Offer.where(['`offers`.`id` IN (?)', offers])
 
     render(:json => { :count => 0 }) unless @offers.count >= 1
+  end
+
+  def validate_offer
+    @offer = Offer.find params[:id]
+    if @offer.nil?
+      request.xhr?? render(nothing: true) : redirect_to(root_path)
+    end
   end
 
 end
