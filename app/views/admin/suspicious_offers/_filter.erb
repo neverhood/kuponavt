@@ -1,0 +1,31 @@
+<div id="filter">
+
+  <div id="all-categories">
+
+    <% Category.parent_categories.each do |parent_category| %>
+
+      <% if Category.parent_categories.index(parent_category) == 0 %>
+        <p class='type first-category'> <%= parent_category.name %> </p>
+      <% else %>
+        <p class='type'> <%= parent_category.name %> </p>
+      <% end %>
+
+      <ul class='<%= parent_category.to_en %>'>
+        <% parent_category.nested_categories.each do |nested_category| %>
+          <li>
+          <label> <%= check_box_tag nested_category.id, nested_category.id, (@categories && @categories.include?(nested_category.id.to_s)),
+            :name => nested_category.to_en %><%= nested_category.name %>
+          </label>
+          </li>
+        <% end %>
+      </ul>
+
+    <% end %>
+
+
+  </div>
+
+  <%= hidden_field_tag :offer_id, nil %>
+
+</div>
+

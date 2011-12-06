@@ -1,5 +1,7 @@
 Kuponavt::Application.routes.draw do
 
+  devise_for :users
+
   root :to => 'welcome#index'
 
   resources :countries, :only => :index
@@ -12,6 +14,12 @@ Kuponavt::Application.routes.draw do
     resources :offers, :only => :index do
       get ':page' => 'offers#index', :on => :collection, :as => 'page'
     end
+  end
+
+  namespace :admin do
+    root :to => 'suspicious_offers#index'
+
+    resources :suspicious_offers, :only => [:index, :update]
   end
 
 #  match ':city/offers' => 'offers#index', :as => 'city_offers'
