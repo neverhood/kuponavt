@@ -21,7 +21,7 @@ ru:
     price: Цена
     discount: Скидка
     ends_at: Времени Осталось
-    freshness: Новизна
+    created_at: Новизна
     checked: Выбрано
     cost: Стоимость
     savings: Экономия
@@ -37,6 +37,7 @@ ru:
     no_categories_selected: Не выбрано ни одной категории
     unlimited: Неограничено
     time_left: Времени осталось
+    category_id: Категория
 
   cities:
     your_city: Ваш Город

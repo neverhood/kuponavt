@@ -388,6 +388,12 @@ $('document').ready(function() {
 
     // Sort
 
+    if ( $('#sort-by-category_id').length ) {
+        $('#sort-by-category_id').data('sort', 'desc').
+            addClass('current-sort').
+            append( '<span class="desc"></span>' );
+    }
+
     $('#sort-buttons li').click(function() {
         var $this = $(this),
             ul = $this.parent();
@@ -410,12 +416,6 @@ $('document').ready(function() {
                 direction = $this.data('sort');
 
             $('#offers-section').attr('data-sort-by', sortBy + '|' + direction );
-                // offersSection = $( $.offers.sections.offers ),
-                // existentOffers = $('#offers-section div.offer'),
-                // sortedOffers = existentOffers.sort( $.offers.sort(sortBy, direction) );
-
-            // existentOffers.remove();
-            // $('#offers-section').append( sortedOffers );
 
             $.offers.latestSort = this.id;
             $this.append('<span class="' + $this.data('sort') + '"></span>');
@@ -426,19 +426,19 @@ $('document').ready(function() {
         }
     });
 
-    $('#sort-reset').click(function() {
-        if ( $( $.offers.sections.offers ).attr('data-sort-by') ) {
-            var sortButtons = $('ul.sort-buttons');
+    // $('#sort-reset').click(function() {
+    //     if ( $( $.offers.sections.offers ).attr('data-sort-by') ) {
+    //         var sortButtons = $('ul.sort-buttons');
 
-            sortButtons.find('.asc, .desc').remove();
-            sortButtons.find('li').removeClass('current-sort');
+    //         sortButtons.find('.asc, .desc').remove();
+    //         sortButtons.find('li').removeClass('current-sort');
 
-            $.offers.latestSort = '';
-            $( $.offers.sections.offers ).removeAttr('data-sort-by');
+    //         $.offers.latestSort = '';
+    //         $( $.offers.sections.offers ).removeAttr('data-sort-by');
 
-            $.offers.utils.retrieveOffers(1);
-        }
-    });
+    //         $.offers.utils.retrieveOffers(1);
+    //     }
+    // });
 
     // Favourites
 

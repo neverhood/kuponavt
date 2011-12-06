@@ -5,8 +5,7 @@
       <%= notification( t('offers.no_categories_selected') ) %>
 
       <ul class='sort-buttons'>
-        <span id='sort-reset'> <%= t('common.reset') %> </span>
-        <% [ 'freshness', 'price', 'discount', 'ends_at' ].each do |sort_link| %><li id='<%= "sort-by-#{sort_link}" %>'><%= t("offers.#{sort_link}") %></li><% end %>
+        <% [ 'category_id', 'created_at', 'price', 'discount', 'ends_at' ].each do |sort_link| %><li id='<%= "sort-by-#{sort_link}" %>'><%= t("offers.#{sort_link}") %></li><% end %>
       </ul>
     </div>
   </div>

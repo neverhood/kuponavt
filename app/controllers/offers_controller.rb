@@ -64,6 +64,9 @@ class OffersController < ApplicationController
     return Offer.default_sort if params[:sort].nil?
 
     @sort_direction, @sort_attribute = params[:sort][:direction], params[:sort][:attribute]
+    if @sort_attribute == 'category_id'
+      @sort_attribute = 'category_id, offers.created_at'
+    end
     @sort_by = (@sort_attribute && @sort_direction) ? "offers.#{@sort_attribute} #{@sort_direction}" : Offer.default_sort
   end
 
