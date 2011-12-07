@@ -9,6 +9,8 @@
 
 <div id='suspicious-offers-navigation'>
   <%= link_to 'Not categorized', admin_suspicious_offers_path %>
+  <%= link_to 'No `Provided Id`', admin_suspicious_offers_path(:section => 'provided_id') %>
+  <%= link_to 'No `Ends At`', admin_suspicious_offers_path(:section => 'ends_at') %>
 </div>
 
 <div id='all-offers'>
@@ -30,5 +32,10 @@
 </div>
 
 <div class='hidden'>
-  <%= render :partial => 'admin/suspicious_offers/filter' %>
+  <% if params[:section].nil? %>
+    <%= render :partial => 'admin/suspicious_offers/filter' %>
+  <% else %>
+    <%= text_field_tag params[:section], nil %>
+  <% end %>
 </div>
+

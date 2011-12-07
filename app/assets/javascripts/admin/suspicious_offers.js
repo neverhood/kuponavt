@@ -8,6 +8,12 @@ $('#admin-suspicious_offers-controller').ready(function() {
             filter: $('#filter')
         };
 
+        if ( /ends_at/.test( window.location.href ) ) {
+            $.admin.filter = $('#ends_at');
+        } else if ( /provided_id/.test( window.location.href ) ) {
+            $.admin.filter = $('#provided_id');
+        }
+
         $.admin.filterContainer = $.admin.filter.parent();
         $.admin.offerIdInput = $.admin.filter.find('#offer_id');
 
@@ -50,6 +56,26 @@ $('#admin-suspicious_offers-controller').ready(function() {
                 }
             });
 
+        });
+
+        $('#ends_at').keypress(function(event) {
+            var code = (event.keyCode ? event.keyCode : event.which),
+                attribute = this.id,
+                newValue = this.value;
+
+                if ( code == 13 ) {
+                    $.ajax({
+                        type: 'PUT',
+                        url: '/admin/suspicious_offers/' + offerId + '?' + attribute + '=' + newValue,
+                        success: function(data) {
+                            if ( data.status == 'success' ) {
+                                $('#offer-' + offerId).find('.offer-left-side').append('<div style="color:red; font-weight:bold">UPDATED</div>');
+                                $(this).parent().hide();
+                            }
+                        }
+                    });
+
+                }
         });
     }
 

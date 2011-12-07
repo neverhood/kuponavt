@@ -1,9 +1,9 @@
 class Admin::SuspiciousOffersController < ApplicationController
 
   before_filter :admin_only
+  before_filter :prepare_offers
 
   def index
-    @offers = Offer.where(:category_id => nil)
   end
 
   def update
@@ -25,6 +25,15 @@ class Admin::SuspiciousOffersController < ApplicationController
 
   def admin_only
     redirect_to root_path unless current_user && current_user.admin?
+  end
+
+  def prepare_offers
+    suspicious_attribute = case params[:section]
+                           when nil then :category_id
+                           when 'provided_id' then :provided_id
+                           when 'ends_at' then :ends_at
+                           end
+    @offers = Offer.where(suspicious_attribute => nil)
   end
 
 end
