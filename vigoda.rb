@@ -57,6 +57,10 @@ cities.keys.each do |city|
 
       params[:title] = parser.call('table.content div .pointer-hand').first.text.strip
       params[:price] = parser.call('div.main-buy-label div.pointer-hand div').first.text.gsub(',','').to_i
+      if params[:price] == 0 # STARTS_AT
+        params[:price] = nil
+        params[:price_starts_at] = parser.call('div.main-buy-label div.pointer-hand div')[1].text.to_i
+      end
       params[:cost] = parser.call('td.price-discount-profit td div').first.text.strip.gsub(',','').to_i
       params[:discount] = parser.call('td.price-discount-profit td div')[1].text.strip.to_i
       params[:image] = open(parser.call('img.pointer-hand').first[:src])
