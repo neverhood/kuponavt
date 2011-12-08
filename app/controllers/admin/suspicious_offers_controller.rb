@@ -2,23 +2,20 @@ class Admin::SuspiciousOffersController < ApplicationController
 
   before_filter :admin_only
   before_filter :prepare_offers
+  before_filter :prepare_suspicious_attribute
 
   def index
   end
 
   def update
     @offer = Offer.find params[:id]
-    @category = Category.find params[:category_id]
 
-    if @offer && @category
-
-      if @offer.update_attributes(category_id: @category.id)
-        expire_fragment /categories.*#{@category.id}.*action.*index.*controller.*offers.*city.*#{@offer.city.name}.*\.json/
-        expire_fragment /.*action.*index.*controller.*offers.*city.*#{@offer.city.name}.*\.html/
-        render :json => { :status => :success }
-      end
-
+    if @offer.update_attributes(@suspicious_attribute => params[@suspicious_attribute])
+      expire_fragment /categories.*#{@offer.category_id}.*action.*index.*controller.*offers.*city.*#{@offer.city.name}.*\.json/
+      expire_fragment /.*action.*index.*controller.*offers.*city.*#{@offer.city.name}.*\.html/
+      render :json => { :status => :success }
     end
+
   end
 
   private
@@ -34,6 +31,11 @@ class Admin::SuspiciousOffersController < ApplicationController
                            when 'ends_at' then :ends_at
                            end
     @offers = Offer.where(suspicious_attribute => nil)
+  end
+
+  def prepare_suspicious_attribute
+    suspicious_attributes = [:ends_at, :category_id, :provided_id]
+    @suspicious_attribute = params.keys.find { |attribute| suspicious_attributes.include?( attribute.to_sym ) }
   end
 
 end
