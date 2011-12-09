@@ -41,7 +41,6 @@ cities.keys.each do |city|
       provided_id = $1.to_i if link =~ /\/(\d+)\//
 
       if existing_offers_ids.include?(provided_id.to_s)
-        binding.pry
         existing_offers_ids -= [provided_id.to_s]
         next
       end
@@ -59,7 +58,7 @@ cities.keys.each do |city|
       params[:price] = parser.call('div.main-buy-label div.pointer-hand div').first.text.gsub(',','').to_i
       if params[:price] == 0 # STARTS_AT
         params[:price] = nil
-        params[:price_starts_at] = parser.call('div.main-buy-label div.pointer-hand div')[1].text.to_i
+        params[:price_starts_at] = parser.call('div.main-buy-label div.pointer-hand div')[1].text.gsub(',','').to_i
       end
       params[:cost] = parser.call('td.price-discount-profit td div').first.text.strip.gsub(',','').to_i
       params[:discount] = parser.call('td.price-discount-profit td div')[1].text.strip.to_i
@@ -70,9 +69,9 @@ cities.keys.each do |city|
       offers << params
     end
 
-    binding.pry
     offers.each { |offer_attributes| Offer.create(offer_attributes) }
-    binding.pry if existing_offers_ids.any?
 
   end
+  binding.pry if existing_offers_ids.any?
+
 end
