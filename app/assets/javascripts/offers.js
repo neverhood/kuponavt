@@ -281,7 +281,7 @@ $('document').ready(function() {
 
     $('#all-offers-check').bind({
         hover: function() {
-            $( $.offers.sections.offers ).toggleClass('hover');
+            $( '#all-categories' ).toggleClass('hover');
         },
         click: function(event) {
             event.preventDefault();
