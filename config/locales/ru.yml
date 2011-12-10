@@ -40,6 +40,7 @@ ru:
     category_id: Категория
     address: Аддресс
     add_to_favourites: Добавить к избранным
+    clear: Очистить
 
   cities:
     your_city: Ваш город

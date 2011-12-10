@@ -318,6 +318,13 @@ $('document').ready(function() {
 
             if ( checkboxes.filter(':checked').length == checkboxes.length ) check = false;
 
+            if ( check ) {
+                $this.data('original-text', $this.text()).
+                    text( $this.data('clear') );
+            } else {
+                $this.text( $this.data('original-text') );
+            }
+
             checkboxes.prop('checked', check);
 
             if ( $.offers.utils.page() == 1 ) {
