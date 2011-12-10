@@ -290,6 +290,14 @@ $('document').ready(function() {
             var checkboxes = $('div#filter').find('input[type="checkbox"]');
             if ( checkboxes.length != checkboxes.filter(':checked').length ) {
                 checkboxes.prop('checked', true);
+
+                $.each( $('span.all-tags'), function() {
+                    var $this = $(this);
+
+                    $this.data('original-text', $this.text()).
+                        text( $this.data('clear') );
+                });
+
                 $.offers.utils.retrieveOffers(1);
             }
         }
@@ -302,6 +310,13 @@ $('document').ready(function() {
         $('#offers-selected-count').text('0');
 
         $('div#filter').find('input[type="checkbox"]').prop('checked', false);
+
+        $.each( $('span.all-tags'), function() {
+            var $this = $(this);
+
+            $this.text( $this.data('original-text') );
+        });
+
         $( $.offers.sections.offers ).html('');
         $( $.offers.sections.pagination ).html('');
     });
