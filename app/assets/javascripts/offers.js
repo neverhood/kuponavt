@@ -2,7 +2,6 @@
 // All this logic will automatically be available in application.js.
 
 $.offers = {
-    latestCategoriesUpdate: [],
     offersPerPage: 25,
     latestSort: '',
     sections: {
@@ -11,7 +10,7 @@ $.offers = {
         selectedCount: '#offers-selected-count'
     },
     utils: {}
-}
+};
 
 $.offers.utils.showFavourites = function() {
 
@@ -22,22 +21,22 @@ $.offers.utils.showFavourites = function() {
             $('div#offer-' + this).find('.add-button').addClass('add-button-added');
         });
     }
-}
+};
 
 $.offers.utils.city = function() {
     return $('#all-offers').attr('data-city');
-}
+};
 
 $.offers.utils.page = function() {
     var currentPage = $('#pagination-bottom .current').text();
 
     return currentPage.length ? parseInt(currentPage) : 1;
-}
+};
 
 $.offers.utils.checkedCategories = function() {
     return $.map($('#all-categories input[type="checkbox"]').
           filter(':checked'), function(element) { return element.id });
-}
+};
 
 $.offers.utils.url = function(page) {
     var city = $.offers.utils.city(),
@@ -91,7 +90,7 @@ $.offers.utils.renderOffers = function(offers) {
     temporaryContainer.remove();
 
     return renderedOffers;
-}
+};
 
 $.offers.utils.offersAheadCount = function(categoryIds) {
     var count = 0;
@@ -107,18 +106,18 @@ $.offers.utils.offersAheadCount = function(categoryIds) {
                 counted.push( existingOffersCategories[j] );
                 count += $('#offers-section div.offer[data-category="' + existingOffersCategories[j] + '"]').length;
             }
-        };
-    };
+        }
+    }
 
     return count;
-}
+};
 
 $.offers.utils.changeCounterAndPaginate = function() {
     var totalSelectedOffersCount = $.offers.utils.selectedOffersCount();
 
     $.offers.utils.paginate( totalSelectedOffersCount );
     $('#offers-selected-count').text( totalSelectedOffersCount );
-}
+};
 
 $.offers.utils.retrieveOffers = function(page) { // Retrieves offers, count and pagination
     $('div.loader').show(50);
@@ -148,7 +147,7 @@ $.offers.utils.retrieveOffers = function(page) { // Retrieves offers, count and 
         $('#offers-section').find('.offer').remove();
         $.offers.utils.changeCounterAndPaginate();
     }
-}
+};
 
 $.offers.utils.getOffers = function(categoryIds) { // Retrieves just offers
     $('.notification').hide();
@@ -210,7 +209,7 @@ $.offers.utils.getOffers = function(categoryIds) { // Retrieves just offers
     }
 
     $('#offers-selected-count').text( totalSelectedOffersCount );
-}
+};
 
 $.offers.utils.selectedOffersCount = function() {
     var categories = $('#all-categories').find('input[type="checkbox"]').filter(':checked'),
@@ -221,7 +220,7 @@ $.offers.utils.selectedOffersCount = function() {
     });
 
     return totalCount;
-}
+};
 
 $.offers.utils.paginate = function(offersCount) {
     var rawCount = offersCount/$.offers.offersPerPage,
@@ -249,13 +248,12 @@ $.offers.utils.paginate = function(offersCount) {
         paginationContainer.html( template );
     }
 
-}
+};
 
 $('document').ready(function() {
 
     $('.pagination a').live('ajax:complete', function( event, xhr, status ) {
-        var attributes = $.parseJSON( xhr.responseText ),
-            url = this.href;
+        var attributes = $.parseJSON( xhr.responseText );
 
         $('#offers-section').html( attributes.offers );
         $('#pagination-bottom').html( attributes.pagination );
@@ -271,9 +269,9 @@ $('document').ready(function() {
 
                 var params = this.href.replace(/^.*#/, '').split(','),
                     page = params[0];
-                if ( params.length == 2 ) {
-                    categories = params[1].split('|').join(',');
-                }
+//                if ( params.length == 2 ) {
+//                    var categories = params[1].split('|').join(',');
+//                }
 
                 $.offers.utils.retrieveOffers(page);
                 $("html:not(:animated)"+( ! $.browser.opera ? ",body:not(:animated)" : "")).animate({scrollTop: 25}, 500);
@@ -291,7 +289,7 @@ $('document').ready(function() {
 
             var checkboxes = $('div#filter').find('input[type="checkbox"]');
             if ( checkboxes.length != checkboxes.filter(':checked').length ) {
-                checkboxes.prop('checked', true)
+                checkboxes.prop('checked', true);
                 $.offers.utils.retrieveOffers(1);
             }
         }
@@ -320,7 +318,7 @@ $('document').ready(function() {
 
             if ( checkboxes.filter(':checked').length == checkboxes.length ) check = false;
 
-            checkboxes.prop('checked', check)
+            checkboxes.prop('checked', check);
 
             if ( $.offers.utils.page() == 1 ) {
                 var categoryIds = $.map( checkboxes, function(category) { return parseInt(category.id) } );
@@ -470,8 +468,6 @@ $('document').ready(function() {
     // Favourites
 
     if ( /\/offers\/favourites/.test(window.location.href) && $.cookie('favourites') ) {
-        var favouritedOffers = $.cookie('favourites');
-
         $.getJSON( '/offers/favourites?offers=' + $.cookie('favourites'), function(data) {
             var countContainer = $('#offers-selected-count');
 
@@ -483,7 +479,7 @@ $('document').ready(function() {
 
             $.offers.utils.showFavourites();
 
-            $('div.offer div.add-button-added').bind('click', function(event) {
+            $('div.offer div.add-button-added').unbind().bind('click', function(event) {
                 var addedOffers = $.cookie('favourites').split(','),
                     offer = $(this).parents('div.offer'),
                     offerId = offer.attr('id').replace('offer-', ''),
@@ -493,6 +489,8 @@ $('document').ready(function() {
                 if ( index != -1 ) {
                     addedOffers.splice(index, 1);
                     $.cookie( 'favourites', addedOffers.unique(), { expires: 7, path: '/' } );
+                    offer.find('.add-button').removeClass('add-button-added');
+
                     offer.fadeOut();
                     countContainer.text( currentCount - 1 );
                 }
