@@ -1,13 +1,14 @@
 /*
-*= require_self
-*/
+ *= require_self
+ */
 
 html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp,
 small, strike, strong, sub, sup, tt, var, dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td 
-{ margin: 0; padding: 0; border: 0; outline: 0;
- font-weight: inherit;  font-style: inherit; font-size: 100%; font-family: inherit; vertical-align: baseline;}
+fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td { 
+  margin: 0; padding: 0; border: 0; outline: 0;
+  font-weight: inherit;  font-style: inherit; font-size: 100%; font-family: inherit; vertical-align: baseline;
+}
 
 $main-color: #007FAD;
 
@@ -23,8 +24,8 @@ ol, ul { list-style: none; }
 
 body {
   background: white;
-	background: url(bg.png) repeat scroll 0 0 #D6CCB5;
-	font-family: 'Open Sans', Segoe UI, Arial, sans-serif;
+  background: url(soap-bubbles-wallpaper.jpg) fixed 0 -400px #D6CCB5;
+  font-family: 'Open Sans', Segoe UI, Arial, sans-serif;
   line-height: 1;
   color: black;
 }
@@ -38,41 +39,41 @@ body {
 
 
 #login {
-	float:left;
-	margin: 15px 0 0 50px;
-	width: 320px;
+  float:left;
+  margin: 15px 0 0 50px;
+  width: 320px;
 }
 
 #login a {
-	text-decoration: none;
+  text-decoration: none;
 }
 
 #login .soc-button:hover {
-	box-shadow: 0 0 3px white;
+  box-shadow: 0 0 3px white;
 }
 
 #wrapper {
   width: 960px;
   margin: auto;
-	margin-top: 40px;
+  margin-top: 40px;
 }
 
 #footer {
-	clear: left;
-	background: url(footerbg.png);
-	color: white;
-	height: 335px;
-	border-top: 1px solid black;
+  clear: left;
+  background: url(footerbg.png);
+  color: white;
+  height: 335px;
+  border-top: 1px solid black;
 }
 
 #footer-info {
-	margin: 10px 0 0 40px;
-	float: left;
+  margin: 10px 0 0 40px;
+  float: left;
 }
 
 #footer ul a {
-	text-decoration: none;
-	color: white;
+  text-decoration: none;
+  color: white;
 }
 
 .loader {

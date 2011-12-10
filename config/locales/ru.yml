@@ -31,7 +31,7 @@ ru:
     all_offers: Все категории
     all_tags: все
     details: Подробнее
-    selected_coupons: Отобранные купоны
+    selected_coupons: Избранные купоны
     offers_search: Поиск по купонам
     search_watermark: Введите слово
     no_categories_selected: Не выбрано ни одной категории
@@ -39,9 +39,10 @@ ru:
     time_left: Времени осталось
     category_id: Категория
     address: Аддресс
+    add_to_favourites: Добавить к избранным
 
   cities:
-    your_city: Ваш Город
+    your_city: Ваш город
 
     kiev: Киев
     moscow: Москва

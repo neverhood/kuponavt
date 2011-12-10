@@ -13,7 +13,7 @@ bot = Mechanize.new
 
 categories = {
   '/cafe' => 2,
-  '/beauty' => 13,
+  '/beauty' => 11,
   '/health' => 10,
   '/products' => 16,
   '/fitness' => 12,

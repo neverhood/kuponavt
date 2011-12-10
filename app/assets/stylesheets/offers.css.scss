@@ -27,7 +27,7 @@ div#offers {
     padding: 10px;
     border-radius: 5px 5px 0 0;
     box-shadow: 0px 0px 2px $main-color;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 
     #offers-selected-count {
       padding: 5px;
@@ -48,7 +48,7 @@ div#offers {
       li {
         display: inline-block;
         position: relative;
-        padding: 6px 10px 7px;
+        padding: 6px 11px 7px;
         font-size: 16px;
         color: white;
         cursor: pointer;
@@ -74,18 +74,22 @@ div#offers {
 
       .current-sort {
         position: relative;
-        top: 1px;
-        padding: 7px 20px 6px 6px;
+        top: 2px;
+        padding: 7px 18px 6px 4px;
         color: white;
         background-image: url(current-sort-tsp.png);
         box-shadow: inset 0px 1px 8px rgba(0,0,0,0.45);
         border: 1px solid #296577;
+      
+        &:hover {
+          border-left: 1px solid #296577;
+        }
       }
 
       .asc {
         position: absolute;
         top: 6px;
-        right: 6px;
+        right: 4px;
         background: url(sort-arrows.png);
         background-position: -10px 50%;
         z-index: 1;
@@ -96,7 +100,7 @@ div#offers {
       .desc {
         position: absolute;
         top: 6px;
-        right: 6px;
+        right: 4px;
         background: url(sort-arrows.png);
         z-index: 1;
         width: 10px;
@@ -146,7 +150,7 @@ div#offers {
     }
 
     h2 {
-      padding-bottom: 20px;
+      margin-bottom: 15px;
       text-align: justify;
       text-shadow: 0px 1px 1px white;
 
@@ -166,20 +170,26 @@ div#offers {
       .offer-image {
         border: 1px solid #F3F3F3;
         padding: 2px;
-        width: 360px;
+        width: 390px;
+        height: 216px;
       }
 
       .offer-image-bottom {
         opacity: .7;
         position: absolute;
         left: 3px;
-        bottom: 5px;
-        width: 360px;
-        height: 24px;
+        bottom: 4px;
+        width: 390px;
+        height: 30px;
         background: url(metro-tsp.png);
+        overflow: hidden;
+
+        &:hover {
+          overflow: visible;
+        }
 
         .subway {
-          margin: 2px 0 0 3px;
+          margin: 5px 0 0 6px;
           float: left;
           background: url(metro-red.png);
           width: 20px;
@@ -189,13 +199,13 @@ div#offers {
         .subway-station {
           float: left;
           max-width: 220px;
-          margin: 3px 0 0 6px;
+          margin: 6px 0 0 6px;
         }
 
         .provider {
           float: right;
           width: auto;
-          height: 24px;
+          height: 30px;
         } 
       }
 
@@ -203,18 +213,25 @@ div#offers {
 
     .offer-right-side {
       float: left;
-      margin-left: 20px;
+      margin-left: 5px;
       width: 235px;
-      height: 237px;
+      height: 220px;
       position: relative;
-      margin-bottom: 25px;
+      margin-bottom: 20px;
+      
+      .info-container { margin-left: 7px }
 
       .price {
         color: green;
         font-weight: bold;
         text-align: center;
-        font-size: 130%;
+        font-size: 150%;
         .hrn { font-weight: normal; }
+      
+        .starts-at {
+          font-weight: normal;
+          text-transform: lowercase;
+        }
       }
 
       .info {
@@ -226,22 +243,18 @@ div#offers {
       table {
         text-align: center;
         font-size: 80%;
-        margin: 10px auto;
+        margin: -3px auto 15px;
         color: grey;
 
-        td {
-          padding: 0 10px;
-        }
-
-        tr {
-          border-left: 1px solid grey;
-        }
+        td { padding: 0 10px; }
+        
+        .offer-cost, .offer-discount, .offer-savings { color: black }
       } /* Table */
 
       .add-button {
         position: absolute;
-        bottom: 7px;
-        left: 5px;
+        bottom: 5px;
+        left: 10px;
         width: 35px;
         height: 35px;
         background: url(add-icons.png);
@@ -253,16 +266,25 @@ div#offers {
         }
 
         &:active {
-          bottom: 6px;
+          bottom: 4px;
           background: url(add-icons.png);
           background-position: -70px;
         }
       }
 
       .add-button-added {
-        bottom: 6px;
+        bottom: 4px;
         background: url(add-icons.png);
         background-position: -70px;
+      
+        &:hover {
+          background-position: -70px;
+        }
+
+        &:active {
+          bottom: 5px;
+          background-position: -35px;
+        }
       }
 
       .buy-button {
@@ -275,14 +297,13 @@ div#offers {
         width: 150px;
         line-height: 30px;
         position: absolute;
-        bottom: 0px;
-        left: 60px;
+        bottom: -1px;
+        left: 64px;
         background: $main-color;
         background:-webkit-linear-gradient(#47AACC,#007fac);
         background:-moz-linear-gradient(#47AACC,#007fac);
         background:-o-linear-gradient(#47AACC,#007fac);
         border: 1px solid $main-color;
-        border-top: 1px solid #47AACC;
         border-radius: 4px;
         text-shadow: 0px 1px 1px $main-color;
 
@@ -295,7 +316,7 @@ div#offers {
         }
 
         &:active {
-          bottom: -1px;
+          bottom: -2px;
           box-shadow:  inset 0px 1px 8px rgba(0,0,0,0.6);
         }
       }
@@ -313,6 +334,11 @@ div#offers {
       margin:25px;
     }
 
+    .offer-description {
+      
+      li { margin-bottom: 10px }
+    }
+
     div.offer-bottom {
       position: absolute;
       width: 672px;
@@ -321,6 +347,7 @@ div#offers {
       border-radius: 0 0 10px 10px;
       border-top: 1px solid #97D0C9;
       padding: 0;
+      cursor: pointer;
 
       img {
         width: 20px;

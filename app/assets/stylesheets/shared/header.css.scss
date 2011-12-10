@@ -11,8 +11,8 @@
   box-shadow:  0px 0px 2px #007FAD;
 
   .selected-deals-link {
-    float: left;
-    margin: 31px 0 0 147px;
+    float: right;
+    margin: 31px 35px 0 0;
     a {
       text-shadow: 0px 1px 1px white;
       font-size: 18px;
@@ -63,9 +63,69 @@
   float:left;
   margin: 30px 0 0 100px;
 
-  select {
-    font-size: 16px;
-    background:#E2EDEA;
+  span {
+    color: #404040;
+    text-shadow: 0 2px 2px #C4C4C4;
+  }
+
+  #current-city {
+    position: relative;
+    margin-left: 10px;
+    font-size: 20px;
+    border-bottom: 1px dashed #007FAD;
+    cursor: pointer;
+  }
+
+  #all-cities {
+    position: absolute;
+    top: 35px;
+    left: -140px;
+    z-index: 100;
+    display: none;
+    min-width: 235px;
+    padding: 10px;
+    background: url(semi-tsp.png) repeat, url(semi-tsp.png) repeat, url(semi-tsp.png) repeat, url(semi-tsp.png) repeat;
+    cursor: default;
+    box-shadow: 0px 0px 2px #007fad;
+    border-radius: 5px;
+
+    h3 {
+      padding: 0px 0px 0px 20px;
+      font-size: 16px;
+      text-shadow: 0 1px white;
+    }
+
+    #russia {
+      float: left;
+
+      h3 { background: url(flag-russia.png) no-repeat 0px 4px; }
+    }
+
+    #ukraine {
+      float: left;
+      margin: 0 0 0 35px;
+
+      h3 {  background: url(flag-ukraine.png) no-repeat 0px 4px; }
+    }
+
+    ul { width: 100px;
+
+      li {
+        clear: left;
+        float: left;
+        cursor: pointer;
+
+        a {
+          font-size: 12px;
+          color: #404040;
+          text-decoration: none;
+          text-shadow: 0 1px white;
+
+          &:hover {
+            text-shadow: 0 0px 1px #0099FF;
+          }
+        }
+      }
+    }
   }
 }
-
