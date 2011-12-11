@@ -42,6 +42,11 @@ ru:
     add_to_favourites: Добавить к избранным
     clear: Очистить
 
+    lenses:
+      all: Все
+      today: За сегодня
+      yesterday: За вчера
+
   cities:
     your_city: Ваш город
 

@@ -71,6 +71,10 @@ $.offers.utils.url = function(page) {
         url += ( '&sort[attribute]=' + sortBy + '&sort[direction]=' + sortDirection );
     }
 
+    if ( $( $.offers.sections.offers ).attr('data-time_period') ) {
+        url += ( '&time_period=' + $( $.offers.sections.offers ).attr('data-time_period') );
+    }
+
     return url;
 };
 
@@ -143,7 +147,12 @@ $.offers.utils.retrieveOffers = function(page) { // Retrieves offers, count and 
                 $( $.offers.sections.pagination ).html( data.pagination );
                 $( $.offers.sections.selectedCount ).html( data.count );
             } else {
-                $.offers.utils.changeCounterAndPaginate();
+                if ( $($.offers.sections.offers).data('time_period') ) {
+                    $( $.offers.sections.selectedCount ).html( data.count );
+                    $.offers.utils.paginate( data.count );
+                } else {
+                    $.offers.utils.changeCounterAndPaginate();
+                }
             }
 
             Cufon.replace('.time-left');
@@ -582,5 +591,28 @@ $('document').ready(function() {
     $('#current-city').click(function(event) {
         if ( event.target.id == 'current-city') $('#all-cities').toggle();
     });
+
+    // Lenses
+
+    $('#lenses li').click(function() {
+        $('#lenses li').removeClass('pressed');
+        $(this).addClass('pressed');
+
+        var currentTimePeriod = parseInt($( $.offers.sections.offers ).attr('data-time_period')),
+            timePeriod = 0;
+
+        if ( !currentTimePeriod ) currentTimePeriod = 0;
+
+        if ( this.id == 'today-lens' ) {
+            timePeriod = 1;
+        } else if ( this.id == 'yesterday-lens' ) {
+            timePeriod = 2;
+        }
+
+        if ( currentTimePeriod != timePeriod ) {
+            $( $.offers.sections.offers ).attr('data-time_period', timePeriod);
+            $.offers.utils.retrieveOffers( $.offers.utils.page() );
+        }
+    })
 
 });

@@ -8,6 +8,7 @@ class OffersController < ApplicationController
   before_filter :validate_city, :only => :index
   before_filter :prepare_categories_array, :only => :index
   before_filter :prepare_sort_attributes, :only => :index
+  before_filter :prepare_time_period, :only => :index
   before_filter :prepare_page_index, :only => :index
 
   before_filter :validate_offer, :only => :show
@@ -16,13 +17,14 @@ class OffersController < ApplicationController
 
   def index
     @offers = if request.xhr?
-                @categories ? @city.offers.by_categories(@categories).order(@sort_by).page( @page ) : []
+                @categories ? @city.offers.by_categories(@categories).by_time_period(@time_period).order(@sort_by).page( @page ) : []
               else
                 @city.offers.page(@page)
               end
 
     @offers_total_count = @city.offers.count
-    @offers_selected_count = @categories ? @city.offers.by_categories(@categories).count : @city.offers.count
+    @offers_selected_count = @categories ? @city.offers.by_categories(@categories).
+        by_time_period(@time_period).count : @city.offers.count
 
     respond_to do |format|
       format.html
@@ -32,13 +34,11 @@ class OffersController < ApplicationController
         # else
         #   render :json => { :offers => @offers.to_json }
         # end
-        if @page > 1
+
           render :json => { :offers => render_to_string(:partial => 'offers/offers'),
             :pagination => render_to_string(:partial => 'offers/pagination'), :count => @offers_selected_count
           }, :layout => false
-        else
-          render :json => { :offers => render_to_string(:partial => 'offers/offers') }
-        end
+
       end
     end
   end
@@ -80,6 +80,16 @@ class OffersController < ApplicationController
     else
       @sort_by = Offer.default_sort
     end
+  end
+
+  def prepare_time_period
+    time_period = params[:time_period] && params[:time_period].to_i
+
+    @time_period = case time_period
+                     when 1 then [Time.now.to_date]
+                     when 2 then [1.day.ago.to_date, Time.now.to_date]
+                     else [365.days.ago]
+                   end
   end
 
   def validate_city

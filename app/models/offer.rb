@@ -16,6 +16,14 @@ class Offer < ActiveRecord::Base
       where(['categories.name IN (:category_names)', :category_names => categories.join(',')])
   }
 
+  scope :by_time_period, lambda { |time_period|
+    if time_period.count == 1
+      where(['offers.created_at >= ?', time_period.first])
+    else
+      where(['offers.created_at >= ? AND offers.created_at < ?', time_period.first, time_period.last])
+    end
+  }
+
   def self.default_sort
     "category_id, offers.ends_at DESC"
   end

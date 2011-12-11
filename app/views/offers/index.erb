@@ -4,7 +4,7 @@
 
     <div id="lenses">
         <ul>
-		    <li class="pressed">все</li><li>за сегодня</li><li>за вчера</li>
+          <% %w(all today yesterday).each do |lens| %> <li id='<%= lens %>-lens' class='<%= lens == 'all' ? 'pressed' : '' %>'> <%= t("offers.lenses.#{lens}") %> </li> <% end %>
 		</ul>
 	</div>
 
