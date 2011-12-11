@@ -2,6 +2,8 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+.pressed { box-shadow: inset 0 1px 5px rgba(0,0,0,0.5) }
+
 div#offers {
 
   background: url(semi-tsp.png) repeat;
@@ -11,26 +13,58 @@ div#offers {
   box-shadow:  0px 0px 2px $main-color;
   margin-bottom: 70px;
 
-  div#current-offers-count {
-    margin: 10px;
-    text-align: center;
-    text-shadow: 0 1px 1px white;
-
-    #offers-selected-count {
-      color: $main-color;
-    }
-  }
-
   div#sort {
     position: relative;
-    height: 50px;
-    padding: 10px;
-    border-radius: 5px 5px 0 0;
-    box-shadow: 0px 0px 2px $main-color;
-    margin-bottom: 10px;
+    height: 90px;
 
-    #offers-selected-count {
-      padding: 5px;
+    #amount-for-time {
+        float: left;
+        margin: 18px 0 0 15px;
+
+        li {
+            display: inline-block;
+            padding: 2px 5px 5px;
+            cursor: pointer;
+            border-radius: 3px;
+            color: #007FAD;
+
+            &:hover { box-shadow: 0px 1px 5px rgba(0,0,0,0.5) }
+
+        }
+    }
+
+
+    #current-offers-count {
+    position: absolute;
+    top: 20px;
+    left: 270px;
+    text-shadow: 0 1px 1px white;
+
+        #offers-selected-count {
+            padding: 1px;
+            font-size: 16px;
+            color: $main-color;
+        }
+    }
+
+    #show-main-map-button {
+        clear: right;
+        float: right;
+        width: 185px;
+        margin: 13px 15px 15px 0px;
+        padding: 3px;
+        border-radius: 3px;
+        cursor: pointer;
+        color: #007FAD;
+
+        &:hover { box-shadow: 0px 1px 5px rgba(0,0,0,0.5) }
+
+        span {
+            display: block;
+            float: right;
+            margin: 4px 2px 0px 2px;
+
+        }
     }
 
     #sort-reset {
@@ -41,14 +75,23 @@ div#offers {
     }
 
     #sort-buttons {
-      position: absolute;
-      bottom: -1px;
-      right: 15px;
+        float: right;
+        margin: 0px 14px 15px 0px;
+
+        .first-child {
+            border-radius: 3px 0 0 3px;
+            border-left: 1px solid #64A2B2;
+        }
+
+        .last-child {
+            border-radius: 0px 3px 3px 0px;
+            border-left: 1px solid #64A2B2;
+        }
 
       li {
         display: inline-block;
         position: relative;
-        padding: 6px 11px 7px;
+        padding: 5px 11px 6px;
         font-size: 16px;
         color: white;
         cursor: pointer;
@@ -57,6 +100,8 @@ div#offers {
         border-left: 1px solid #73BACC;
         -moz-transition: box-shadow 70ms linear, padding .1s linear;
         -webkit-transition: box-shadow 70ms linear, padding .1s linear;
+
+
 
         &:hover {
           background-image: url(sort-tsp-current.png);
@@ -70,12 +115,14 @@ div#offers {
         }
 
 
+
+
       }
 
       .current-sort {
         position: relative;
         top: 2px;
-        padding: 7px 18px 6px 4px;
+        padding: 6px 18px 5px 4px;
         color: white;
         background-image: url(current-sort-tsp.png);
         box-shadow: inset 0px 1px 8px rgba(0,0,0,0.45);
@@ -119,20 +166,10 @@ div#offers {
       }
     }
 
-    h2 {
-      font-size: 22px;
-    }
-    span {
-      font-size: 14px;
-    }
 
-    p {
-      span {
-        font-size:16px;
-        float:right;
-        cursor: pointer;
-      }
-    }
+
+
+
   }
 
   div.offer {
@@ -498,22 +535,17 @@ div#offers {
     @include rounded-corners(3px);
 
     &:hover {
-      background: $main-color;
-      color: white;
+        box-shadow: 0px 1px 5px rgba(0,0,0,0.5);
     }
     &:active {
-      box-shadow: 0 0 2px #007fad;
+        box-shadow: inset 0px 1px 5px rgba(0,0,0,0.5);
     }
   }
 
   .current {
     padding: 2px 8px 3px 7px;
-    border: 1px solid $main-color;
-    color: white;
     @include rounded-corners(3px);
-    background: #007fad;
-    border-right: 1px solid #00a1d6;
-    border-bottom: 1px solid #00a1d6;
+    box-shadow: inset 0px 1px 5px rgba(0,0,0,0.5);
   }
 }
 

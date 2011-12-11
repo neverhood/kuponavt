@@ -55,7 +55,7 @@ body {
 #wrapper {
   width: 960px;
   margin: auto;
-  margin-top: 40px;
+  margin-top: 25px;
 }
 
 #footer {
@@ -78,7 +78,8 @@ body {
 
 .loader {
   position: absolute;
-  margin: -5px 0 0 5px;
+  top: -6px;
+  left: 155px;
 }
 
 .notification {

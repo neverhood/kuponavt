@@ -42,7 +42,7 @@ $.offers.utils.url = function(page) {
     var city = $.offers.utils.city(),
         checkedCategories = $.offers.utils.checkedCategories(),
         categories = [],
-        url = '/' + city + '/offers';
+        url = '/' + city;
 
     if ( page > 1 ) {
         url += '/' + page;
@@ -120,13 +120,13 @@ $.offers.utils.changeCounterAndPaginate = function() {
 };
 
 $.offers.utils.retrieveOffers = function(page) { // Retrieves offers, count and pagination
-    $('div.loader').show(50);
+    $('div.loader').show();
     $('#current-offers-count').append( $.api.loader() );
 
     $('.notification').hide();
 
     var checkedCategories = $.offers.utils.checkedCategories();
-    if ( checkedCategories.length ) {
+    if ( checkedCategories.length > 0 ) {
         $.getJSON($.offers.utils.url(page), function(data) {
             $( $.offers.sections.offers ).html( data.offers );
             // $( $.offers.sections.offers ).html( $.offers.utils.renderOffers( $.parseJSON( data.offers ) ) );
@@ -143,7 +143,7 @@ $.offers.utils.retrieveOffers = function(page) { // Retrieves offers, count and 
             $.offers.utils.showFavourites();
         });
     } else {
-        $('#all-offers').find('.loader').remove();
+        $('#current-offers-count').find('.loader').remove();
         $('#offers-section').find('.offer').remove();
         $.offers.utils.changeCounterAndPaginate();
     }
@@ -178,7 +178,7 @@ $.offers.utils.getOffers = function(categoryIds) { // Retrieves just offers
         // Too complex, just get offers from server
         $.offers.utils.retrieveOffers(1);
     } else {
-        var url = '/' + $.offers.utils.city() + '/offers?categories=' + categoryIds.join(',');
+        var url = '/' + $.offers.utils.city() + '?categories=' + categoryIds.join(',');
         $('#current-offers-count').append( $.api.loader() );
 
         $.getJSON( url, function(data) {
@@ -404,7 +404,19 @@ $('document').ready(function() {
 
     $('#all-categories input[type="checkbox"]').change(function() {
         var $this = $(this),
-        checked = $this.prop('checked');
+            checked = $this.prop('checked'),
+            ul = $this.parents('ul'),
+            tag = ul.prev().find('.all-tags'),
+            checkboxes = ul.find('input[type="checkbox"]');
+
+        if ( checked ) {
+            if ( checkboxes.length == checkboxes.filter(':checked').length ) {
+                tag.data('original-text', tag.text()).
+                    text( tag.data('clear') );
+            }
+        } else {
+            if ( tag.data('original-text') ) tag.text( tag.data('original-text') );
+        }
 
         if ( $.offers.utils.page() == 1 ) {
             if ( checked ) {
@@ -472,20 +484,6 @@ $('document').ready(function() {
             $('#sort-buttons .notification').show();
         }
     });
-
-    // $('#sort-reset').click(function() {
-    //     if ( $( $.offers.sections.offers ).attr('data-sort-by') ) {
-    //         var sortButtons = $('ul.sort-buttons');
-
-    //         sortButtons.find('.asc, .desc').remove();
-    //         sortButtons.find('li').removeClass('current-sort');
-
-    //         $.offers.latestSort = '';
-    //         $( $.offers.sections.offers ).removeAttr('data-sort-by');
-
-    //         $.offers.utils.retrieveOffers(1);
-    //     }
-    // });
 
     // Favourites
 
