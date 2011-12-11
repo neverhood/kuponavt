@@ -27,6 +27,14 @@ $.offers.utils.city = function() {
     return $('#all-offers').attr('data-city');
 };
 
+$.offers.utils.showLenses = function() {
+    var lenses = $('#lenses');
+
+    if ( lenses.not(':visible') ) {
+        lenses.show();
+    }
+};
+
 $.offers.utils.page = function() {
     var currentPage = $('#pagination-bottom .current').text();
 
@@ -145,6 +153,7 @@ $.offers.utils.retrieveOffers = function(page) { // Retrieves offers, count and 
     } else {
         $('#current-offers-count').find('.loader').remove();
         $('#offers-section').find('.offer').remove();
+        $('#lenses').hide()
         $.offers.utils.changeCounterAndPaginate();
     }
 };
@@ -291,11 +300,13 @@ $('document').ready(function() {
             if ( checkboxes.length != checkboxes.filter(':checked').length ) {
                 checkboxes.prop('checked', true);
 
+                $.offers.utils.showLenses();
+
                 $.each( $('span.all-tags'), function() {
                     var $this = $(this);
 
-                    $this.data('original-text', $this.text()).
-                        text( $this.data('clear') );
+                    if ( ! $this.data('original-text') ) $this.data('original-text', $this.text());
+                    $this.text( $this.data('clear') );
                 });
 
                 $.offers.utils.retrieveOffers(1);
@@ -319,6 +330,7 @@ $('document').ready(function() {
 
         $( $.offers.sections.offers ).html('');
         $( $.offers.sections.pagination ).html('');
+        $('#lenses').hide();
     });
 
     $('span.all-tags').bind({
@@ -336,6 +348,7 @@ $('document').ready(function() {
             if ( check ) {
                 $this.data('original-text', $this.text()).
                     text( $this.data('clear') );
+                $.offers.utils.showLenses();
             } else {
                 $this.text( $this.data('original-text') );
             }
@@ -410,6 +423,8 @@ $('document').ready(function() {
             checkboxes = ul.find('input[type="checkbox"]');
 
         if ( checked ) {
+            $.offers.utils.showLenses();
+
             if ( checkboxes.length == checkboxes.filter(':checked').length ) {
                 tag.data('original-text', tag.text()).
                     text( tag.data('clear') );

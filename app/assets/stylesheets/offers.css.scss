@@ -17,9 +17,10 @@ div#offers {
     position: relative;
     height: 90px;
 
-    #amount-for-time {
+    #lenses {
         float: left;
         margin: 18px 0 0 15px;
+        display: none;
 
         li {
             display: inline-block;
