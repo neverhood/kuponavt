@@ -93,7 +93,7 @@ $.offers.utils.renderOffers = function(offers) {
 };
 
 $.offers.utils.offersAheadCount = function(categoryIds) {
-    var count = 0;
+    var count = 0,
         existingOffers = $('#offers-section div.offer'),
         existingOffersCategories = $.map( existingOffers, function(offer) {
             return parseInt( $(offer).attr('data-category') )
@@ -552,6 +552,22 @@ $('document').ready(function() {
             }
 
         }
+    });
+
+    $('html').click(function(event) {
+        var citiesContainer = $('#all-cities'),
+            target = $(event.target),
+            targetId = target.attr('id');
+
+        if ( target.parents('#all-cities').length == 0 && targetId != 'current-city' && targetId != 'all-cities' && citiesContainer.is(':visible') ) {
+            citiesContainer.toggle();
+        }
+    });
+
+    // City selection
+
+    $('#current-city').click(function(event) {
+        if ( event.target.id == 'current-city') $('#all-cities').toggle();
     });
 
 });
