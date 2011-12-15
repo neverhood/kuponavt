@@ -125,7 +125,6 @@ retrieve_attributes = lambda do |offers|
 end
 
 # bot.post(auth_url, auth_details)
-
 cities.each do |city|
 
   city_model = City.where(name: city).first
@@ -162,7 +161,7 @@ cities.each do |city|
 
       offers = []
       offer_ids_to_category_ids.each do |offer_and_categories|
-        offers << bot.page.parser.css("##{offer_and_categories.first}")
+        offers << bot.page.parser.css("[data-id='#{offer_and_categories.first}']")
       end
 
       biglion_offers = retrieve_attributes.call(offers)
