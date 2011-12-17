@@ -77,9 +77,12 @@ retrieve_attributes = lambda do |offers|
     offer = offer.first if offer.is_a?(Nokogiri::XML::NodeSet)
 
     begin
-      offer_attributes[:provided_id] = offer.css('.photo a').first.attr(:rel) || offer.attr(:id)
+      offer_attributes[:provided_id] = offer.css('.photo a').first.attr(:rel) || offer.attr('id') || offer.attr('data-id')
 
-      next if Offer.where(provided_id: offer_attributes[:provided_id], provider_id: PROVIDER.id).any?
+      if Offer.where(provided_id: offer_attributes[:provided_id], provider_id: PROVIDER.id).any?
+        $existing_offers -= [ offer_attributes[:provided_id] ]
+        next
+      end
 
       offer_attributes[:url] = offer.css('.actionsItemHeadding a').first.attr :href
 
@@ -90,6 +93,10 @@ retrieve_attributes = lambda do |offers|
 
       if img_url.blank?
         img_url = bot.page.parser.css('script').inner_html.scan(/var image_big(.*);/)[0][0].gsub(/"/, '').gsub(/.*http/, 'http')
+      end
+
+      if img_url =~ /\n/
+        img_url = img_url.split("\n").first.strip
       end
 
       offer_attributes[:image] = open( image_bot.get(img_url).uri ) unless img_url.blank?
@@ -105,7 +112,9 @@ retrieve_attributes = lambda do |offers|
       # bitches!!
       if offer.css('.offer-contact .links').count > 0
         offer_attributes[:subway] = offer.css('.offer-contact .links div div div').text.strip
-        offer_attributes[:address] = offer.css('.offer-contact .links div div').first.children.first.text.strip
+        if offer.css('.offer-contact .links div div').first
+          offer_attributes[:address] = offer.css('.offer-contact .links div div').first.children.first.text.strip
+        end
       end
       if offer.css('.ppOffer-info ul li span').count > 0
         offer_attributes[:ends_at] = offer.css('.ppOffer-info ul li span').first.text.gsub(/[^\.\d]/, '')
@@ -127,8 +136,11 @@ end
 # bot.post(auth_url, auth_details)
 cities.each do |city|
 
+
   city_model = City.where(name: city).first
   country_model = city_model.country
+
+  $existing_offers = Offer.where(:city_id => city_model.id, :provider_id => PROVIDER.id).map(&:provided_id)
 
   base_url = "#{URL}/#{city}"
   bot.get base_url
@@ -182,6 +194,11 @@ cities.each do |city|
       end
     end
 
+  end
+
+  if $existing_offers.any?
+    binding.pry
+    Offer.where(:provider_id => PROVIDER.id, :provided_id => $existing_offers).delete_all
   end
 
 end
