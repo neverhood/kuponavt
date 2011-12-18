@@ -287,9 +287,6 @@ $('document').ready(function() {
 
                 var params = this.href.replace(/^.*#/, '').split(','),
                     page = params[0];
-//                if ( params.length == 2 ) {
-//                    var categories = params[1].split('|').join(',');
-//                }
 
                 $.offers.utils.retrieveOffers(page);
                 $("html:not(:animated)"+( ! $.browser.opera ? ",body:not(:animated)" : "")).animate({scrollTop: 25}, 500);
