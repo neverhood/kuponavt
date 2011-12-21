@@ -7,7 +7,7 @@ ru:
     hrn: грн
     reset: Сброс
     rub: руб
-    starts_at: От
+    starts_at: от
 
   views:
     pagination:
@@ -20,7 +20,7 @@ ru:
   offers:
     price: Цена
     discount: Скидка
-    ends_at: Времени Осталось
+    ends_at: Времени осталось
     created_at: Новизна
     checked: Выбрано
     cost: Стоимость
@@ -35,17 +35,17 @@ ru:
     offers_search: Поиск по купонам
     search_watermark: Введите слово
     no_categories_selected: Не выбрано ни одной категории
-    unlimited: Неограничено
+    unlimited: "&#8734;"
     time_left: Времени осталось
     category_id: Категория
-    address: Аддресс
+    address: Адрес
     add_to_favourites: Добавить к избранным
-    clear: Очистить
+    clear: очистить
 
     lenses:
-      all: Все
-      today: За сегодня
-      yesterday: За вчера
+      all: все
+      today: за сегодня
+      yesterday: за вчера
 
   cities:
     your_city: Ваш город

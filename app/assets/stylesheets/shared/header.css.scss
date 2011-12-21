@@ -2,7 +2,7 @@
 
   position: relative;
   width: 960px;
-  height: 80px;
+  height: 75px;
   margin: 0 auto;
   background: url(semi-tsp.png) repeat;
   border-radius: 0 0 5px 5px;
@@ -12,7 +12,7 @@
 
   .selected-deals-link {
     float: right;
-    margin: 31px 35px 0 0;
+    margin: 26px 35px 0 0;
     a {
       text-shadow: 0px 1px 1px white;
       font-size: 18px;
@@ -25,7 +25,7 @@
 
 #logo {
   float: left;
-  margin: 15px 0 0 15px;
+  margin: 5px 0 0 15px;
   position: relative;
 }
 
@@ -40,7 +40,9 @@
 }
 
 .close-popup {
-  float: right;
+  position: absolute;
+  top: -17px;
+  right: -17px;
   cursor: pointer;
 }
 
@@ -58,10 +60,9 @@
 }
 
 #city {
-  width:50;
-  height:40px;
-  float:left;
-  margin: 30px 0 0 100px;
+  height: 40px;
+  float: left;
+  margin: 24px 0 0 100px;
 
   span {
     color: #404040;

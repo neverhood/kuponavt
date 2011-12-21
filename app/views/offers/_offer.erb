@@ -23,9 +23,9 @@
         <td><%= t('offers.savings') %></td>
       </tr>
       <tr>
-        <td class='offer-cost'> <%= offer.cost > 0 ? offer.cost : t('offers.unlimited') %> </td>
+        <td class='offer-cost'> <%= offer.cost > 0 ? offer.cost : t('offers.unlimited').html_safe %> </td>
         <td class='offer-discount'> <%= offer.discount %>% </td>
-        <td class='offer-savings'> <%= (offer.cost && offer.cost > 0) ? offer.cost/100 * offer.discount : t('offers.unlimited') %> </td>
+        <td class='offer-savings'> <%= (offer.cost && offer.cost > 0) ? offer.cost/100 * offer.discount : t('offers.unlimited').html_safe %> </td>
       </tr>
     </table>
 

@@ -197,7 +197,6 @@ cities.each do |city|
   end
 
   if $existing_offers.any?
-    binding.pry
     Offer.where(:provider_id => PROVIDER.id, :provided_id => $existing_offers).delete_all
   end
 

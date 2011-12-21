@@ -35,6 +35,14 @@ $.offers.utils.showLenses = function() {
     }
 };
 
+$.offers.utils.hideLenses = function() {
+    var lenses = $('#lenses');
+
+    if ( lenses.is(':visible') ) {
+        lenses.hide();
+    }
+};
+
 $.offers.utils.page = function() {
     var currentPage = $('#pagination-bottom .current').text();
 
@@ -381,6 +389,10 @@ $('document').ready(function() {
             } else {
                 $.offers.utils.retrieveOffers(1);
             }
+
+            if ( $('#all-categories input[type="checkbox"]').filter(':checked').length == 0 ) {
+                $.offers.utils.hideLenses();
+            }
         }
     });
 
@@ -451,6 +463,10 @@ $('document').ready(function() {
             }
         } else {
             $.offers.utils.retrieveOffers(1);
+        }
+
+        if ( $('#all-categories input[type="checkbox"]').filter(':checked').length == 0 ) {
+            $.offers.utils.hideLenses();
         }
     });
 
