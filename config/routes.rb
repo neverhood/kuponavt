@@ -8,6 +8,7 @@ Kuponavt::Application.routes.draw do
 #  resources :cities, :only => :index
   resources :offers, :only => :show do
     get 'favourites', :on => :collection
+    get 'search', :on => :collection
   end
 
   get '/:city' => 'offers#index', :as => :offers

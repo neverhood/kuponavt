@@ -1,19 +1,23 @@
 class OffersController < ApplicationController
 
+  SEARCH_QUERY_REGEXP = /(\+|-|&&|\|\||!|\(|\)|{|}|\[|\]|`|"|~|\?|:|\\)/
+
   layout Proc.new { |controller| controller.request.xhr?? false : 'application' }
 
   caches_action :index, :cache_path => Proc.new { |controller| "#{controller.params}.#{request.format.symbol.to_s}" }
   caches_action :show, :cache_path => Proc.new { |controller| "offers/show/#{controller.params[:id]}.#{request.format.symbol.to_s}" }
 
-  before_filter :validate_city, :only => :index
+  before_filter :validate_city, :only => [ :index, :search ]
   before_filter :prepare_categories_array, :only => :index
   before_filter :prepare_sort_attributes, :only => :index
   before_filter :prepare_time_period, :only => :index
-  before_filter :prepare_page_index, :only => :index
+  before_filter :prepare_page_index, :only => [ :index, :search ]
 
   before_filter :validate_offer, :only => :show
 
   before_filter :validate_favourites, :only => :favourites, :if => lambda { |controller| controller.request.xhr? }
+
+  before_filter :validate_search, :only => :search
 
   def index
     @offers = if request.xhr?
@@ -29,16 +33,9 @@ class OffersController < ApplicationController
     respond_to do |format|
       format.html
       format.js do
-        # if params[:page] && params[:page].to_i > 1
-        #   render :json => { :offers => @offers.to_json, :pagination => render_to_string(:partial => 'offers/pagination'), :count => @offers_selected_count }
-        # else
-        #   render :json => { :offers => @offers.to_json }
-        # end
-
-          render :json => { :offers => render_to_string(:partial => 'offers/offers'),
-            :pagination => render_to_string(:partial => 'offers/pagination'), :count => @offers_selected_count
-          }, :layout => false
-
+        render :json => { :offers => render_to_string(:partial => 'offers/offers'),
+          :pagination => render_to_string(:partial => 'offers/pagination'), :count => @offers_selected_count
+        }, :layout => false
       end
     end
   end
@@ -57,6 +54,12 @@ class OffersController < ApplicationController
       format.html
       format.json { render :json => { description: @offer.description, address: @offer.address } }
     end
+  end
+
+  def search
+    @offers = @city.offers.search("#{@search}", per_page: 25, page: @page, load: true)
+    render :json => { :offers => render_to_string( partial: 'offers'), :total => @offers.total,
+      :pagination => render_to_string( partial: 'remote_pagination' ) }
   end
 
 
@@ -112,6 +115,14 @@ class OffersController < ApplicationController
     @offer = Offer.find params[:id]
     if @offer.nil?
       request.xhr?? render(nothing: true) : redirect_to(root_path)
+    end
+  end
+
+  def validate_search
+    if params[:search] && params[:search].strip.length > 0
+      @search = params[:search].gsub SEARCH_QUERY_REGEXP, "\\\\\\1"
+    else
+      render :nothing => true
     end
   end
 

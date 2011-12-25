@@ -1,5 +1,8 @@
 class Offer < ActiveRecord::Base
 
+  include Tire::Model::Search
+  include Tire::Model::Callbacks
+
   attr_accessor :remote_image_url
 
   belongs_to :city

@@ -46,8 +46,11 @@
 
   <div id='search'>
     <p> <%= t('offers.offers_search') %> </p>
-    <%= text_field_tag :search_field, t('offers.search_watermark'), 'data-value' => t('offers.search_watermark') %>
-    <span id='search-button'></span>
+
+    <%= form_tag search_offers_path(:city => @city), :method => :get, :remote => true, :id => 'search-form' do %>
+      <%= text_field_tag :search, nil, :placeholder => t('offers.search_watermark') %>
+      <span id='search-button'></span>
+    <% end %>
   </div>
 
 

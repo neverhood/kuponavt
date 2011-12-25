@@ -55,7 +55,8 @@ cities.keys.each do |city|
       parser = lambda { |selector| bot.page.parser.css selector }
 
       params[:title] = parser.call('table.content div .pointer-hand').first.text.strip
-      params[:price] = parser.call('div.main-buy-label div.pointer-hand div').first.text.gsub(',','').to_i
+      params[:price] = parser.call('div.main-buy-label div.pointer-hand div').first
+      params[:price] = params[:price].text.gsub(',','').to_i if params[:price]
       if params[:price] == 0 # STARTS_AT
         params[:price] = nil
         params[:price_starts_at] = parser.call('div.main-buy-label div.pointer-hand div')[1].text.gsub(',','').to_i

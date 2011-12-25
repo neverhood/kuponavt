@@ -83,6 +83,10 @@ $.offers.utils.url = function(page) {
         url += ( '&time_period=' + $( $.offers.sections.offers ).attr('data-time_period') );
     }
 
+    if ( $( $.offers.sections.offers ).attr('data-search') ) {
+        url += ( '&search=' + $( $.offers.sections.offers ).attr('data-search') );
+    }
+
     return url;
 };
 
@@ -91,11 +95,13 @@ $.offers.utils.renderOffers = function(offers) {
         temporaryContainer = $('<div class="hidden"></div>').appendTo( $('body') );
 
     $.each( offers, function() {
+        console.log( this );
         var offer = offerTemplate.clone().
             attr('id', this['id']).
             attr('data-category', this.category_id);
-        offer.find('a.offer-url').attr('href', this.provider_url).text(this.title);
-        offer.find('img.offer-image').attr('src', this.image_url);
+        offer.find('a.offer-url').text( this.title );
+        offer.find('a.offer-url').attr('href', this.provider_url);
+        offer.find('img.offer-image').attr('src', this.image.thumb.url);
         offer.find('td.offer-cost').text(this.cost);
         offer.find('td.offer-discount').text(this.discount + '%'); offer.find('td.offer-savings').text( this.cost ? this.cost/100 * this.discount : '' );
         offer.find('p.time-left').text(this.ends_at);
@@ -142,11 +148,12 @@ $.offers.utils.changeCounterAndPaginate = function() {
 $.offers.utils.retrieveOffers = function(page) { // Retrieves offers, count and pagination
     $('div.loader').show();
     $('#current-offers-count').append( $.api.loader() );
+    $( $.offers.sections.offers ).removeAttr('data-search');
 
     $('.notification').hide();
 
     var checkedCategories = $.offers.utils.checkedCategories();
-    if ( checkedCategories.length > 0 ) {
+    if ( checkedCategories.length > 0 || $( $.offers.sections.offers ).attr('data-search') ) {
         $.getJSON($.offers.utils.url(page), function(data) {
             $( $.offers.sections.offers ).html( data.offers );
             // $( $.offers.sections.offers ).html( $.offers.utils.renderOffers( $.parseJSON( data.offers ) ) );
@@ -170,13 +177,14 @@ $.offers.utils.retrieveOffers = function(page) { // Retrieves offers, count and 
     } else {
         $('#current-offers-count').find('.loader').remove();
         $('#offers-section').find('.offer').remove();
-        $('#lenses').hide()
+        $('#lenses').hide();
         $.offers.utils.changeCounterAndPaginate();
     }
 };
 
 $.offers.utils.getOffers = function(categoryIds) { // Retrieves just offers
     $('.notification').hide();
+    $( $.offers.sections.offers ).removeAttr('data-search');
 
     if ( $( $.offers.sections.offers ).attr('data-sort-by') ) {
         $.offers.utils.retrieveOffers( $.offers.utils.page() );
@@ -264,6 +272,7 @@ $.offers.utils.paginate = function(offersCount) {
                 }
             }
         });
+
         var lastPage = template.find('.last').find('a');
         lastPage.attr('href', lastPage.attr('href').replace('LAST_PAGE', pagesCount));
 
@@ -284,7 +293,7 @@ $('document').ready(function() {
         $('#offers-section').html( attributes.offers );
         $('#pagination-bottom').html( attributes.pagination );
 
-        $("body").animate({ scrollTop: 25 }, 500);
+        $("html:not(:animated)"+( ! $.browser.opera ? ",body:not(:animated)" : "")).animate({scrollTop: 25}, 500);
     });
 
     $('.pagination a').live({
@@ -292,6 +301,7 @@ $('document').ready(function() {
             if ( /#/.test(this.href) ) {
                 event.preventDefault();
                 event.stopPropagation();
+                alert('wtf');
 
                 var params = this.href.replace(/^.*#/, '').split(','),
                     page = params[0];
@@ -471,15 +481,8 @@ $('document').ready(function() {
     });
 
     // Search
-    $('#search_field').bind({
-        focus: function() {
-            if ( this.value == $(this).attr('data-value') ) this.value = '';
-        },
-        blur: function() {
-            if ( this.value.length == 0 ) {
-                $(this).val( $(this).attr('data-value') );
-            }
-        }
+
+    $('#search-button').click(function() {
     });
 
     // Sort
@@ -594,13 +597,11 @@ $('document').ready(function() {
             target = $(event.target),
             targetId = target.attr('id');
 
-        if ( target.parents('#all-cities').length == 0 && targetId != 'current-city' && targetId != 'all-cities' && citiesContainer.is(':visible') ) {
+        if ( target.parents('#all-cities').length === 0 && targetId != 'current-city' && targetId != 'all-cities' && citiesContainer.is(':visible') ) {
             citiesContainer.toggle();
         }
     });
-
-    // City selection
-
+// City selection 
     $('#current-city').click(function(event) {
         if ( event.target.id == 'current-city') $('#all-cities').toggle();
     });
@@ -626,6 +627,40 @@ $('document').ready(function() {
             $( $.offers.sections.offers ).attr('data-time_period', timePeriod);
             $.offers.utils.retrieveOffers( $.offers.utils.page() );
         }
+    });
+
+    $('#search-button').click(function() {
+        var form = $(this).parents('form'),
+            input = form.find('#search');
+
+        if ( input.val().replace(/\s+/, '').length > 0 ) {
+            form.submit();
+        }
+    });
+
+    $('#search-form').submit(function() {
+        var valueLength = $(this).find('#search').val().replace(/\s+/, '').length;
+
+        if ( valueLength === 0 ) {
+            return false;
+        } else {
+            $('#all-categories input[type="checkbox"]').prop('checked', false);
+            $.each( $('span.all-tags'), function() {
+                var $this = $(this);
+
+                $this.text( $this.data('original-text') );
+            });
+
+            $('#lenses').hide();
+        }
     })
+    .bind('ajax:complete', function(event, xhr, status) {
+        var response = $.parseJSON( xhr.responseText );
+
+        $( $.offers.sections.offers ).attr('data-search', true).
+            html( response.offers );
+        $('#offers-selected-count').text( response.total );
+        $('#pagination-bottom').html( response.pagination );
+    });
 
 });
