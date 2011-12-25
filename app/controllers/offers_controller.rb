@@ -57,7 +57,7 @@ class OffersController < ApplicationController
   end
 
   def search
-    @offers = @city.offers.search("#{@search}", per_page: 25, page: @page, load: true)
+    @offers = @city.offers.search("*#{@search}*", per_page: 25, page: @page, load: true)
     render :json => { :offers => render_to_string( partial: 'offers'), :total => @offers.total,
       :pagination => render_to_string( partial: 'remote_pagination' ) }
   end
