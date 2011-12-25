@@ -56,6 +56,7 @@ cities.keys.each do |city|
 
       params[:title] = parser.call('table.content div .pointer-hand').first.text.strip
       params[:price] = parser.call('div.main-buy-label div.pointer-hand div').first
+      next if params[:price].nil?
       params[:price] = params[:price].text.gsub(',','').to_i if params[:price]
       if params[:price] == 0 # STARTS_AT
         params[:price] = nil
