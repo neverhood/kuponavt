@@ -4,6 +4,13 @@ Kuponavt::Application.routes.draw do
 
   root :to => 'welcome#index'
 
+  namespace :admin do
+    root :to => 'suspicious_offers#index'
+
+    resources :suspicious_offers, :only => [:index, :update]
+  end
+
+
   resources :countries, :only => :index
 #  resources :cities, :only => :index
   resources :offers, :only => :show do
@@ -18,12 +25,6 @@ Kuponavt::Application.routes.draw do
 #      get ':page' => 'offers#index', :on => :collection, :as => 'page'
 #    end
 #  end
-
-  namespace :admin do
-    root :to => 'suspicious_offers#index'
-
-    resources :suspicious_offers, :only => [:index, :update]
-  end
 
 #  match ':city/offers' => 'offers#index', :as => 'city_offers'
 #  match ':city/offers/:page' => 'offers#index', :as => 'city_offers_page'
