@@ -1,33 +1,35 @@
 # encoding: UTF-8
-require 'mechanize'
-require 'open-uri'
 require 'pry'
+require 'nokogiri'
+require 'open-uri'
 
-URL = 'http://www.weclever.ru/xml/openstat/kuponavt.com.xml'
-PROVIDER = Provider.find_by_name('weclever')
-
-bot = Mechanize.new
+PROVIDER = Provider.find_by_name('bigbuzzy')
 
 cities = City.where(name: ['moscow'])
-offers = Nokogiri::XML( open URL ).xpath('//offer')
-
-cities_mapping = {
-  moscow: 'Москва'
-}
+offers = Nokogiri::XML( open 'http://bigbuzzy.ru/xml/' ).xpath('//offer')
 
 categories_mapping = {
+  'leisure' => 3,
   'beauty' => 11,
   'food' => 2,
-  'entertainment' => 3,
-  'auto' => 18,
+  'sport' => 12,
+  'education' => 14,
   'health' => 10,
+  'auto' => 18,
+  'products' => 16,
   'tourism' => 8,
-  'others' => 24
+  'child' => 20,
+  'other' => 24
+}
+
+cities_mapping = {
+  'moscow' => 'Москва'
 }
 
 cities.each do |city|
   city_offer_attributes = []
-  city_offers = offers.select { |offer| offer.xpath('region').text == cities_mapping[city.name.to_sym] }
+  city_offers = offers.select { |offer| offer.xpath('region').text == cities_mapping[city.name] }
+  binding.pry
 
   city_offers.each do |offer|
 
@@ -44,13 +46,20 @@ cities.each do |city|
       discount: offer.xpath('discount').text.to_i,
       address: offer.xpath('supplier/addresses/address/name').text,
       city_id: city.id,
-      country_id: city.country_id
+      country_id: city.country_id,
+      category_id: categories_mapping[offer.xpath('category').text]
     }
 
     city_offer_attributes << offer_attributes unless Offer.where(provider_id: PROVIDER.id, provided_id: offer_attributes[:provided_id]).any?
-    binding.pry
 
   end
+
+  city_offer_attributes.each do |city_offer_attributes|
+    offer = Offer.new( city_offer_attributes )
+    if offer.valid?
+      offer.save
+    else
+      binding.pry
+    end
+  end
 end
-
-

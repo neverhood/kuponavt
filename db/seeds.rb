@@ -23,6 +23,10 @@ providers =
                   { name: 'weclever',
                     url: 'http://www.weclever.ru',
                     logo_url: 'weclever.png'
+                  },
+                  { name: 'bigbuzzy',
+                    url: 'http://bigbuzzy.ru',
+                    logo_url: 'bigbuzzy.png'
                   }
   ])
 
