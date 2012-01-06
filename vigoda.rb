@@ -1,4 +1,4 @@
-require 'mechanize'
+# encoding: UTF-8
 require 'pry'
 require 'open-uri'
 
@@ -10,6 +10,7 @@ cities = {
 }
 
 bot = Mechanize.new
+xml_offers = Nokogiri::XML( open 'http://vigoda.ru/api/xml' ).xpath('//offer')
 
 categories = {
   '/cafe' => 2,
@@ -50,6 +51,7 @@ cities.keys.each do |city|
         [:url, link], [:city_id, city.id ], [:country_id, city.country.id],
         [:provider_id, PROVIDER.id]
       ]]
+      offer_xml = xml_offers.find { |o| o.xpath('url').text.include? provided_id.to_s }
 
       bot.get link
       parser = lambda { |selector| bot.page.parser.css selector }
@@ -67,11 +69,16 @@ cities.keys.each do |city|
       params[:image] = open(parser.call('img.pointer-hand').first[:src])
       params[:description] = parser.call('div.conditions').inner_html.strip
       params[:address] = $1 if parser.call('.main-benefits-right').text =~ /Основной адрес:\s*(.*)\s*, Тел/
+      params[:ends_at] = (Time.parse(offer_xml.xpath('endsell').text.gsub('T',' ')) + 1) if offer_xml
 
       offers << params
     end
 
-    offers.each { |offer_attributes| Offer.create(offer_attributes) }
+    begin
+      offers.each { |offer_attributes| Offer.create(offer_attributes) }
+    rescue
+      binding.pry
+    end
 
   end
   binding.pry if existing_offers_ids.any?

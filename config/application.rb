@@ -51,7 +51,7 @@ module Kuponavt
     config.autoload_paths += Dir["#{config.root}/app/parsers"]
     config.autoload_paths += Dir["#{config.root}/app/parsers/**/"]
 
-    requirements = [ './lib/patches/active_record/base/' ]
+    requirements = [ './lib/patches/active_record/base/', './lib/patches/' ]
     requirements.each do |req|
       Dir.glob(req + '*.{rb}').each { |file| require file }
     end

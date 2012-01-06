@@ -1,7 +1,7 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.1.1'
-gem 'rack' , '1.3.3' # Bye Bye warning
+gem 'rails', '3.1.3'
+#gem 'rack' , '1.3.3' # Bye Bye warning
 
 # Bundle edge Rails instead:
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'
@@ -21,7 +21,7 @@ gem 'rmagick'
 gem 'kaminari'
 
 # Parser
-gem 'mechanize'
+gem 'mechanize', '2.0.1'
 
 # REPL
 gem 'pry-rails'
