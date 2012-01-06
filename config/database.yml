@@ -15,7 +15,7 @@ development:
   database: kuponavt_development
   pool: 5
   username: root
-  password: "1"
+  password:
   host: localhost
 
 
