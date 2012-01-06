@@ -2,12 +2,10 @@
 	$.fn.countdown = function (date, options) {
 		options = $.extend({
 			lang: {
-				years:   ['год', 'года', 'лет'],
-				months:  ['месяц', 'месяца', 'месяцев'],
-				days:    ['день', 'дня', 'дней'],
-				hours:   ['час', 'часа', 'часов'],
-				minutes: ['минута', 'минуты', 'минут'],
-				seconds: ['секунда', 'секунды', 'секунд'],
+				days:    [' день ', ' дня ', ' дней '],
+				hours:   [':', ':', ':'],
+				minutes: [':', ':', ':'],
+				seconds: ['', '', ''],
 				plurar:  function(n) {
 					return (n % 10 == 1 && n % 100 != 11 ? 0 : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2);
 				}
@@ -25,8 +23,6 @@
 		    	minutes: [end.getMinutes() - begin.getMinutes(), 60],
 		    	hours: [end.getHours() - begin.getHours(), 24],
 		    	days: [end.getDate()  - begin.getDate(), new Date(begin.getYear(), begin.getMonth() + 1, 0).getDate()],
-		    	months: [end.getMonth() - begin.getMonth(), 12],
-		    	years: [end.getYear()  - begin.getYear(), 0]
 		    };
 		    var result = new Array();
 		    var flag = false;
@@ -39,10 +35,13 @@
 		    		flag = true;
 		    		diff[i][0] += diff[i][1];
 		    	}
-		    	if (!diff[i][0]) continue;
-			    result.push(diff[i][0] + ' ' + options.lang[i][options.lang.plurar(diff[i][0])]);
+//		    	if (!diff[i][0])
+
+                var num = (diff[i][0] < 10) ? '0' + diff[i][0] : diff[i][0];
+
+			    result.push(num + '' + options.lang[i][options.lang.plurar(diff[i][0])]);
 		    }
-		    return result.reverse().join(' ');
+		    return result.reverse().join('');
 		};
 		var elem = $(this);
 		var timeUpdate = function () {
