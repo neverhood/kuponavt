@@ -37,7 +37,7 @@
 		    	}
 //		    	if (!diff[i][0])
 
-                var num = (diff[i][0] < 10) ? '0' + diff[i][0] : diff[i][0];
+                var num = (diff[i][0] < 10 && options.lang[i] != options.lang.days) ? '0' + diff[i][0] : diff[i][0];
 
 			    result.push(num + '' + options.lang[i][options.lang.plurar(diff[i][0])]);
 		    }
