@@ -10,6 +10,8 @@ class Offer < ActiveRecord::Base
   belongs_to :provider
   belongs_to :category
 
+  validates :provided_id, :uniqueness => { :scope => :provider_id }
+
   mount_uploader :image, PictureUploader
 
   after_destroy :destroy_image_and_folder

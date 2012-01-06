@@ -62,7 +62,11 @@ Array.prototype.unique = function() {
 
 $('document').ready(function() {
 
-    Cufon.replace('.time-left');
+    $.each( $('.time-left'), function() {
+        var $this = $(this);
+
+        $this.countdown( new Date($this.text().trim()), { prefix: '', finish: 'Завершено' } )
+    });
 
     $('#site-description-help').click( function() {
         $('div#site-description').show();
