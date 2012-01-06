@@ -301,7 +301,6 @@ $('document').ready(function() {
             if ( /#/.test(this.href) ) {
                 event.preventDefault();
                 event.stopPropagation();
-                alert('wtf');
 
                 var params = this.href.replace(/^.*#/, '').split(','),
                     page = params[0];
