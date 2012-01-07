@@ -305,7 +305,7 @@ div#offers {
       } /* Table */
 
       .time-left { text-align: center; font-size: 14px }
-      .time-left-red { color: #ee3f41 }
+      .time-left-red { text-align: center; font-size: 14px; color: #ee3f41 }
 
       .add-button {
         position: absolute;
@@ -497,6 +497,8 @@ div#offers {
     font-size: 14px;
     margin-right: 3px;
     cursor: pointer;
+    border-bottom: 1px dashed #007FAD;
+    color: #007FAD;
   }
 
   #search {

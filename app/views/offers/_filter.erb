@@ -35,7 +35,7 @@
           <label> <%= check_box_tag nested_category.id, nested_category.id, (@categories && @categories.include?(nested_category.id.to_s)),
             :name => nested_category.to_en %><%= nested_category.name %>
           </label>
-          <span class='amount'>[<%= nested_category.offers.where(city_id: @city.id).count %>]</span>
+          <span class='amount'><%= nested_category.offers.where(city_id: @city.id).count %></span>
           </li>
         <% end %>
       </ul>
