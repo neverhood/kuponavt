@@ -49,6 +49,15 @@ class OffersController < ApplicationController
     end
   end
 
+  def out
+    @offer = Offer.find(params[:id])
+    if @offer
+      redirect_to @offer.url
+    else
+      render :nothing => true
+    end
+  end
+
   def show
     respond_to do |format|
       format.html

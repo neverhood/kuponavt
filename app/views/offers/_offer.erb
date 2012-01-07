@@ -1,6 +1,6 @@
 <div class='offer' id='offer-<%= offer.id %>' data-category='<%= offer.category_id %>'>
   <h2>
-    <%= link_to offer.title, offer.url, :class => 'offer-url', :target => '_blank', :rel => 'nofollow' %>
+    <%= link_to offer.title, out_offer_path(offer), :class => 'offer-url', :target => '_blank', :rel => 'nofollow' %>
   </h2>
 
   <div class='offer-left-side'>
