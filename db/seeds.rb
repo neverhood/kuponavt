@@ -50,7 +50,7 @@ cities =
               { name: 'kiev',
                 country_id: ukraine_id
               },
-              { name: 'moscow',
+              { name: 'moskva',
                 country_id: russia_id
               }
   ])
