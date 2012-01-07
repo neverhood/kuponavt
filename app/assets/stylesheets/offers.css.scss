@@ -18,6 +18,21 @@ div#offers {
 
   #main-description { margin: 15px 0 0 15px; display: none }
 
+  #favourites-sort { position: relative; height: 50px }
+
+  #current-offers-count {
+    position: absolute;
+    top: 16px;
+    left: 280px;
+    text-shadow: 0 1px 1px white;
+
+    #offers-selected-count {
+        padding: 1px;
+        font-size: 16px;
+        color: $main-color;
+    }
+  }
+
   div#sort {
     position: relative;
     height: 90px;
@@ -37,20 +52,6 @@ div#offers {
 
             &:hover { box-shadow: 0px 1px 5px rgba(0,120,170,0.6) }
 
-        }
-    }
-
-
-    #current-offers-count {
-    position: absolute;
-    top: 16px;
-    left: 280px;
-    text-shadow: 0 1px 1px white;
-
-        #offers-selected-count {
-            padding: 1px;
-            font-size: 16px;
-            color: $main-color;
         }
     }
 
@@ -232,9 +233,13 @@ div#offers {
         height: 30px;
         background: url(metro-tsp.png);
         overflow: hidden;
+        /*-webkit-transition: height 200ms linear;*/
+        /*-moz-transition: height 200ms linear;*/
 
         &:hover {
           overflow: visible;
+          height: auto;
+          /*padding: 0 0 3px 0;*/
         }
 
         .subway {
@@ -248,7 +253,7 @@ div#offers {
         .subway-station {
           float: left;
           max-width: 220px;
-          margin: 6px 0 0 6px;
+          margin: 6px 0 6px 6px;
         }
 
         .provider {
@@ -300,6 +305,7 @@ div#offers {
       } /* Table */
 
       .time-left { text-align: center; font-size: 14px }
+      .time-left-red { color: #ee3f41 }
 
       .add-button {
         position: absolute;
