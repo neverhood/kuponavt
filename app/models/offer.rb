@@ -47,6 +47,14 @@ class Offer < ActiveRecord::Base
     end
   end
 
+  def finished?
+    ends_at < Time.now.to_date
+  end
+
+  def is_about_to_finish?
+    ends_at == 1.day.from_now.to_date
+  end
+
   private
 
   def destroy_image_and_folder

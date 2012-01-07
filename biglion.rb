@@ -84,7 +84,10 @@ retrieve_attributes = lambda do |offers|
         next
       end
 
-      offer_attributes[:url] = offer.css('.actionsItemHeadding a').first.attr(:href) + PROVIDER.ref_url
+      _offer_url = offer.css('.actionsItemHeadding a').first.attr(:href)
+      _offer_url.gsub!(/\/$/, '') if _offer_url
+
+      offer_attributes[:url] = _offer_url + PROVIDER.ref_url
 
       bot.get offer_attributes[:url]
       offer = bot.page.parser.css('.offer').first

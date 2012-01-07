@@ -32,7 +32,13 @@
     <p class='info'>
     <%= t('offers.time_left') %>:
     </p>
-    <p class='time-left'> <%= offer.ends_at ? offer.ends_at.to_js : 1.day.ago.to_date.to_js %> </p>
+
+    <% if offer.is_about_to_finish? %>
+      <p class='time-left-red'> <%= offer.ends_at.to_js %> </p>
+    <% else %>
+      <p class='time-left'> <%= offer.finished?? 1.day.ago.to_date.to_js : offer.ends_at.to_js %> </p>
+    <% end %>
+
     <br />
 
     <p class='info'>

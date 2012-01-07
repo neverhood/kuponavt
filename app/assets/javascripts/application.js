@@ -62,7 +62,7 @@ Array.prototype.unique = function() {
 
 $('document').ready(function() {
 
-    $.each( $('.time-left'), function() {
+    $.each( $('.time-left, .time-left-red'), function() {
         var $this = $(this);
 
         $this.countdown( new Date($this.text().trim()), { prefix: '', finish: 'Завершено' } )
