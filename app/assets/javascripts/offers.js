@@ -285,9 +285,6 @@ $.offers.utils.paginate = function(offersCount) {
         var lastPage = template.find('.last').find('a');
         lastPage.attr('href', lastPage.attr('href').replace('LAST_PAGE', pagesCount));
 
-        $.each( template.find('a'), function() {
-            this.href = this.href + ',' + $.offers.utils.checkedCategories().join('|');
-        });
 
         paginationContainer.html( template );
     }
@@ -307,16 +304,14 @@ $('document').ready(function() {
 
     $('.pagination a').live({
         click: function(event) {
-            if ( /#/.test(this.href) ) {
-                event.preventDefault();
-                event.stopPropagation();
+            event.preventDefault();
+            event.stopPropagation();
 
-                var params = this.href.replace(/^.*#/, '').split(','),
-                    page = params[0];
+            var params = this.href.replace(/^.*\?/, '').split('&'),
+                page = params[0].split('=')[1];
 
-                $.offers.utils.retrieveOffers(page);
-                $("html:not(:animated)"+( ! $.browser.opera ? ",body:not(:animated)" : "")).animate({scrollTop: 25}, 500);
-            }
+            $.offers.utils.retrieveOffers(page);
+            $("html:not(:animated)"+( ! $.browser.opera ? ",body:not(:animated)" : "")).animate({scrollTop: 25}, 500);
         }
     });
 

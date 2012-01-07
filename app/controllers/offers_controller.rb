@@ -23,12 +23,12 @@ class OffersController < ApplicationController
     @offers = if request.xhr?
                 @categories ? @city.offers.by_categories(@categories).by_time_period(@time_period).order(@sort_by).page( @page ) : []
               else
-                @city.offers.page(@page)
+                @city.offers.categorized.page(@page)
               end
 
-    @offers_total_count = @city.offers.count
+    @offers_total_count = @city.offers.categorized.count
     @offers_selected_count = @categories ? @city.offers.by_categories(@categories).
-        by_time_period(@time_period).count : @city.offers.count
+        by_time_period(@time_period).count : @city.offers.categorized.count
 
     respond_to do |format|
       format.html
