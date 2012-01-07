@@ -416,38 +416,9 @@ $('document').ready(function() {
 
     // Offer-bottom-more
 
-    $(".offer-bottom").live('click', function(){
-        var $this = $(this),
-            offer = $this.parents('.offer'),
-            offerDetails = offer.find('.offer-details'),
-            offerAddress = offer.find('.offer-address'),
-            offerDescription = offer.find('.offer-description'),
-            offerId = offer.attr('id').replace('offer-', '');
-
-            if ( offerDetails.is(':visible') ) {
-                offerDetails.toggle('1s');
-            } else {
-                if ( offerDescription.text().length == 0 ) {
-                    $this.find('img').attr('src', '/assets/loader.gif');
-
-                    $.getJSON( ('/offers/' + offerId), function(data) {
-                        offerAddress.show().
-                            html( data.address );
-                        offerDescription.show().
-                            html( data.description );
-
-                        offerDetails.toggle('1s');
-
-                        $this.find('img').attr('src', '/assets/down-arrow.png');
-                    });
-
-                } else {
-                    offerDetails.toggle('1s');
-            }
-        }
+    $(".offer-bottom").live('click', function() {
+        $(this).parents('.offer').find('.offer-details').toggle('1s');
     });
-
-
 
     // Categories
 
@@ -564,6 +535,7 @@ $('document').ready(function() {
             countContainer.find('.loader').remove();
 
             $.offers.utils.showFavourites();
+            $.offers.utils.startCountDown();
 
             $('div.offer div.add-button-added').unbind().bind('click', function(event) {
                 var addedOffers = $.cookie('favourites').split(','),
