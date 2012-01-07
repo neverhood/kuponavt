@@ -497,6 +497,12 @@ $('document').ready(function() {
                 prop('checked', true).
                 attr('id');
 
+        $.each( $('span.all-tags'), function() {
+            var $this = $(this);
+
+            $this.text( $this.data('original-text') );
+        });
+
         $.offers.utils.retrieveOffers( 1 );
     });
 
