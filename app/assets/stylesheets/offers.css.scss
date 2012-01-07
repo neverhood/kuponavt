@@ -16,6 +16,8 @@ div#offers {
   box-shadow:  0px 0px 2px $main-color;
   margin-bottom: 70px;
 
+  #main-description { margin: 15px 0 0 15px; display: none }
+
   div#sort {
     position: relative;
     height: 90px;
@@ -196,11 +198,16 @@ div#offers {
       text-align: justify;
       text-shadow: 0px 1px 1px white;
 
+
+
       a {
         font-size: 18px;
         text-decoration: none;
         color: $main-color;
         font-weight: bold;
+
+        &:hover { color: #0099D1 };
+
       }
     }
 
@@ -277,21 +284,22 @@ div#offers {
       }
 
       .info {
-        font-size: 80%;
+        font-size: 12px;
         color: grey;
         text-align: center;
       }
 
       table {
         text-align: center;
-        font-size: 80%;
         margin: -3px auto 15px;
         color: grey;
 
-        td { padding: 0 10px; }
+        td { padding: 0 10px; font-size: 12px }
         
-        .offer-cost, .offer-discount, .offer-savings { color: black }
+        .offer-cost, .offer-discount, .offer-savings { color: black; font-size: 14px }
       } /* Table */
+
+      .time-left { text-align: center; font-size: 14px }
 
       .add-button {
         position: absolute;
@@ -486,7 +494,7 @@ div#offers {
   }
 
   #search {
-    margin-bottom: 13px;
+    margin-bottom: 10px;
 
     input#search {
       margin-left: 18px;
@@ -506,7 +514,7 @@ div#offers {
 
     span#search-button {
       position: absolute;
-      bottom: 14px;
+      bottom: 18px;
       right: 17px;
       background: url(search.png);
       display: inline-block;
@@ -516,7 +524,7 @@ div#offers {
       -webkit-transition: all .1s linear;
       -moz-transition: all .1s linear;
       &:active {
-        bottom: 12px;
+        bottom: 17px;
       }
     }
 
