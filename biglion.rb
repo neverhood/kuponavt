@@ -89,7 +89,7 @@ retrieve_attributes = lambda do |offers|
 
       offer_attributes[:url] = _offer_url + PROVIDER.ref_url
 
-      bot.get offer_attributes[:url]
+      bot.get _offer_url
       offer = bot.page.parser.css('.offer').first
       img_url = (bot.page.parser.css('script').inner_html.scan(/photos_big\s*=\s*\[(.*)\]\;/m).flatten.
                  first.split(',').first.strip.gsub('\'', ''))
