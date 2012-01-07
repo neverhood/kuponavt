@@ -12,6 +12,14 @@ $.offers = {
     utils: {}
 };
 
+$.offers.utils.startCountDown = function() {
+    $.each( $('.time-left'), function() {
+        var $this = $(this);
+
+        $this.countdown( new Date($this.text().trim()), { prefix: '', finish: 'Завершено' } )
+    });
+}
+
 $.offers.utils.showFavourites = function() {
 
     if ( $.cookie('favourites') ) {
@@ -170,7 +178,7 @@ $.offers.utils.retrieveOffers = function(page) { // Retrieves offers, count and 
                 }
             }
 
-            Cufon.replace('.time-left');
+            $.offers.utils.startCountDown();
             $('#current-offers-count').find('.loader').remove();
             $.offers.utils.showFavourites();
         });
@@ -235,7 +243,8 @@ $.offers.utils.getOffers = function(categoryIds) { // Retrieves just offers
                 var updatedOffers = $('#offers-section div.offer');
                 updatedOffers.slice($.offers.offersPerPage, updatedOffers.length).remove();
             }
-            Cufon.replace('.time-left');
+
+            $.offers.utils.startCountDown();
             $('#current-offers-count').find('.loader').remove();
             $.offers.utils.paginate( totalSelectedOffersCount );
             $.offers.utils.showFavourites();
