@@ -7,11 +7,7 @@ gem 'rails', '3.1.3'
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'
 
 # Db
-gem 'sqlite3'
 gem 'mysql2'
-
-# Xml & Html parser
-gem 'hpricot'
 
 # Image processor
 gem 'carrierwave'
@@ -27,7 +23,6 @@ gem 'mechanize', '2.0.1'
 gem 'pry-rails'
 
 # YAML DB
-gem 'yaml_db'
 
 # Search
 gem 'tire'
@@ -45,6 +40,7 @@ group :development do
 end
 
 group :development, :test do
+  gem 'yaml_db'
   gem 'rspec-rails'
   gem 'capybara'
   gem 'spork', '~> 0.9.0.rc'
