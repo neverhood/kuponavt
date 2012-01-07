@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120107012951) do
+ActiveRecord::Schema.define(:version => 20120107120948) do
 
   create_table "categories", :force => true do |t|
     t.string   "name"
@@ -33,6 +33,16 @@ ActiveRecord::Schema.define(:version => 20120107012951) do
   end
 
   add_index "countries", ["name"], :name => "index_countries_on_name", :unique => true
+
+  create_table "crawling_exceptions", :force => true do |t|
+    t.text     "stacktrace"
+    t.integer  "provider_id"
+    t.string   "error_text"
+    t.text     "offer_attributes"
+    t.string   "offer_url"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "kupongid", :force => true do |t|
     t.integer  "kupongid_id",  :null => false
