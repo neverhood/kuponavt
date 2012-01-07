@@ -6,7 +6,7 @@ PROVIDER = Provider.where(name: 'vigoda').first
 
 cities = {
   City.where(name: 'kiev').first => 'http://kiev.vigoda.ru',
-  City.where(name: 'moscow').first => 'http://vigoda.ru'
+  City.where(name: 'moskva').first => 'http://vigoda.ru'
 }
 
 bot = Mechanize.new

@@ -13,7 +13,7 @@ class City < ActiveRecord::Base
   validates :country, :presence => true
 
   def self.default
-    City.where(:name => 'moscow').first
+    City.where(:name => 'moskva').first
   end
 
   def to_param

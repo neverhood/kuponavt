@@ -5,7 +5,7 @@ require 'open-uri'
 
 PROVIDER = Provider.find_by_name('bigbuzzy')
 
-cities = City.where(name: ['moscow'])
+cities = City.where(name: ['moskva'])
 offers = Nokogiri::XML( open 'http://bigbuzzy.ru/xml/' ).xpath('//offer')
 
 categories_mapping = {

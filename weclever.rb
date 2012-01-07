@@ -8,7 +8,7 @@ PROVIDER = Provider.find_by_name('weclever')
 
 bot = Mechanize.new
 
-cities = City.where(name: ['moscow'])
+cities = City.where(name: ['moskva'])
 offers = Nokogiri::XML( open URL ).xpath('//offer')
 
 cities_mapping = {
