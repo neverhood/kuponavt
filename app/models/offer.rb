@@ -10,7 +10,8 @@ class Offer < ActiveRecord::Base
   belongs_to :provider
   belongs_to :category
 
-  validates :provided_id, :uniqueness => { :scope => :provider_id }
+  validates :provided_id, :uniqueness => { :scope => :provider_id }, :presence => true
+  validates :cost, :presence => true
 
   mount_uploader :image, PictureUploader
 

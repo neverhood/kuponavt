@@ -16,7 +16,7 @@ $.offers.utils.startCountDown = function() {
     $.each( $('.time-left, .time-left-red'), function() {
         var $this = $(this);
 
-        $this.countdown( new Date($this.text().trim()), { prefix: '', finish: 'Завершено' } )
+        if ( $this.data('countdown') === undefined ) $this.countdown( new Date($this.text().trim()), { prefix: '', finish: 'Завершено' } )
     });
 }
 
