@@ -48,7 +48,7 @@ cities.keys.each do |city|
 
       params = Hash[[
         [:provided_id, provided_id], [:category_id, categories[category]],
-        [:url, link], [:city_id, city.id ], [:country_id, city.country.id],
+        [:url, link.gsub(/\/$/, '') + PROVIDER.ref_url], [:city_id, city.id ], [:country_id, city.country.id],
         [:provider_id, PROVIDER.id]
       ]]
       offer_xml = xml_offers.find { |o| o.xpath('url').text.include? provided_id.to_s }

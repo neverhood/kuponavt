@@ -14,11 +14,13 @@ providers =
                   { name: 'biglion',
                     url: 'http://www.biglion.ru',
                     auth_params: {:auth_url=>"http://www.biglion.ru/auth/", :auth_details=>{:email_4=>"kupostat@gmail.com", :password_4=>"cdtnbr1988"}},
-                    logo_url: 'biglion.png'
+                    logo_url: 'biglion.png',
+                    ref_url: '/?utm_campaign=PartnerReferral&utm_medium=site&utm_source=p6268090'
                   },
                   { name: 'vigoda',
                     url: 'http://vigoda.ru',
-                    logo_url: 'vigoda.png'
+                    logo_url: 'vigoda.png',
+                    ref_url: '/?a_aid=kuponavt'
                   },
                   { name: 'weclever',
                     url: 'http://www.weclever.ru',

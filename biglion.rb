@@ -84,7 +84,7 @@ retrieve_attributes = lambda do |offers|
         next
       end
 
-      offer_attributes[:url] = offer.css('.actionsItemHeadding a').first.attr :href
+      offer_attributes[:url] = offer.css('.actionsItemHeadding a').first.attr(:href) + PROVIDER.ref_url
 
       bot.get offer_attributes[:url]
       offer = bot.page.parser.css('.offer').first
@@ -116,9 +116,7 @@ retrieve_attributes = lambda do |offers|
           offer_attributes[:address] = offer.css('.offer-contact .links div div').first.children.first.text.strip
         end
       end
-      if offer.css('.ppOffer-info ul li span').count > 0
-        offer_attributes[:ends_at] = offer.css('.ppOffer-info ul li span').first.text.gsub(/[^\.\d]/, '')
-      end
+
       offer.css('.ppOffer-info a').remove
       offer_attributes[:description] = offer.css('.ppOffer-info').inner_html
     rescue Exception => e

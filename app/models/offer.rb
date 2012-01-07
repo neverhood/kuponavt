@@ -40,6 +40,13 @@ class Offer < ActiveRecord::Base
     retail ? retail_price : price_starts_at
   end
 
+  def ends_at
+    case read_attribute(:ends_at)
+      when nil then 1.day.from_now.to_date
+      else read_attribute(:ends_at)
+    end
+  end
+
   private
 
   def destroy_image_and_folder
