@@ -488,6 +488,18 @@ $('document').ready(function() {
         }
     });
 
+    $('.amount').click(function() {
+        $('#all-categories input[type="checkbox"]').prop('checked', false);
+
+        var $this = $(this),
+            categoryId = $this.prev().
+                find('input[type="checkbox"]').
+                prop('checked', true).
+                attr('id');
+
+        $.offers.utils.retrieveOffers( 1 );
+    });
+
     // Search
 
     $('#search-button').click(function() {
