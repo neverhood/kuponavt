@@ -197,7 +197,7 @@ $.offers.utils.retrieveOffers = function(page) { // Retrieves offers, count and 
     $('.notification').hide();
 
     var checkedCategories = $.offers.utils.checkedCategories();
-    if ( checkedCategories.length > 0 || $( $.offers.sections.offers ).attr('data-search') ) {
+    if ( (checkedCategories.length > 0 && $.offers.utils.selectedOffersCount() > 0) || $( $.offers.sections.offers ).attr('data-search') ) {
         $.getJSON($.offers.utils.url(page), function(data) {
             $( $.offers.sections.offers ).html( data.offers );
             // $( $.offers.sections.offers ).html( $.offers.utils.renderOffers( $.parseJSON( data.offers ) ) );
@@ -206,7 +206,7 @@ $.offers.utils.retrieveOffers = function(page) { // Retrieves offers, count and 
                 $( $.offers.sections.pagination ).html( data.pagination );
                 $( $.offers.sections.selectedCount ).html( data.count );
             } else {
-                if ( $($.offers.sections.offers).data('time_period') ) {
+                if ( $($.offers.sections.offers).attr('data-time_period') ) {
                     $( $.offers.sections.selectedCount ).html( data.count );
                     $.offers.utils.paginate( data.count );
                 } else {
@@ -321,7 +321,6 @@ $.offers.utils.paginate = function(offersCount) {
         var lastPage = template.find('.last').find('a');
         lastPage.attr('href', lastPage.attr('href').replace('LAST_PAGE', pagesCount));
 
-
         paginationContainer.html( template );
     }
 
@@ -350,6 +349,16 @@ $('document').ready(function() {
 
         $.each( categories, function(i,e) {
             $('input[type="checkbox"]#' + e).prop('checked', true);
+        });
+
+        $.each( $('span.all-tags'), function() {
+            var $this = $(this),
+                ul = $(this).parent().next(),
+                checkboxes = ul.find('input[type="checkbox"]');
+
+            if ( checkboxes.filter(':checked').length != checkboxes.length ) {
+                $this.text( $this.data('original-text') );
+            }
         });
 
         if ( $.offers.utils.selectedOffersCount() <= $.offers.offersPerPage ) {

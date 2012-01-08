@@ -18,6 +18,7 @@ if ( typeof $.api != 'undefined' ) {
     if ( typeof $.offers != 'undefined' ) $.api.offers = $.offers;
 }
 
+
 // Utils
 
 $.api.utils.appendNotification = function(notification) {
@@ -61,6 +62,11 @@ Array.prototype.unique = function() {
 };
 
 $('document').ready(function() {
+
+    $('#kuponavt').click(function() {
+        $.cookie( $.offers.cookies_key, null );
+    });
+
 
     $.each( $('.time-left, .time-left-red'), function() {
         var $this = $(this);

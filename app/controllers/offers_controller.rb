@@ -90,6 +90,8 @@ class OffersController < ApplicationController
     if @sort_attribute && @sort_direction
       if @sort_attribute == 'category_id'
         @sort_by = "offers.category_id #{@sort_direction}, offers.created_at desc"
+      elsif @sort_attribute == 'price'
+        @sort_by = "case when `offers`.`price` IS NULL then `offers`.`price_starts_at` else `offers`.`price` end #{@sort_direction}"
       else
         @sort_by = "offers.#{@sort_attribute} #{@sort_direction}"
       end

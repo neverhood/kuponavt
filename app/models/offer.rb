@@ -21,7 +21,8 @@ class Offer < ActiveRecord::Base
     joins(:category).
       where(['categories.name IN (:category_names)', :category_names => categories.join(',')])
   }
-  scope :categorized, where('`offers`.`category_id` IS NOT NULL')
+  scope :categorized, where('`offers`.`category_id` IS NOT NULL').order('`offers`.`category_id` DESC')
+  scope :newest_first, order('`offers`.`created_at` DESC')
 
   scope :by_time_period, lambda { |time_period|
     if time_period.count == 1
