@@ -545,9 +545,10 @@ div#offers {
 
 
 #pagination-bottom {
-  margin: 5px auto 15px;
-  width: 650px;
+  text-align: center;
   font-size: 80%;
+
+    .pagination { margin: 5px auto 15px }
 
   .page {
     margin: 0 -1px;
