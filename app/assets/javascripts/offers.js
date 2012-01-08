@@ -15,12 +15,33 @@ $.offers = {
         sort: 'category_id desc',
         categories: 'all',
         time_period: 0,
-        search: '',
         page: 1
     },
     cookies_changed: false
 };
 
+$.offers.utils.setCookies = function() {
+    var cookies = $.offers.cookies,
+        string = cookies.sort + '|' + cookies.categories + '|' + cookies.time_period + '|' + cookies.page;
+
+    $.cookie( $.offers.cookies_key, string, { expires: 7 } );
+};
+
+$.offers.utils.copyCookies = function() {
+    var params = $.cookie( $.offers.cookies_key ).split('|');
+
+    $.offers.cookies = {
+        sort: params[0],
+        categories: params[1],
+        time_period: params[2],
+        page: params[3]
+    }
+};
+
+$.offers.utils.setCookie = function(key, value) {
+    $.offers.cookies[key] = value;
+    $.offers.utils.setCookies();
+}
 
 $.offers.utils.startCountDown = function() {
     $.each( $('.time-left, .time-left-red'), function() {
@@ -32,6 +53,7 @@ $.offers.utils.startCountDown = function() {
 
 $.offers.utils.rememberCategories = function() {
     $.offers.cookies.categories = $.offers.utils.checkedCategories().join(',');
+    $.offers.utils.setCookies();
 };
 
 $.offers.utils.showFavourites = function() {
@@ -310,7 +332,50 @@ $('document').ready(function() {
     // cookies
 
     if ( $.cookie( $.offers.cookies_key ) ) {
-        // Load Data
+        $.offers.utils.copyCookies();
+
+        var page = $.offers.cookies.page == 0 ? false : $.offers.cookies.page,
+            categories = $.offers.cookies.categories.split(','),
+            timePeriod = parseInt( $.offers.cookies.time_period ),
+            sort = $.offers.cookies.sort.split(' ');
+
+        $('#offers-selected-count').text(0);
+        $('#offers-section .offer').remove();
+        $( $.offers.sections.pagination ).html('');
+
+        $('#offers-section').attr('data-time_period', timePeriod).
+            attr('data-sort-by', sort.join('|'));
+
+        $('#all-categories input[type="checkbox"]').prop('checked', false);
+
+        $.each( categories, function(i,e) {
+            $('input[type="checkbox"]#' + e).prop('checked', true);
+        });
+
+        if ( $.offers.utils.selectedOffersCount() <= $.offers.offersPerPage ) {
+            page = false;
+            $.offers.utils.setCookie('page', false);
+        }
+
+        $('#all-offers').attr('data-page', page);
+
+        if ( $('#sort-by-' + sort[0]).length ) {
+            $('#sort-by-' + sort[0]).data('sort', sort[1]).
+                addClass('current-sort').
+                append( '<span class="' + sort[1] + '"></span>' );
+        }
+
+        $('#lenses li').removeClass('pressed');
+        if ( timePeriod === 0 ) {
+            $('#all-lens').addClass('pressed');
+        } else if ( timePeriod == 1 ) {
+            $('#today-lens').addClass('pressed');
+        } else {
+            $('#yesterday-lens').addClass('pressed');
+        }
+
+        $.offers.utils.retrieveOffers( parseInt(page) );
+
     }
 
     // cookies END
@@ -332,7 +397,7 @@ $('document').ready(function() {
             var params = this.href.replace(/^.*\?/, '').split('&'),
                 page = params[0].split('=')[1];
 
-            $.offers.cookies.page = parseInt(page);
+            $.offers.utils.setCookie('page', parseInt(page));
 
             $.offers.utils.retrieveOffers(page);
             $("html:not(:animated)"+( ! $.browser.opera ? ",body:not(:animated)" : "")).animate({scrollTop: 25}, 500);
@@ -360,7 +425,8 @@ $('document').ready(function() {
                     $this.text( $this.data('clear') );
                 });
 
-                $.offers.cookies.categories = 'all';
+                $.offers.utils.setCookie('categories', 'all');
+
                 $.offers.utils.retrieveOffers(1);
             }
         }
@@ -383,7 +449,8 @@ $('document').ready(function() {
         $( $.offers.sections.offers ).html('');
         $( $.offers.sections.pagination ).html('');
         $('#lenses').hide();
-        $.offers.cookies.categories = '';
+
+        $.offers.utils.setCookie('categories', '');
     });
 
     $('span.all-tags').bind({
@@ -499,6 +566,7 @@ $('document').ready(function() {
             $this.text( $this.data('original-text') );
         });
 
+        $.offers.utils.showLenses();
         $.offers.utils.rememberCategories();
         $.offers.utils.retrieveOffers( 1 );
     });
@@ -506,7 +574,7 @@ $('document').ready(function() {
 
     // Sort
 
-    if ( $('#sort-by-category_id').length ) {
+    if ( $('#sort-by-category_id').length && $('#offers-section').attr('data-sort-by') === undefined ) {
         $('#sort-by-category_id').data('sort', 'desc').
             addClass('current-sort').
             append( '<span class="desc"></span>' );
@@ -534,7 +602,7 @@ $('document').ready(function() {
                 direction = $this.data('sort');
 
             $('#offers-section').attr('data-sort-by', sortBy + '|' + direction );
-            $.offers.cookies.sort = sortBy + ' ' + direction;
+            $.offers.utils.setCookie('sort', sortBy + ' ' + direction);
 
             $.offers.latestSort = this.id;
             $this.append('<span class="' + $this.data('sort') + '"></span>');
@@ -646,7 +714,7 @@ $('document').ready(function() {
 
         if ( currentTimePeriod != timePeriod ) {
             $( $.offers.sections.offers ).attr('data-time_period', timePeriod);
-            $.offers.cookies.time_period = timePeriod;
+            $.offers.utils.setCookie('time_period', timePeriod);
             $.offers.utils.retrieveOffers( $.offers.utils.page() );
         }
     });
