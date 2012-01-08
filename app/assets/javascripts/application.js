@@ -61,11 +61,6 @@ Array.prototype.unique = function() {
     return uniqArray;
 };
 
-Date.prototype.toUTC = function() {
-    return new Date(this.getUTCFullYear(), this.getUTCMonth(), this.getUTCDate(), this.getUTCHours(), this.getUTCMinutes(), this.getUTCSeconds());
-}
-
-
 $('document').ready(function() {
 
     $('#kuponavt').click(function() {
