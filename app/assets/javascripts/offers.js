@@ -366,7 +366,7 @@ $('document').ready(function() {
 
     // cookies
 
-    if ( $.cookie( $.offers.cookies_key ) ) {
+    if ( $.cookie( $.offers.cookies_key ) && $('body').attr('id') == 'offers-controller' ) {
         $.offers.utils.copyCookies();
 
         var page = $.offers.cookies.page == 0 ? false : $.offers.cookies.page,

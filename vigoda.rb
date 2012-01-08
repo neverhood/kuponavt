@@ -74,12 +74,18 @@ cities.keys.each do |city|
       offers << params
     end
 
-    offers.each do |offer_attribute|
+    offers.each do |offer_attributes|
       Offer.create(offer_attributes) ||
         CrawlingException.create(provider_id: PROVIDER.id, error_text: 'failed to save offer', offer_attributes: offer_attributes)
     end
 
   end
-  Offer.where(provided_id: existing_offers_ids).delete_all if existing_offers_ids.any?
+  if existing_offers_ids.any?
+    Offer.where(provided_id: existing_offers_ids).each do |offer|
+      OfferArchive.create( offer.attributes.merge({archived_at: Time.now}) )
+      offer.destroy
+      offer = nil # garbage
+    end
+  end
 
 end

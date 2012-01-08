@@ -104,8 +104,8 @@ class OffersController < ApplicationController
     time_period = params[:time_period] && params[:time_period].to_i
 
     @time_period = case time_period
-                     when 1 then [Time.now.to_date]
-                     when 2 then [1.day.ago.to_date, Time.now.to_date]
+                     when 1 then [Time.now.utc.to_date]
+                     when 2 then [1.day.ago.utc.to_date, Time.now.utc.to_date]
                      else [365.days.ago]
                    end
   end

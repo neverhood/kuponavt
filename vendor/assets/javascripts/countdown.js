@@ -57,6 +57,7 @@ function toUTC(date) {
 		    return result.reverse().join('');
 		};
 		var elem = $(this);
+        console.log( toUTC(date).toString() );
 		var timeUpdate = function () {
             var utcTime = toUTC(new Date()),
                 serverTime = new Date( utcTime.setHours( utcTime.getHours() + 2 ) );
@@ -70,7 +71,7 @@ function toUTC(date) {
 		        elem.html(options.finish);
 		    }		
 		};
-		timeUpdate();
+        timeUpdate();
 		var timer = setInterval(timeUpdate, 1000);		
 	};
 })(jQuery);

@@ -173,7 +173,10 @@ cities.keys.each do |city|
       end
     else
       # FUCKING STUPID!!!
-      deal_offer_values = bot.page.parser.css('script').inner_html.scan(/deal_offer_values\s*=\s*(.*)/)[0][0].gsub(';','')
+      deal_offer_values = bot.page.parser.css('script').inner_html.scan(/deal_offer_values\s*=\s*(.*)/)[0][0].
+        gsub(';','').
+        gsub(' || {}', '') # dolboebs
+
       offer_ids_to_category_ids = JSON.parse( deal_offer_values )
 
       offers = []
@@ -203,7 +206,11 @@ cities.keys.each do |city|
   end
 
   if $existing_offers.any?
-    Offer.where(:provider_id => PROVIDER.id, :provided_id => $existing_offers).delete_all
+    Offer.where(:provider_id => PROVIDER.id, :provided_id => $existing_offers).each do |offer|
+      OfferArchive.create( offer.attributes.merge({archived_at: Time.now}) )
+      offer.destroy
+      offer = nil # this should be garbage collected
+    end
   end
 
 end
