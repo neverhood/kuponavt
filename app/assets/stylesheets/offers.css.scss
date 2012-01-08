@@ -259,7 +259,7 @@ div#offers {
           float: right;
           width: auto;
           height: 30px;
-        } 
+        }
       }
 
     }
@@ -271,7 +271,7 @@ div#offers {
       height: 220px;
       position: relative;
       margin-bottom: 20px;
-      
+
       .info-container { margin-left: 7px }
 
       .price {
@@ -279,8 +279,8 @@ div#offers {
         font-weight: bold;
         text-align: center;
         font-size: 150%;
-        .hrn { font-weight: normal; }
-      
+        .currency { font-weight: normal; }
+
         .starts-at {
           font-weight: normal;
           text-transform: lowercase;
