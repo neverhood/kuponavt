@@ -17,14 +17,14 @@
 
       <% if Category.parent_categories.index(parent_category) == 0 %>
         <p class='type first-category'> <%= parent_category.name %> |
-          <span class='all-tags' data-clear='<%= t('offers.clear') %>' id='<%= parent_category.id %>'>
-            <%= t('offers.all_tags') %>
+        <span class='all-tags' data-clear='<%= t('offers.clear') %>' data-original-text='<%= t('offers.all_tags') %>' id='<%= parent_category.id %>'>
+            <%= t('offers.clear') %>
           </span>
         </p>
       <% else %>
         <p class='type'> <%= parent_category.name %> |
-          <span class='all-tags' data-clear='<%= t('offers.clear') %>' id='<%= parent_category.id %>'>
-            <%= t('offers.all_tags') %>
+        <span class='all-tags' data-clear='<%= t('offers.clear') %>' data-original-text='<%= t('offers.all_tags') %>' id='<%= parent_category.id %>'>
+            <%= t('offers.clear') %>
           </span>
         </p>
       <% end %>
@@ -32,7 +32,7 @@
       <ul class='<%= parent_category.to_en %>'>
         <% parent_category.nested_categories.each do |nested_category| %>
           <li>
-          <label> <%= check_box_tag nested_category.id, nested_category.id, (@categories && @categories.include?(nested_category.id.to_s)),
+          <label> <%= check_box_tag nested_category.id, nested_category.id, true,
             :name => nested_category.to_en %><span style='display:inline-block; position:relative; bottom: 1px'><%= nested_category.name %></span>
           </label>
           <span class='amount'><%= nested_category.offers.where(city_id: @city.id).count %></span>

@@ -56,7 +56,8 @@
 		var timeUpdate = function () {
 		    var s = timeDifference(new Date(), date);
 		    if (s.length) {
-		    	elem.html(options.prefix + s);
+		    	elem.html(options.prefix + s).
+                    data('countdown', true);
 		    } else {
 		        clearInterval(timer);
 		        elem.html(options.finish);

@@ -11,8 +11,7 @@ class Admin::SuspiciousOffersController < ApplicationController
     @offer = Offer.find params[:id]
 
     if @offer.update_attributes(@suspicious_attribute => params[@suspicious_attribute])
-      expire_fragment /categories.*#{@offer.category_id}.*action.*index.*controller.*offers.*city.*#{@offer.city.name}.*\.json/
-      expire_fragment /.*action.*index.*controller.*offers.*city.*#{@offer.city.name}.*\.html/
+      expire_fragment /offers.*#{@offer.city.name}/
       render :json => { :status => :success }
     end
 

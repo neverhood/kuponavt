@@ -14,7 +14,10 @@ image_bot = Mechanize.new
 #   password_4: 'cdtnbr1988'
 # }
 
-cities = %w( kiev moscow )
+cities = {
+  'kiev' => 'kiev',
+  'moskva' => 'moscow'
+}
 
 matchers = {
   :pagination => '.main_pagination_block',
@@ -123,7 +126,7 @@ retrieve_attributes = lambda do |offers|
       offer.css('.ppOffer-info a').remove
       offer_attributes[:description] = offer.css('.ppOffer-info').inner_html
     rescue Exception => e
-      binding.pry
+      CrawlingException.create(provider_id: PROVIDER.id, error_text: e.message, stacktrace: e.backtrace.join("\n"), offer_attributes: offer_attributes, offer_url: _offer_url)
     end
 
     attributes << offer_attributes
@@ -135,7 +138,7 @@ retrieve_attributes = lambda do |offers|
 end
 
 # bot.post(auth_url, auth_details)
-cities.each do |city|
+cities.keys.each do |city|
 
 
   city_model = City.where(name: city).first
@@ -143,7 +146,7 @@ cities.each do |city|
 
   $existing_offers = Offer.where(:city_id => city_model.id, :provider_id => PROVIDER.id).map(&:provided_id)
 
-  base_url = "#{URL}/#{city}"
+  base_url = "#{URL}/#{cities[city]}"
   bot.get base_url
 
   categories.keys.each do |category|
@@ -164,7 +167,8 @@ cities.each do |city|
         biglion_offers.each do |offer_attributes|
           offer_attributes.merge! category_id: categories[category][biglion_category], city_id: city_model.id,
             country_id: country_model.id, provider_id: PROVIDER.id
-          Offer.create(offer_attributes) || binding.pry
+          Offer.create(offer_attributes) ||
+            CrawlingException.create(provider_id: PROVIDER.id, error_text: 'failed to save offer', offer_attributes: offer_attributes)
         end
       end
     else
@@ -188,9 +192,10 @@ cities.each do |city|
             end
           end
           offer_attributes.merge! city_id: city_model.id, country_id: country_model.id, provider_id: PROVIDER.id
-          Offer.create(offer_attributes) || binding.pry
-        rescue
-          binding.pry
+          Offer.create(offer_attributes) ||
+            CrawlingException.create(provider_id: PROVIDER.id, error_text: 'failed to save offer', offer_attributes: offer_attributes)
+        rescue Exception => e
+          CrawlingException.create(provider_id: PROVIDER.id, error_text: e.message, stacktrace: e.backtrace.join("\n"), offer_attributes: offer_attributes)
         end
       end
     end

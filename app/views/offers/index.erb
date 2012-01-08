@@ -9,8 +9,8 @@
     <div id="lenses">
         <ul>
           <% %w(all today yesterday).each do |lens| %> <li id='<%= lens %>-lens' class='<%= lens == 'all' ? 'pressed' : '' %>'> <%= t("offers.lenses.#{lens}") %> </li> <% end %>
-		</ul>
-	</div>
+		    </ul>
+	  </div>
 
     <div id='current-offers-count'>
         <%= t('offers.checked') -%> <span id='offers-selected-count'><%= @offers_selected_count %></span> <%= t('common.of') -%> <%= @offers_total_count -%>
@@ -35,7 +35,7 @@
     </div>
   </div>
 
-  <div style="text-align: center;">
+  <div class='center-aligned'>
     <div id='pagination-bottom'>
       <%= render 'pagination' %>
     </div>

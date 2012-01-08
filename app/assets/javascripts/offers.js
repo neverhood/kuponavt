@@ -9,16 +9,52 @@ $.offers = {
         pagination: '#pagination-bottom',
         selectedCount: '#offers-selected-count'
     },
-    utils: {}
+    utils: {},
+    cookies_key: 'kuponavt_params',
+    cookies: {
+        sort: 'category_id desc',
+        categories: 'all',
+        time_period: 0,
+        page: 1
+    },
+    cookies_changed: false
 };
+
+$.offers.utils.setCookies = function() {
+    var cookies = $.offers.cookies,
+        string = cookies.sort + '|' + cookies.categories + '|' + cookies.time_period + '|' + cookies.page;
+
+    $.cookie( $.offers.cookies_key, string, { expires: 7 } );
+};
+
+$.offers.utils.copyCookies = function() {
+    var params = $.cookie( $.offers.cookies_key ).split('|');
+
+    $.offers.cookies = {
+        sort: params[0],
+        categories: params[1],
+        time_period: params[2],
+        page: params[3]
+    }
+};
+
+$.offers.utils.setCookie = function(key, value) {
+    $.offers.cookies[key] = value;
+    $.offers.utils.setCookies();
+}
 
 $.offers.utils.startCountDown = function() {
     $.each( $('.time-left, .time-left-red'), function() {
         var $this = $(this);
 
-        $this.countdown( new Date($this.text().trim()), { prefix: '', finish: 'Завершено' } )
+        if ( $this.data('countdown') === undefined ) $this.countdown( new Date($this.text().trim()), { prefix: '', finish: 'Завершено' } )
     });
-}
+};
+
+$.offers.utils.rememberCategories = function() {
+    $.offers.cookies.categories = $.offers.utils.checkedCategories().join(',');
+    $.offers.utils.setCookies();
+};
 
 $.offers.utils.showFavourites = function() {
 
@@ -38,7 +74,7 @@ $.offers.utils.city = function() {
 $.offers.utils.showLenses = function() {
     var lenses = $('#lenses');
 
-    if ( lenses.not(':visible') ) {
+    if ( lenses.not(':visible') && $.offers.utils.selectedOffersCount() > 0 ) {
         lenses.show();
     }
 };
@@ -285,9 +321,6 @@ $.offers.utils.paginate = function(offersCount) {
         var lastPage = template.find('.last').find('a');
         lastPage.attr('href', lastPage.attr('href').replace('LAST_PAGE', pagesCount));
 
-        $.each( template.find('a'), function() {
-            this.href = this.href + ',' + $.offers.utils.checkedCategories().join('|');
-        });
 
         paginationContainer.html( template );
     }
@@ -295,6 +328,57 @@ $.offers.utils.paginate = function(offersCount) {
 };
 
 $('document').ready(function() {
+
+    // cookies
+
+    if ( $.cookie( $.offers.cookies_key ) ) {
+        $.offers.utils.copyCookies();
+
+        var page = $.offers.cookies.page == 0 ? false : $.offers.cookies.page,
+            categories = $.offers.cookies.categories.split(','),
+            timePeriod = parseInt( $.offers.cookies.time_period ),
+            sort = $.offers.cookies.sort.split(' ');
+
+        $('#offers-selected-count').text(0);
+        $('#offers-section .offer').remove();
+        $( $.offers.sections.pagination ).html('');
+
+        $('#offers-section').attr('data-time_period', timePeriod).
+            attr('data-sort-by', sort.join('|'));
+
+        $('#all-categories input[type="checkbox"]').prop('checked', false);
+
+        $.each( categories, function(i,e) {
+            $('input[type="checkbox"]#' + e).prop('checked', true);
+        });
+
+        if ( $.offers.utils.selectedOffersCount() <= $.offers.offersPerPage ) {
+            page = false;
+            $.offers.utils.setCookie('page', false);
+        }
+
+        $('#all-offers').attr('data-page', page);
+
+        if ( $('#sort-by-' + sort[0]).length ) {
+            $('#sort-by-' + sort[0]).data('sort', sort[1]).
+                addClass('current-sort').
+                append( '<span class="' + sort[1] + '"></span>' );
+        }
+
+        $('#lenses li').removeClass('pressed');
+        if ( timePeriod === 0 ) {
+            $('#all-lens').addClass('pressed');
+        } else if ( timePeriod == 1 ) {
+            $('#today-lens').addClass('pressed');
+        } else {
+            $('#yesterday-lens').addClass('pressed');
+        }
+
+        $.offers.utils.retrieveOffers( parseInt(page) );
+
+    }
+
+    // cookies END
 
     $('.pagination a').live('ajax:complete', function( event, xhr, status ) {
         var attributes = $.parseJSON( xhr.responseText );
@@ -307,16 +391,16 @@ $('document').ready(function() {
 
     $('.pagination a').live({
         click: function(event) {
-            if ( /#/.test(this.href) ) {
-                event.preventDefault();
-                event.stopPropagation();
+            event.preventDefault();
+            event.stopPropagation();
 
-                var params = this.href.replace(/^.*#/, '').split(','),
-                    page = params[0];
+            var params = this.href.replace(/^.*\?/, '').split('&'),
+                page = params[0].split('=')[1];
 
-                $.offers.utils.retrieveOffers(page);
-                $("html:not(:animated)"+( ! $.browser.opera ? ",body:not(:animated)" : "")).animate({scrollTop: 25}, 500);
-            }
+            $.offers.utils.setCookie('page', parseInt(page));
+
+            $.offers.utils.retrieveOffers(page);
+            $("html:not(:animated)"+( ! $.browser.opera ? ",body:not(:animated)" : "")).animate({scrollTop: 25}, 500);
         }
     });
 
@@ -341,6 +425,8 @@ $('document').ready(function() {
                     $this.text( $this.data('clear') );
                 });
 
+                $.offers.utils.setCookie('categories', 'all');
+
                 $.offers.utils.retrieveOffers(1);
             }
         }
@@ -363,6 +449,8 @@ $('document').ready(function() {
         $( $.offers.sections.offers ).html('');
         $( $.offers.sections.pagination ).html('');
         $('#lenses').hide();
+
+        $.offers.utils.setCookie('categories', '');
     });
 
     $('span.all-tags').bind({
@@ -371,9 +459,9 @@ $('document').ready(function() {
         },
         click: function() {
             var $this = $(this),
-            ul = $this.parent().next(),
-            checkboxes = ul.find('input[type="checkbox"]'),
-            check = true;
+                ul = $this.parent().next(),
+                checkboxes = ul.find('input[type="checkbox"]'),
+                check = true;
 
             if ( checkboxes.filter(':checked').length == checkboxes.length ) check = false;
 
@@ -386,6 +474,7 @@ $('document').ready(function() {
             }
 
             checkboxes.prop('checked', check);
+            $.offers.utils.rememberCategories();
 
             if ( $.offers.utils.page() == 1 ) {
                 var categoryIds = $.map( checkboxes, function(category) { return parseInt(category.id) } );
@@ -416,38 +505,9 @@ $('document').ready(function() {
 
     // Offer-bottom-more
 
-    $(".offer-bottom").live('click', function(){
-        var $this = $(this),
-            offer = $this.parents('.offer'),
-            offerDetails = offer.find('.offer-details'),
-            offerAddress = offer.find('.offer-address'),
-            offerDescription = offer.find('.offer-description'),
-            offerId = offer.attr('id').replace('offer-', '');
-
-            if ( offerDetails.is(':visible') ) {
-                offerDetails.toggle('1s');
-            } else {
-                if ( offerDescription.text().length == 0 ) {
-                    $this.find('img').attr('src', '/assets/loader.gif');
-
-                    $.getJSON( ('/offers/' + offerId), function(data) {
-                        offerAddress.show().
-                            html( data.address );
-                        offerDescription.show().
-                            html( data.description );
-
-                        offerDetails.toggle('1s');
-
-                        $this.find('img').attr('src', '/assets/down-arrow.png');
-                    });
-
-                } else {
-                    offerDetails.toggle('1s');
-            }
-        }
+    $(".offer-bottom").live('click', function() {
+        $(this).parents('.offer').find('.offer-details').toggle('1s');
     });
-
-
 
     // Categories
 
@@ -457,6 +517,9 @@ $('document').ready(function() {
             ul = $this.parents('ul'),
             tag = ul.prev().find('.all-tags'),
             checkboxes = ul.find('input[type="checkbox"]');
+
+
+        $.offers.utils.rememberCategories();
 
         if ( checked ) {
             $.offers.utils.showLenses();
@@ -488,14 +551,30 @@ $('document').ready(function() {
         }
     });
 
-    // Search
+    $('.amount').click(function() {
+        $('#all-categories input[type="checkbox"]').prop('checked', false);
 
-    $('#search-button').click(function() {
+        var $this = $(this),
+            categoryId = $this.prev().
+                find('input[type="checkbox"]').
+                prop('checked', true).
+                attr('id');
+
+        $.each( $('span.all-tags'), function() {
+            var $this = $(this);
+
+            $this.text( $this.data('original-text') );
+        });
+
+        $.offers.utils.showLenses();
+        $.offers.utils.rememberCategories();
+        $.offers.utils.retrieveOffers( 1 );
     });
+
 
     // Sort
 
-    if ( $('#sort-by-category_id').length ) {
+    if ( $('#sort-by-category_id').length && $('#offers-section').attr('data-sort-by') === undefined ) {
         $('#sort-by-category_id').data('sort', 'desc').
             addClass('current-sort').
             append( '<span class="desc"></span>' );
@@ -523,6 +602,7 @@ $('document').ready(function() {
                 direction = $this.data('sort');
 
             $('#offers-section').attr('data-sort-by', sortBy + '|' + direction );
+            $.offers.utils.setCookie('sort', sortBy + ' ' + direction);
 
             $.offers.latestSort = this.id;
             $this.append('<span class="' + $this.data('sort') + '"></span>');
@@ -546,6 +626,7 @@ $('document').ready(function() {
             countContainer.find('.loader').remove();
 
             $.offers.utils.showFavourites();
+            $.offers.utils.startCountDown();
 
             $('div.offer div.add-button-added').unbind().bind('click', function(event) {
                 var addedOffers = $.cookie('favourites').split(','),
@@ -633,6 +714,7 @@ $('document').ready(function() {
 
         if ( currentTimePeriod != timePeriod ) {
             $( $.offers.sections.offers ).attr('data-time_period', timePeriod);
+            $.offers.utils.setCookie('time_period', timePeriod);
             $.offers.utils.retrieveOffers( $.offers.utils.page() );
         }
     });

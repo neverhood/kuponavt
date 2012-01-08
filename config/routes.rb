@@ -16,6 +16,7 @@ Kuponavt::Application.routes.draw do
   resources :offers, :only => :show do
     get 'favourites', :on => :collection
     get 'search', :on => :collection
+    get 'out', :on => :member
   end
 
   get '/:city' => 'offers#index', :as => :offers

@@ -23,12 +23,12 @@ class OffersController < ApplicationController
     @offers = if request.xhr?
                 @categories ? @city.offers.by_categories(@categories).by_time_period(@time_period).order(@sort_by).page( @page ) : []
               else
-                @city.offers.page(@page)
+                @city.offers.categorized.page(@page)
               end
 
-    @offers_total_count = @city.offers.count
+    @offers_total_count = @city.offers.categorized.count
     @offers_selected_count = @categories ? @city.offers.by_categories(@categories).
-        by_time_period(@time_period).count : @city.offers.count
+        by_time_period(@time_period).count : @city.offers.categorized.count
 
     respond_to do |format|
       format.html
@@ -49,6 +49,15 @@ class OffersController < ApplicationController
     end
   end
 
+  def out
+    @offer = Offer.find(params[:id])
+    if @offer
+      redirect_to @offer.url
+    else
+      render :nothing => true
+    end
+  end
+
   def show
     respond_to do |format|
       format.html
@@ -66,7 +75,11 @@ class OffersController < ApplicationController
   private
 
   def prepare_categories_array
-    @categories = params[:categories] && params[:categories].split(',')
+    if params[:categories] == 'all'
+      @categories = Category.all.map(&:id)
+    else
+      @categories = params[:categories] && params[:categories].split(',')
+    end
   end
 
   def prepare_sort_attributes

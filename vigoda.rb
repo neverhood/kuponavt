@@ -6,7 +6,7 @@ PROVIDER = Provider.where(name: 'vigoda').first
 
 cities = {
   City.where(name: 'kiev').first => 'http://kiev.vigoda.ru',
-  City.where(name: 'moscow').first => 'http://vigoda.ru'
+  City.where(name: 'moskva').first => 'http://vigoda.ru'
 }
 
 bot = Mechanize.new
@@ -74,13 +74,12 @@ cities.keys.each do |city|
       offers << params
     end
 
-    begin
-      offers.each { |offer_attributes| Offer.create(offer_attributes) }
-    rescue
-      binding.pry
+    offers.each do |offer_attribute|
+      Offer.create(offer_attributes) ||
+        CrawlingException.create(provider_id: PROVIDER.id, error_text: 'failed to save offer', offer_attributes: offer_attributes)
     end
 
   end
-  binding.pry if existing_offers_ids.any?
+  Offer.where(provided_id: existing_offers_ids).delete_all if existing_offers_ids.any?
 
 end
