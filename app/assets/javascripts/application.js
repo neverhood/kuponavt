@@ -6,7 +6,6 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require cufon
 //= require transponder
 //= require countdown
 //= require cookie
