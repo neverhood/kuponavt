@@ -25,6 +25,13 @@
         <%= notification( t('offers.no_categories_selected') ) %>
         <% [ 'category_id', 'created_at', 'price', 'discount', 'ends_at' ].each do |sort_link| %><li class='<%= (sort_link == 'category_id' || sort_link == 'ends_at') ? (sort_link == 'category_id' ? 'first-child' : 'last-child') : '' %>' id='<%= "sort-by-#{sort_link}" %>'><%= t("offers.#{sort_link}") %></li><% end %>
       </ul>
+      <div class='hidden center-aligned' id='no-results-for-time-period'>
+        <%= t('offers.no_results_for_time_period') %>
+      </div>
+
+      <div class='hidden center-aligned' id='no-results-to-display'>
+        <%= t('offers.choose_categories') %>
+      </div>
   </div>
 
   <div id='all-offers' data-city='<%= @city.name %>' data-page='<%= params[:page] || false %>'>

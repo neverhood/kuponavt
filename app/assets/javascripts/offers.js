@@ -51,8 +51,42 @@ $.offers.utils.startCountDown = function() {
     });
 };
 
+$.offers.utils.toggleOptions = function() {
+    var options = [ $('#lenses'), $('#sort-buttons') ];
+
+    var shownOffersCount = parseInt( $('#offers-selected-count').text() ),
+        selectedOffersCount = $.offers.utils.selectedOffersCount(),
+        timePeriod = parseInt( $( $.offers.sections.offers ).attr('data-time_period') ),
+        lense;
+
+    if ( timePeriod === 0 ) lense = $('#all-lens');
+    if ( timePeriod == 1 ) lense = $('#today-lens');
+    if ( timePeriod == 2 ) lense = $('#yesterday-lens');
+
+    $.each( options, function() {
+        ( selectedOffersCount > 0 ) ? this.show() : this.hide();
+    });
+
+    if ( options[1].is(':visible') ) {
+        $('#no-results-to-display').hide();
+    } else {
+        $('#no-results-to-display').show();
+    }
+
+    if ( shownOffersCount == 0 && timePeriod != 0 && selectedOffersCount > 0 ) {
+        $('.time-period-tag').remove();
+
+        $('#no-results-for-time-period').
+            append('<div class="time-period-tag">' + lense.text() + '</div>' ).
+            show();
+    } else {
+        $('#no-results-for-time-period').hide();
+    }
+}
+
 $.offers.utils.rememberCategories = function() {
     $.offers.cookies.categories = $.offers.utils.checkedCategories().join(',');
+    $.offers.cookies.page = false;
     $.offers.utils.setCookies();
 };
 
@@ -217,11 +251,13 @@ $.offers.utils.retrieveOffers = function(page) { // Retrieves offers, count and 
             $.offers.utils.startCountDown();
             $('#current-offers-count').find('.loader').remove();
             $.offers.utils.showFavourites();
+            $.offers.utils.toggleOptions();
         });
     } else {
         $('#current-offers-count').find('.loader').remove();
         $('#offers-section').find('.offer').remove();
-        $('#lenses').hide();
+
+        $.offers.utils.toggleOptions();
         $.offers.utils.changeCounterAndPaginate();
     }
 };
@@ -338,7 +374,6 @@ $('document').ready(function() {
             timePeriod = parseInt( $.offers.cookies.time_period ),
             sort = $.offers.cookies.sort.split(' ');
 
-        $( $.offers.sections.offers ).append( $.api.loader() );
 
         $('#offers-selected-count').text(0);
         $('#offers-section .offer').remove();
@@ -350,9 +385,15 @@ $('document').ready(function() {
 
         $('#all-categories input[type="checkbox"]').prop('checked', false);
 
-        $.each( categories, function(i,e) {
-            $('input[type="checkbox"]#' + e).prop('checked', true);
-        });
+        if ( categories.length == 1 && categories[0] == '' ) categories = [];
+
+        if (  categories.length == 1 && categories[0] == 'all' ) {
+            $('#all-categories input[type="checkbox"]').prop('checked', true);
+        } else {
+            $.each( categories, function(i,e) {
+                $('input[type="checkbox"]#' + e).prop('checked', true);
+            });
+        }
 
         $.each( $('span.all-tags'), function() {
             var $this = $(this),
@@ -430,8 +471,6 @@ $('document').ready(function() {
             if ( checkboxes.length != checkboxes.filter(':checked').length ) {
                 checkboxes.prop('checked', true);
 
-                $.offers.utils.showLenses();
-
                 $.each( $('span.all-tags'), function() {
                     var $this = $(this);
 
@@ -462,9 +501,9 @@ $('document').ready(function() {
 
         $( $.offers.sections.offers ).html('');
         $( $.offers.sections.pagination ).html('');
-        $('#lenses').hide();
+        $.offers.utils.toggleOptions();
 
-        $.offers.utils.setCookie('categories', '');
+        $.offers.utils.setCookie('categories', []);
     });
 
     $('span.all-tags').bind({
@@ -475,7 +514,12 @@ $('document').ready(function() {
             var $this = $(this),
                 ul = $this.parent().next(),
                 checkboxes = ul.find('input[type="checkbox"]'),
-                check = true;
+                check = true,
+                amount = 0;
+
+            $.map( checkboxes, function(e) {
+                amount += parseInt( $(e).parents('li').find('.amount').text() );
+            });
 
             if ( checkboxes.filter(':checked').length == checkboxes.length ) check = false;
 
@@ -490,30 +534,9 @@ $('document').ready(function() {
             checkboxes.prop('checked', check);
             $.offers.utils.rememberCategories();
 
-            if ( $.offers.utils.page() == 1 ) {
-                var categoryIds = $.map( checkboxes, function(category) { return parseInt(category.id) } );
+            if ( amount == 0 ) return false;
 
-                if ( check ) {
-                    $.offers.utils.getOffers( categoryIds );
-                } else {
-                    var count = 0;
-                    $.each( categoryIds, function(id) {
-                        count += $('#offers-section div.offer[data-category="' + categoryIds[id] + '"]').length
-                    });
-
-                    if ( count > 0 ) {
-                        $.offers.utils.retrieveOffers(1);
-                    } else {
-                        $.offers.utils.changeCounterAndPaginate();
-                    }
-                }
-            } else {
-                $.offers.utils.retrieveOffers(1);
-            }
-
-            if ( $('#all-categories input[type="checkbox"]').filter(':checked').length == 0 ) {
-                $.offers.utils.hideLenses();
-            }
+            $.offers.utils.retrieveOffers(1);
         }
     });
 
@@ -530,14 +553,15 @@ $('document').ready(function() {
             checked = $this.prop('checked'),
             ul = $this.parents('ul'),
             tag = ul.prev().find('.all-tags'),
-            checkboxes = ul.find('input[type="checkbox"]');
+            checkboxes = ul.find('input[type="checkbox"]'),
+            amount = parseInt( $this.parents('li').find('.amount').text() );
 
+
+        if ( amount == 0 ) return false;
 
         $.offers.utils.rememberCategories();
 
         if ( checked ) {
-            $.offers.utils.showLenses();
-
             if ( checkboxes.length == checkboxes.filter(':checked').length ) {
                 tag.data('original-text', tag.text()).
                     text( tag.data('clear') );
@@ -546,23 +570,7 @@ $('document').ready(function() {
             if ( tag.data('original-text') ) tag.text( tag.data('original-text') );
         }
 
-        if ( $.offers.utils.page() == 1 ) {
-            if ( checked ) {
-                $.offers.utils.getOffers( [parseInt( this.id )] );
-            } else {
-                if ( $('#offers-section div.offer[data-category="' + this.id + '"]').length > 0 ) {
-                    $.offers.utils.retrieveOffers(1);
-                } else {
-                    $.offers.utils.changeCounterAndPaginate();
-                }
-            }
-        } else {
-            $.offers.utils.retrieveOffers(1);
-        }
-
-        if ( $('#all-categories input[type="checkbox"]').filter(':checked').length == 0 ) {
-            $.offers.utils.hideLenses();
-        }
+        $.offers.utils.retrieveOffers(1);
     });
 
     $('.amount').click(function() {

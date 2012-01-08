@@ -3,7 +3,9 @@
     <%= render :partial => 'offers/offer', :locals => { :offer => offer } %>
   <% end %>
 <% else %>
-  <div class='center-aligned no-results-found'>
-    <%= t('offers.nothing_found', :query => params[:search]) %>
-  </div>
+  <% if params[:search] %>
+    <div class='center-aligned no-results-found'>
+      <%= t('offers.nothing_found', :query => params[:search]) %>
+    </div>
+  <% end %>
 <% end %>

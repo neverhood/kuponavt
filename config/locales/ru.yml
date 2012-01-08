@@ -42,6 +42,8 @@ ru:
     add_to_favourites: Добавить к избранным
     clear: очистить
     nothing_found: "Извините, по запросу '%{query}' ничего не найдено"
+    choose_categories: Пожалуйста, выберите категории, в которых есть купоны =>
+    no_results_for_time_period: В выбраных категориях нет купонов
 
     lenses:
       all: все
