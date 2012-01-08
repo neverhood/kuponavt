@@ -6,7 +6,6 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require transponder
 //= require countdown
 //= require cookie
 //= require animate-colors

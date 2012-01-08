@@ -1,5 +1,5 @@
-Date.prototype.toUTC = function() {
-    return new Date(this.getUTCFullYear(), this.getUTCMonth(), this.getUTCDate(), this.getUTCHours(), this.getUTCMinutes(), this.getUTCSeconds());
+function toUTC(date) {
+    return new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
 }
 
 (function($) {
@@ -58,7 +58,7 @@ Date.prototype.toUTC = function() {
 		};
 		var elem = $(this);
 		var timeUpdate = function () {
-            var utcTime = new Date().toUTC(),
+            var utcTime = toUTC(new Date()),
                 serverTime = new Date( utcTime.setHours( utcTime.getHours() + 2 ) );
 		    var s = timeDifference(serverTime, date);
 
