@@ -41,6 +41,7 @@ ru:
     address: Адрес
     add_to_favourites: Добавить к избранным
     clear: очистить
+    nothing_found: "Извините, по запросу '%{query}' ничего не найдено"
 
     lenses:
       all: все

@@ -338,9 +338,12 @@ $('document').ready(function() {
             timePeriod = parseInt( $.offers.cookies.time_period ),
             sort = $.offers.cookies.sort.split(' ');
 
+        $( $.offers.sections.offers ).append( $.api.loader() );
+
         $('#offers-selected-count').text(0);
         $('#offers-section .offer').remove();
         $( $.offers.sections.pagination ).html('');
+
 
         $('#offers-section').attr('data-time_period', timePeriod).
             attr('data-sort-by', sort.join('|'));
@@ -372,6 +375,8 @@ $('document').ready(function() {
             $('#sort-by-' + sort[0]).data('sort', sort[1]).
                 addClass('current-sort').
                 append( '<span class="' + sort[1] + '"></span>' );
+
+            $.offers.latestSort = 'sort-by-' + sort[0];
         }
 
         $('#lenses li').removeClass('pressed');
@@ -760,6 +765,7 @@ $('document').ready(function() {
             html( response.offers );
         $('#offers-selected-count').text( response.total );
         $('#pagination-bottom').html( response.pagination );
+        $.offers.utils.startCountDown();
     });
 
 });
