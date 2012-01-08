@@ -44,8 +44,8 @@ function toUTC(date) {
 		    	if (!diff[i][0] && options.lang[i] == options.lang.days ) continue;
 
                 if ( options.lang[i] == options.lang.days ) {
-                    var monthDiff = ( end.getUTCMonth() - begin.getMonth() >= 0 ) ? ( end.getUTCMonth() - begin.getMonth() ) : 12,
-                        yearDiff = ( end.getUTCYear() - begin.getYear() >= 0 ) ? ( end.getUTCYear() - begin.getYear() ) : 0;
+                    var monthDiff = ( end.getMonth() - begin.getMonth() >= 0 ) ? ( end.getMonth() - begin.getMonth() ) : 12,
+                        yearDiff = ( end.getYear() - begin.getYear() >= 0 ) ? ( end.getYear() - begin.getYear() ) : 0;
 
                     diff[i][0] = (monthDiff * 30) + (yearDiff * 365) + diff[i][0];
                 }
