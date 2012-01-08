@@ -75,7 +75,11 @@ class OffersController < ApplicationController
   private
 
   def prepare_categories_array
-    @categories = params[:categories] && params[:categories].split(',')
+    if params[:categories] == 'all'
+      @categories = Category.all.map(&:id)
+    else
+      @categories = params[:categories] && params[:categories].split(',')
+    end
   end
 
   def prepare_sort_attributes

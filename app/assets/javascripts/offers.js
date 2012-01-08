@@ -9,8 +9,18 @@ $.offers = {
         pagination: '#pagination-bottom',
         selectedCount: '#offers-selected-count'
     },
-    utils: {}
+    utils: {},
+    cookies_key: 'kuponavt_params',
+    cookies: {
+        sort: 'category_id desc',
+        categories: 'all',
+        time_period: 0,
+        search: '',
+        page: 1
+    },
+    cookies_changed: false
 };
+
 
 $.offers.utils.startCountDown = function() {
     $.each( $('.time-left, .time-left-red'), function() {
@@ -18,7 +28,11 @@ $.offers.utils.startCountDown = function() {
 
         if ( $this.data('countdown') === undefined ) $this.countdown( new Date($this.text().trim()), { prefix: '', finish: 'Завершено' } )
     });
-}
+};
+
+$.offers.utils.rememberCategories = function() {
+    $.offers.cookies.categories = $.offers.utils.checkedCategories().join(',');
+};
 
 $.offers.utils.showFavourites = function() {
 
@@ -38,7 +52,7 @@ $.offers.utils.city = function() {
 $.offers.utils.showLenses = function() {
     var lenses = $('#lenses');
 
-    if ( lenses.not(':visible') ) {
+    if ( lenses.not(':visible') && $.offers.utils.selectedOffersCount() > 0 ) {
         lenses.show();
     }
 };
@@ -293,6 +307,14 @@ $.offers.utils.paginate = function(offersCount) {
 
 $('document').ready(function() {
 
+    // cookies
+
+    if ( $.cookie( $.offers.cookies_key ) ) {
+        // Load Data
+    }
+
+    // cookies END
+
     $('.pagination a').live('ajax:complete', function( event, xhr, status ) {
         var attributes = $.parseJSON( xhr.responseText );
 
@@ -309,6 +331,8 @@ $('document').ready(function() {
 
             var params = this.href.replace(/^.*\?/, '').split('&'),
                 page = params[0].split('=')[1];
+
+            $.offers.cookies.page = parseInt(page);
 
             $.offers.utils.retrieveOffers(page);
             $("html:not(:animated)"+( ! $.browser.opera ? ",body:not(:animated)" : "")).animate({scrollTop: 25}, 500);
@@ -336,6 +360,7 @@ $('document').ready(function() {
                     $this.text( $this.data('clear') );
                 });
 
+                $.offers.cookies.categories = 'all';
                 $.offers.utils.retrieveOffers(1);
             }
         }
@@ -358,6 +383,7 @@ $('document').ready(function() {
         $( $.offers.sections.offers ).html('');
         $( $.offers.sections.pagination ).html('');
         $('#lenses').hide();
+        $.offers.cookies.categories = '';
     });
 
     $('span.all-tags').bind({
@@ -366,9 +392,9 @@ $('document').ready(function() {
         },
         click: function() {
             var $this = $(this),
-            ul = $this.parent().next(),
-            checkboxes = ul.find('input[type="checkbox"]'),
-            check = true;
+                ul = $this.parent().next(),
+                checkboxes = ul.find('input[type="checkbox"]'),
+                check = true;
 
             if ( checkboxes.filter(':checked').length == checkboxes.length ) check = false;
 
@@ -381,6 +407,7 @@ $('document').ready(function() {
             }
 
             checkboxes.prop('checked', check);
+            $.offers.utils.rememberCategories();
 
             if ( $.offers.utils.page() == 1 ) {
                 var categoryIds = $.map( checkboxes, function(category) { return parseInt(category.id) } );
@@ -423,6 +450,9 @@ $('document').ready(function() {
             ul = $this.parents('ul'),
             tag = ul.prev().find('.all-tags'),
             checkboxes = ul.find('input[type="checkbox"]');
+
+
+        $.offers.utils.rememberCategories();
 
         if ( checked ) {
             $.offers.utils.showLenses();
@@ -469,13 +499,10 @@ $('document').ready(function() {
             $this.text( $this.data('original-text') );
         });
 
+        $.offers.utils.rememberCategories();
         $.offers.utils.retrieveOffers( 1 );
     });
 
-    // Search
-
-    $('#search-button').click(function() {
-    });
 
     // Sort
 
@@ -507,6 +534,7 @@ $('document').ready(function() {
                 direction = $this.data('sort');
 
             $('#offers-section').attr('data-sort-by', sortBy + '|' + direction );
+            $.offers.cookies.sort = sortBy + ' ' + direction;
 
             $.offers.latestSort = this.id;
             $this.append('<span class="' + $this.data('sort') + '"></span>');
@@ -618,6 +646,7 @@ $('document').ready(function() {
 
         if ( currentTimePeriod != timePeriod ) {
             $( $.offers.sections.offers ).attr('data-time_period', timePeriod);
+            $.offers.cookies.time_period = timePeriod;
             $.offers.utils.retrieveOffers( $.offers.utils.page() );
         }
     });
