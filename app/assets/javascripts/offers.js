@@ -77,6 +77,7 @@ $.offers.utils.toggleOptions = function() {
 
     if ( shownOffersCount == 0 && timePeriod != 0 && selectedOffersCount > 0 ) {
         $('.time-period-tag').remove();
+        options[1].hide();
 
         $('#no-results-for-time-period').
             append('<div class="time-period-tag">' + lense.text() + '</div>' ).
