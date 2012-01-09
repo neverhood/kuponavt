@@ -33,8 +33,8 @@ class OffersController < ApplicationController
     respond_to do |format|
       format.html
       format.js do
-        render :json => { :offers => render_to_string(:partial => 'offers/offers'),
-          :pagination => render_to_string(:partial => 'offers/pagination'), :count => @offers_selected_count
+        render :json => { :offers => render_to_string(:partial => 'offer', :collection => @offers),
+          :pagination => render_to_string(:partial => 'pagination'), :count => @offers_selected_count
         }, :layout => false
       end
     end
@@ -44,7 +44,7 @@ class OffersController < ApplicationController
     respond_to do |format|
       format.html
       format.js do
-        render :json => { :offers => render_to_string(:partial => 'offers/offers'), :count => @offers.count }
+        render :json => { :offers => render_to_string(:partial => 'offer', :collection => @offers), :count => @offers.count }
       end
     end
   end
@@ -67,7 +67,7 @@ class OffersController < ApplicationController
 
   def search
     @offers = @city.offers.search("*#{@search}*", per_page: 25, page: @page, load: true)
-    render :json => { :offers => render_to_string( partial: 'offers'), :total => @offers.total,
+    render :json => { :offers => render_to_string( partial: 'offer', collection: @offers ), :total => @offers.total,
       :pagination => render_to_string( partial: 'remote_pagination' ) }
   end
 
