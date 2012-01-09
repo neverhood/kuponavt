@@ -57,7 +57,6 @@ function toUTC(date) {
 		    return result.reverse().join('');
 		};
 		var elem = $(this);
-        console.log( toUTC(date).toString() );
 		var timeUpdate = function () {
             var utcTime = toUTC(new Date()),
                 serverTime = new Date( utcTime.setHours( utcTime.getHours() + 2 ) );

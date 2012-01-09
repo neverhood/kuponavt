@@ -41,7 +41,7 @@ ru:
     address: Адрес
     add_to_favourites: Добавить к избранным
     clear: очистить
-    nothing_found: "Извините, по запросу '%{query}' ничего не найдено"
+    nothing_found: "Извините, по Вашему запросу ничего не найдено"
     choose_categories: Пожалуйста, выберите категории, в которых есть купоны =>
     no_results_for_time_period: В выбраных категориях нет купонов
     this_only: только эти

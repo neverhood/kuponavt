@@ -67,6 +67,8 @@ $.offers.utils.toggleOptions = function() {
         ( selectedOffersCount > 0 ) ? this.show() : this.hide();
     });
 
+    $('.no-results-found').hide();
+
     if ( options[1].is(':visible') ) {
         $('#no-results-to-display').hide();
     } else {
@@ -362,11 +364,171 @@ $.offers.utils.paginate = function(offersCount) {
 
 };
 
+// Bindings
+
+var checkboxCategoryClickHandler = function() {
+    var $this = $(this),
+        checked = $this.prop('checked'),
+        ul = $this.parents('ul'),
+        tag = ul.prev().find('.all-tags'),
+        checkboxes = ul.find('input[type="checkbox"]'),
+        amount = parseInt( $this.parents('li').find('.amount').text() );
+
+    if ( amount == 0 ) return false;
+
+    $.offers.utils.rememberCategories();
+
+    if ( checked ) {
+        if ( checkboxes.length == checkboxes.filter(':checked').length ) {
+            tag.data('original-text', tag.text()).
+                text( tag.data('clear') );
+        }
+    } else {
+        if ( tag.data('original-text') ) tag.text( tag.data('original-text') );
+    }
+
+    $.offers.utils.retrieveOffers(1);
+
+}
+
+var amountClickHandler = function() {
+    $('#all-categories input[type="checkbox"]').prop('checked', false);
+
+    var $this = $(this),
+    categoryId = $this.prev().
+        find('input[type="checkbox"]').
+        prop('checked', true).
+        attr('id');
+
+    $.each( $('span.all-tags'), function() {
+        var $this = $(this);
+
+        $this.text( $this.data('original-text') );
+    });
+
+    $.offers.utils.showLenses();
+    $.offers.utils.rememberCategories();
+    $.offers.utils.retrieveOffers( 1 );
+}
+
+var allTagsClickHandler = function() {
+    var $this = $(this),
+    ul = $this.parent().next(),
+    checkboxes = ul.find('input[type="checkbox"]'),
+    check = true,
+    amount = 0;
+
+    $.map( checkboxes, function(e) {
+        amount += parseInt( $(e).parents('li').find('.amount').text() );
+    });
+
+    if ( checkboxes.filter(':checked').length == checkboxes.length ) check = false;
+
+    if ( check ) {
+        $this.data('original-text', $this.text()).
+            text( $this.data('clear') );
+        $.offers.utils.showLenses();
+    } else {
+        $this.text( $this.data('original-text') );
+    }
+
+    checkboxes.prop('checked', check);
+    $.offers.utils.rememberCategories();
+
+    if ( amount == 0 ) return false;
+
+    $.offers.utils.retrieveOffers(1);
+}
+
+var allOffersClickHandler = function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    var checkboxes = $('div#filter').find('input[type="checkbox"]');
+    if ( checkboxes.length != checkboxes.filter(':checked').length ) {
+        checkboxes.prop('checked', true);
+
+        $.each( $('span.all-tags'), function() {
+            var $this = $(this);
+
+            if ( ! $this.data('original-text') ) $this.data('original-text', $this.text());
+            $this.text( $this.data('clear') );
+        });
+
+        $.offers.utils.setCookie('categories', 'all');
+
+        $.offers.utils.retrieveOffers(1);
+    }
+}
+
+var allOffersClearClickHandler = function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    $('#offers-selected-count').text('0');
+
+    $('div#filter').find('input[type="checkbox"]').prop('checked', false);
+
+    $.each( $('span.all-tags'), function() {
+        var $this = $(this);
+
+        $this.text( $this.data('original-text') );
+    });
+
+    $( $.offers.sections.offers ).html('');
+    $( $.offers.sections.pagination ).html('');
+    $.offers.utils.toggleOptions();
+
+    $.offers.utils.setCookie('categories', []);
+}
+
 $('document').ready(function() {
+
+    // Refresh
+
+    if ( document.body.id == 'offers-controller' ) {
+        var refreshFilter = function() {
+            $.getJSON('offers/refresh?city=' + $.offers.utils.city(), function(data) {
+                if ( data.filter.length ) {
+                    var newFilter = $(data.filter),
+                        checkedCategories = $.offers.utils.checkedCategories(),
+                        newFilterCheckboxes = newFilter.find('input[type="checkbox"]').
+                            prop('checked', false).
+                            bind('change', checkboxCategoryClickHandler),
+                        newFilterTags = newFilter.find('span.all-tags').bind('click', allTagsClickHandler);
+
+                    $.each( newFilterCheckboxes, function() {
+                        if ( checkedCategories.include( this.id ) ) this.checked = 'checked';
+                    });
+
+                    $.each( newFilterTags, function() {
+                        var $this = $(this),
+                            ul = $(this).parent().next(),
+                            checkboxes = ul.find('input[type="checkbox"]');
+
+                        if ( checkboxes.filter(':checked').length != checkboxes.length )
+                            $this.text( $this.data('original-text') );
+                    });
+
+                    newFilter.find('.amount').bind('click', amountClickHandler);
+                    newFilter.find('#all-offers-check').bind('click', function(event) {
+                        allOffersClickHandler(event);
+                    });
+                    newFilter.find('#all-offers-clear').bind('click', function(event) {
+                        allOffersClearClickHandler(event);
+                    });
+
+                    $('#filter').replaceWith( newFilter );
+                }
+            });
+        }
+
+        setInterval( refreshFilter, 30000 );
+    }
 
     // cookies
 
-    if ( $.cookie( $.offers.cookies_key ) && $('body').attr('id') == 'offers-controller' ) {
+    if ( $.cookie( $.offers.cookies_key ) && document.body.id == 'offers-controller' ) {
         $.offers.utils.copyCookies();
 
         var page = $.offers.cookies.page == 0 ? false : $.offers.cookies.page,
@@ -459,87 +621,6 @@ $('document').ready(function() {
         }
     });
 
-    $('#all-offers-check').bind({
-        hover: function() {
-            $( '#all-categories' ).toggleClass('hover');
-        },
-        click: function(event) {
-            event.preventDefault();
-            event.stopPropagation();
-
-            var checkboxes = $('div#filter').find('input[type="checkbox"]');
-            if ( checkboxes.length != checkboxes.filter(':checked').length ) {
-                checkboxes.prop('checked', true);
-
-                $.each( $('span.all-tags'), function() {
-                    var $this = $(this);
-
-                    if ( ! $this.data('original-text') ) $this.data('original-text', $this.text());
-                    $this.text( $this.data('clear') );
-                });
-
-                $.offers.utils.setCookie('categories', 'all');
-
-                $.offers.utils.retrieveOffers(1);
-            }
-        }
-    });
-
-    $('#all-offers-clear').click(function(event) {
-        event.preventDefault();
-        event.stopPropagation();
-
-        $('#offers-selected-count').text('0');
-
-        $('div#filter').find('input[type="checkbox"]').prop('checked', false);
-
-        $.each( $('span.all-tags'), function() {
-            var $this = $(this);
-
-            $this.text( $this.data('original-text') );
-        });
-
-        $( $.offers.sections.offers ).html('');
-        $( $.offers.sections.pagination ).html('');
-        $.offers.utils.toggleOptions();
-
-        $.offers.utils.setCookie('categories', []);
-    });
-
-    $('span.all-tags').bind({
-        hover: function() {
-            $(this).parent().next().toggleClass('hover');
-        },
-        click: function() {
-            var $this = $(this),
-                ul = $this.parent().next(),
-                checkboxes = ul.find('input[type="checkbox"]'),
-                check = true,
-                amount = 0;
-
-            $.map( checkboxes, function(e) {
-                amount += parseInt( $(e).parents('li').find('.amount').text() );
-            });
-
-            if ( checkboxes.filter(':checked').length == checkboxes.length ) check = false;
-
-            if ( check ) {
-                $this.data('original-text', $this.text()).
-                    text( $this.data('clear') );
-                $.offers.utils.showLenses();
-            } else {
-                $this.text( $this.data('original-text') );
-            }
-
-            checkboxes.prop('checked', check);
-            $.offers.utils.rememberCategories();
-
-            if ( amount == 0 ) return false;
-
-            $.offers.utils.retrieveOffers(1);
-        }
-    });
-
     // Offer-bottom-more
 
     $(".offer-bottom").live('click', function() {
@@ -548,51 +629,28 @@ $('document').ready(function() {
 
     // Categories
 
-    $('#all-categories input[type="checkbox"]').change(function() {
-        var $this = $(this),
-            checked = $this.prop('checked'),
-            ul = $this.parents('ul'),
-            tag = ul.prev().find('.all-tags'),
-            checkboxes = ul.find('input[type="checkbox"]'),
-            amount = parseInt( $this.parents('li').find('.amount').text() );
+    $('#all-categories input[type="checkbox"]').
+        bind('change', checkboxCategoryClickHandler);
 
+    $('.amount').bind('click', amountClickHandler);
 
-        if ( amount == 0 ) return false;
-
-        $.offers.utils.rememberCategories();
-
-        if ( checked ) {
-            if ( checkboxes.length == checkboxes.filter(':checked').length ) {
-                tag.data('original-text', tag.text()).
-                    text( tag.data('clear') );
-            }
-        } else {
-            if ( tag.data('original-text') ) tag.text( tag.data('original-text') );
-        }
-
-        $.offers.utils.retrieveOffers(1);
+    $('#all-offers-check').bind({
+        hover: function() {
+            $( '#all-categories' ).toggleClass('hover');
+        },
+        click: function(event) { allOffersClickHandler(event) }
     });
 
-    $('.amount').click(function() {
-        $('#all-categories input[type="checkbox"]').prop('checked', false);
-
-        var $this = $(this),
-            categoryId = $this.prev().
-                find('input[type="checkbox"]').
-                prop('checked', true).
-                attr('id');
-
-        $.each( $('span.all-tags'), function() {
-            var $this = $(this);
-
-            $this.text( $this.data('original-text') );
-        });
-
-        $.offers.utils.showLenses();
-        $.offers.utils.rememberCategories();
-        $.offers.utils.retrieveOffers( 1 );
+    $('#all-offers-clear').bind('click', function(event) {
+        allOffersClearClickHandler(event);
     });
 
+    $('span.all-tags').bind({
+        hover: function() {
+            $(this).parent().next().toggleClass('hover');
+        },
+        click: allTagsClickHandler
+    });
 
     // Sort
 
@@ -774,6 +832,8 @@ $('document').ready(function() {
         $('#offers-selected-count').text( response.total );
         $('#pagination-bottom').html( response.pagination );
         $.offers.utils.startCountDown();
+
+        if ( parseInt(response.total) == 0 ) $('.no-results-found').show();
     });
 
 });

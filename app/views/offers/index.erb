@@ -32,11 +32,15 @@
       <div class='hidden center-aligned' id='no-results-to-display'>
         <%= t('offers.choose_categories') %>
       </div>
+
+      <div class='hidden center-aligned no-results-found'>
+        <%= t('offers.nothing_found', :query => params[:search]) %>
+      </div>
+
   </div>
 
+
   <div id='all-offers' data-city='<%= @city.name %>' data-page='<%= params[:page] || false %>'>
-
-
     <div id='offers-section'>
       <%= render 'offers' %>
     </div>

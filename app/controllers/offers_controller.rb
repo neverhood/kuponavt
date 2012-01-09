@@ -6,7 +6,7 @@ class OffersController < ApplicationController
 
   #caches_action :show, :cache_path => Proc.new { |controller| "offers/show/#{controller.params[:id]}.#{request.format.symbol.to_s}" }
 
-  before_filter :validate_city, :only => [ :index, :search ]
+  before_filter :validate_city, :only => [ :index, :search, :refresh ]
 
   caches_action :index, :cache_path => Proc.new { |controller| "#{controller.params}.#{@city.name}_index_fragment" }
 
@@ -60,6 +60,14 @@ class OffersController < ApplicationController
     @offer = Offer.find(params[:id])
     if @offer
       redirect_to @offer.url
+    else
+      render :nothing => true
+    end
+  end
+
+  def refresh
+    if request.xhr? && @city
+      render :json => { filter: render_to_string(partial: 'filter') }
     else
       render :nothing => true
     end
