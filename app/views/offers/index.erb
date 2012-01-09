@@ -50,12 +50,16 @@
 
 </div>
 
+<% cache action: 'index', action_suffix: 'filter' do %>
+  <%= render 'filter' %>
+<% end %>
 
-<%= render 'filter' %>
 <div class='hidden'>
-  <%= render 'pagination_template' %>
+  <% cache do %>
+    <%= render 'pagination_template' %>
+  <% end %>
 </div>
 
 <div class='hidden'>
-  <%= render 'offer_template' %>
+  <%# render 'offer_template' %>
 </div>

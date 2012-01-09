@@ -4,10 +4,12 @@ class OffersController < ApplicationController
 
   layout Proc.new { |controller| controller.request.xhr?? false : 'application' }
 
-  caches_action :index, :cache_path => Proc.new { |controller| "#{controller.params}.#{request.format.symbol.to_s}" }
-  caches_action :show, :cache_path => Proc.new { |controller| "offers/show/#{controller.params[:id]}.#{request.format.symbol.to_s}" }
+  #caches_action :show, :cache_path => Proc.new { |controller| "offers/show/#{controller.params[:id]}.#{request.format.symbol.to_s}" }
 
   before_filter :validate_city, :only => [ :index, :search ]
+
+  caches_action :index, :cache_path => Proc.new { |controller| "#{controller.params}.#{@city.name}_index_fragment" }
+
   before_filter :prepare_categories_array, :only => :index
   before_filter :prepare_sort_attributes, :only => :index
   before_filter :prepare_time_period, :only => :index
@@ -21,7 +23,12 @@ class OffersController < ApplicationController
 
   def index
     @offers = if request.xhr?
-                @categories ? @city.offers.by_categories(@categories).by_time_period(@time_period).order(@sort_by).page( @page ) : []
+                @categories ? @city.offers.with_dependencies.
+                  by_categories(@categories).
+                  by_time_period(@time_period).
+                  order(@sort_by).
+                  page( @page ) :
+                  []
               else
                 @city.offers.categorized.page(@page)
               end

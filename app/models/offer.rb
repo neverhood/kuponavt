@@ -23,6 +23,7 @@ class Offer < ActiveRecord::Base
   }
   scope :categorized, where('`offers`.`category_id` IS NOT NULL').order('`offers`.`category_id` DESC')
   scope :newest_first, order('`offers`.`created_at` DESC')
+  scope :with_dependencies, includes(:provider).includes(:country)
 
   scope :by_time_period, lambda { |time_period|
     if time_period.count == 1

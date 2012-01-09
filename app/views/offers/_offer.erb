@@ -1,4 +1,4 @@
-<% cache action: 'index', action_suffix: "offer_#{offer.id}" do %>
+<% cache action_suffix: "offer_#{offer.id}" do %>
 <div class='offer' id='offer-<%= offer.id %>' data-category='<%= offer.category_id %>'>
   <h2>
     <%= link_to offer.title, out_offer_path(offer), :class => 'offer-url', :target => '_blank', :rel => 'nofollow' %>
