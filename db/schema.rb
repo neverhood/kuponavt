@@ -67,7 +67,7 @@ ActiveRecord::Schema.define(:version => 20120108221537) do
 
   add_index "kupongid", ["kupongid_id"], :name => "index_kupongid_on_kupongid_id", :unique => true
 
-  create_table "offer_archives", :force => true do |t|
+  create_table "offer_archive", :force => true do |t|
     t.integer  "provider_id"
     t.string   "provided_id"
     t.integer  "category_id"
@@ -88,6 +88,7 @@ ActiveRecord::Schema.define(:version => 20120108221537) do
     t.boolean  "retail"
     t.integer  "retail_price"
     t.integer  "price_starts_at"
+    t.datetime "archived_at"
   end
 
   create_table "offers", :force => true do |t|

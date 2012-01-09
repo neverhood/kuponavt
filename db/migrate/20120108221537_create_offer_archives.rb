@@ -1,5 +1,5 @@
 class CreateOfferArchives < ActiveRecord::Migration
-  def change
+  def self.up
     create_table :offer_archive do |t|
       t.integer  "provider_id"
       t.string   "provided_id"
@@ -25,5 +25,9 @@ class CreateOfferArchives < ActiveRecord::Migration
 
       t.timestamps
     end
+  end
+
+  def self.down
+    drop_table :offer_archive
   end
 end
