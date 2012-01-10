@@ -1,0 +1,37 @@
+// Place all the styles related to the admin/bot controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+body#admin-bot-controller {
+
+  .bot-entry {
+    border-radius: 5px;
+    border: 1px solid #007FAD;
+    padding: 10px;
+    margin-bottom: 25px;
+
+    .title {
+      color: #007FAD;
+      font-weight: bold;
+    }
+
+    .category {
+      color: #007FAD;
+      font-weight: bold;
+    }
+
+    .match {
+      color: red;
+      font-weight: bold;
+    }
+
+    .cancel {
+      cursor: pointer;
+      font-weight: bold;
+      color: red;
+      width: 50px;
+      text-align: center;
+    }
+  }
+
+}

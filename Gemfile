@@ -37,6 +37,7 @@ end
 
 group :development do
   gem 'rails3-generators'
+  gem 'unicode'
 end
 
 group :development, :test do

@@ -11,7 +11,16 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120109105738) do
+ActiveRecord::Schema.define(:version => 20120110133909) do
+
+  create_table "bot_statistics", :force => true do |t|
+    t.integer  "offer_id"
+    t.integer  "category_id"
+    t.string   "match"
+    t.string   "found_in"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "categories", :force => true do |t|
     t.string   "name"

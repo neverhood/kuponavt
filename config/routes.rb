@@ -8,6 +8,9 @@ Kuponavt::Application.routes.draw do
     root :to => 'suspicious_offers#index'
 
     resources :suspicious_offers, :only => [:index, :update]
+    resources :bot, :only => [ :index, :show, :destroy ] do
+      post :clear, :on => :collection
+    end
   end
 
 
