@@ -7,8 +7,8 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
+require File.join Rails.root, 'db/seeds/categories'
 
-require 'pry'
 providers =
   Provider.create([
                   { name: 'biglion',
@@ -56,43 +56,44 @@ cities =
   ])
 
 # CATEGORIES
+categories = $categories
 
-categories = [
-  { name: "Еда и Развлечения", nested_categories: [
-                                 { name: "Кафе, рестораны" },
-                                 { name: "Вечеринки, клубы" },
-                                 { name: "Боулинг, бильярд" },
-                                 { name: "Кино, концерты" },
-                                 { name: "Театры, экскурсии" },
-                                 { name: "Активный отдых" },
-                                 { name: "Отели, путешествия" }
-                               ]
-  },
-  { name: "Красота и Здоровье", nested_categories: [
-                                  { name: "Здоровье, медицина" },
-                                  { name: "Красота, уход" },
-                                  { name: "Спорт, танцы" }
-                                ]
-  },
-  { name: "Обучение", nested_categories: [
-                        { name: "Обучение, курсы" },
-                      ]
-  },
-  { name: "Товары и Услуги", nested_categories: [
-                               { name: "Магазины, распродажи" },
-                               { name: "Фото, видео" },
-                               { name: "Автомобили, мойки" },
-                               { name: "Дом, уют" },
-                               { name: "Дети, семья" },
-                               { name: "Животные" },
-                               { name: "Бизнес" }
-                             ]
-  },
-  { name: "Прочее", nested_categories: [
-                      { name: "Все" }
-                    ]
-  }
-]
+#categories = [
+  #{ name: "Еда и Развлечения", nested_categories: [
+                                 #{ name: "Кафе, рестораны" },
+                                 #{ name: "Вечеринки, клубы" },
+                                 #{ name: "Боулинг, бильярд" },
+                                 #{ name: "Кино, концерты" },
+                                 #{ name: "Театры, экскурсии" },
+                                 #{ name: "Активный отдых" },
+                                 #{ name: "Отели, путешествия" }
+                               #]
+  #},
+  #{ name: "Красота и Здоровье", nested_categories: [
+                                  #{ name: "Здоровье, медицина" },
+                                  #{ name: "Красота, уход" },
+                                  #{ name: "Спорт, танцы" }
+                                #]
+  #},
+  #{ name: "Обучение", nested_categories: [
+                        #{ name: "Обучение, курсы" },
+                      #]
+  #},
+  #{ name: "Товары и Услуги", nested_categories: [
+                               #{ name: "Магазины, распродажи" },
+                               #{ name: "Фото, видео" },
+                               #{ name: "Автомобили, мойки" },
+                               #{ name: "Дом, уют" },
+                               #{ name: "Дети, семья" },
+                               #{ name: "Животные" },
+                               #{ name: "Бизнес" }
+                             #]
+  #},
+  #{ name: "Прочее", nested_categories: [
+                      #{ name: "Все" }
+                    #]
+  #}
+#]
 
 categories.each do |parent_category|
   nested_categories = parent_category.delete(:nested_categories)
