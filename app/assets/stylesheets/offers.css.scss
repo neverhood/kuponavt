@@ -8,7 +8,6 @@
 }
 
 div#offers {
-
   background: url(semi-tsp.png) repeat;
   width: 700px;
   float: left;
@@ -16,14 +15,24 @@ div#offers {
   box-shadow:  0px 0px 2px $main-color;
   margin-bottom: 70px;
 
-  #main-description { margin: 15px 0 0 15px; display: none }
+  #main-description {
+    margin: 15px 0 0 15px;
+    display: none;
+    text-shadow: 0px 1px white;
+
+    h1 { text-align: center; font-size: 18px; font-weight: bold }
+
+    p { line-height: 1.5}
+
+
+  }
 
   #favourites-sort { position: relative; height: 50px }
 
   #current-offers-count {
     position: absolute;
     top: 16px;
-    left: 280px;
+    left: 270px;
     text-shadow: 0 1px 1px white;
 
     #offers-selected-count {
@@ -55,6 +64,7 @@ div#offers {
     }
 
     #show-main-map-button {
+        display: none;
         clear: right;
         float: right;
         width: 185px;
@@ -83,7 +93,7 @@ div#offers {
 
     #sort-buttons {
         float: right;
-        margin: 0px 85px 25px 0px;
+        margin: 13px 85px 25px 0px;
 
         .first-child {
             border-radius: 3px 0 0 3px;
@@ -171,11 +181,24 @@ div#offers {
   }
 
   #no-results-to-display {
+    float: left;
+    margin: 110px 0px 110px 130px;
     clear: both;
     color: #007FAD;
     font-weight: bold;
   }
   #no-results-for-time-period {
+    float: left;
+    margin: 70px 0px 110px 150px;
+    clear: both;
+    color: #007FAD;
+    font-weight: bold;
+
+    p { margin-top: 10px }
+  }
+  #no-results-found {
+    float: left;
+    margin: 110px 0px 110px 145px;
     clear: both;
     color: #007FAD;
     font-weight: bold;

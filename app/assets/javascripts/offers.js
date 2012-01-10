@@ -80,7 +80,8 @@ $.offers.utils.toggleOptions = function() {
         options[1].hide();
 
         $('#no-results-for-time-period').
-            append('<div class="time-period-tag">' + lense.text() + '</div>' ).
+            append('<span class="time-period-tag">' + lense.text() + '</span>.' ).
+            append('<p>Попробуйте выбрать другой временной промежуток</p>').
             show();
     } else {
         $('#no-results-for-time-period').hide();

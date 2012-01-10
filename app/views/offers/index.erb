@@ -1,7 +1,11 @@
 <div id='offers'>
 
   <div id="main-description">
-    <!-- <h1>Все купоны на скидку в одном месте</h1> -->
+     <h1>Все купоны на скидку в Вашем городе</h1>
+    <a>Какое добро мы можем Вам причинить?</a>
+    <p>Купонавт (по аналогии со словом "космонавт") - это агрегатор купонов на скидку (? - про купоны).
+    Это значит, что на данном сайте мы собираем актуальные скидочные купоны со всех сайтов коллективных покупок (таких как Groupon, Biglion, WeClever и ещё 112 представителей).</p>
+
   </div>
 
   <div id='sort'>
@@ -25,15 +29,15 @@
         <%= notification( t('offers.no_categories_selected') ) %>
         <% [ 'category_id', 'created_at', 'price', 'discount', 'ends_at' ].each do |sort_link| %><li class='<%= (sort_link == 'category_id' || sort_link == 'ends_at') ? (sort_link == 'category_id' ? 'first-child' : 'last-child') : '' %>' id='<%= "sort-by-#{sort_link}" %>'><%= t("offers.#{sort_link}") %></li><% end %>
       </ul>
-      <div class='hidden center-aligned' id='no-results-for-time-period'>
+      <div class='hidden' id='no-results-for-time-period'>
         <%= t('offers.no_results_for_time_period') %>
       </div>
 
-      <div class='hidden center-aligned' id='no-results-to-display'>
+      <div class='hidden' id='no-results-to-display'>
         <%= t('offers.choose_categories') %>
       </div>
 
-      <div class='hidden center-aligned no-results-found'>
+      <div class='hidden' id='no-results-found'>
         <%= t('offers.nothing_found', :query => params[:search]) %>
       </div>
 
