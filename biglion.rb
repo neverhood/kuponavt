@@ -165,7 +165,7 @@ cities.keys.each do |city|
 
         biglion_offers = retrieve_attributes.call(offers.flatten)
         biglion_offers.each do |offer_attributes|
-          offer_attributes.merge! category_id: categories[category][biglion_category], city_id: city_model.id,
+          offer_attributes.merge! city_id: city_model.id,
             country_id: country_model.id, provider_id: PROVIDER.id
           Offer.create(offer_attributes) ||
             CrawlingException.create(provider_id: PROVIDER.id, error_text: 'failed to save offer', offer_attributes: offer_attributes)
@@ -187,13 +187,6 @@ cities.keys.each do |city|
       biglion_offers = retrieve_attributes.call(offers)
       biglion_offers.each do |offer_attributes|
         begin
-          if offer_ids_to_category_ids[ offer_attributes[:provided_id] ]
-            offer_categories = offer_ids_to_category_ids[ offer_attributes[:provided_id] ]
-            offer_category = offer_categories.is_a?(Array) ? offer_categories.first : offer_categories
-            if offer_category
-              offer_attributes.merge! category_id: categories[category][offer_category]
-            end
-          end
           offer_attributes.merge! city_id: city_model.id, country_id: country_model.id, provider_id: PROVIDER.id
           Offer.create(offer_attributes) ||
             CrawlingException.create(provider_id: PROVIDER.id, error_text: 'failed to save offer', offer_attributes: offer_attributes)

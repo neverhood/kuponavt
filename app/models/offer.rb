@@ -62,9 +62,10 @@ class Offer < ActiveRecord::Base
   private
 
   def destroy_image_and_folder
+    return unless image_url
     directory = "public/#{File.dirname(image_url)}"
     remove_image!
-    FileUtils.rm_rf(directory)
+    FileUtils.rm_rf(directory) if directory
   end
 
 
