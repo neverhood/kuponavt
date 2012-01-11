@@ -11,4 +11,8 @@ class Kupongid < ActiveRecord::Base
       where(['categories.name IN (:category_names)', :category_names => categories.join(',')])
   }
 
+  def self.default_sort
+    "category_id, kupongid.ends_at DESC"
+  end
+
 end

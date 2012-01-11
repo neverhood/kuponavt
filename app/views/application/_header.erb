@@ -1,20 +1,53 @@
 <div id='header'>
 
   <div id='logo'>
-    <%= link_to image_tag('logo.png'), root_path %>
+    <%= link_to image_tag('logo.png', :id => 'kuponavt'), root_path %>
     <%= image_tag 'help.png', :class => 'help', :id => 'site-description-help' %>
   </div>
 
   <div id='site-description' class='hidden'>
-    <%= image_tag 'close.png', :class => 'close-popup' %>
-
-    <p>Купонавт - это сайт, на котором собраны и отсортированы все скидочные купоны с десятков сайтов.</p>
-    <p>Выберите свой город и получайте удовольствия со скидкой ; )</p>
+    <div style="position: relative"> <%= image_tag 'close.png', :class => 'close-popup' %> </div>
+    <p>Мы собрали для вас купоны на скидку с сотен сайтов.</p>
+    <p>Выберите свой город и получайте удовольствия с экономией ; )</p>
   </div>
 
-  <div id='city'>
-    <span> <%= t('cities.your_city') %>
-    <%= select_tag 'city-selection', options_for_select(City.all.map { |city| [t('cities.' + city.name), city.name] } ) %>
+  <% unless action_name == 'favourites' %>
+    <div id="city">
+      <span>Ваш город
+        <span id="current-city"><%= @city ? t("cities.#{@city.name}") : '' %>
+          <div id="all-cities">
+            <div id="russia">
+              <h3>Россия</h3>
+              <ul>
+                <li>
+                <a href="/moskva" style="font-weight: bold">Москва</a>
+                </li>
+                <li>
+                <a href="/spb" style="font-weight: bold">Санкт-Петербург</a>
+                </li>
+              </ul>
+            </div>
+
+
+            <div id="ukraine">
+              <h3>Украина</h3>
+              <ul>
+                <li>
+                <a href="/kiev" style="font-weight: bold">Киев</a>
+                </li>
+                <li>
+                <a href="/dnepropetrovsk">Днепропетровск</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </span>
+      </span>
+    </div>
+  <% end %>
+
+  <div class='selected-deals-link'>
+    <%= link_to t('offers.selected_coupons'), favourites_offers_path %>
   </div>
 
 </div>

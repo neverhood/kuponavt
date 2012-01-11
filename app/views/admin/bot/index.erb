@@ -1,0 +1,29 @@
+<h1> Bot Statistics </h1>
+<h1> Всего новостей от бота: <%= @entries.total_count %> </h1>
+<div style='margin: 15px; color:red;'>
+  <%= link_to 'ОЧИСТИТЬ НОВОСТИ ОТ БОТА', clear_admin_bot_index_path, :id => :clear_news, :remote => true, :method => :post,
+        :confirm => 'are you sure?' %>
+</div>
+
+<% @entries.each do |entry| %>
+
+  <div class='bot-entry' id='entry-<%= entry.id %>'>
+    <% offer = Offer.find entry.offer_id %>
+    <% if offer.category %>
+      Бот перенес оффер <span class='title'> <%= offer.title %> </span> в категорию <span class='category'> <%= offer.category.name %> </span>
+      <div>Т.к. нашел ключевое слово <span class='match'><%= entry.match %></span> в <%= entry.found_in %> оффера</div>
+
+      <div style='padding:10px;'>
+        <span class='cancel'>
+          ОТМЕНИТЬ
+        </span>
+      </div>
+
+    <% else %>
+      Бот не справился с оффером <span class='title'><%= offer.title %></span>
+    <% end %>
+  </div>
+
+<% end %>
+
+<%= paginate @entries %>

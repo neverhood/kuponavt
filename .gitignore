@@ -1,4 +1,7 @@
+config/database.yml
 .bundle
 log/*.log
 tmp/
 .sass-cache/
+public/uploads/offer/
+.idea/

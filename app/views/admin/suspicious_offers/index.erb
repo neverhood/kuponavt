@@ -1,0 +1,43 @@
+<% content_for :head do %>
+  <%= javascript_include_tag 'admin/suspicious_offers' %>
+  <%= stylesheet_link_tag 'admin/suspicious_offers' %>
+<% end %>
+
+<h1> HI <%= current_user.email %> </h1>
+
+<%= link_to 'Log Out', destroy_user_session_path, :method => :delete %>
+
+<div id='suspicious-offers-navigation'>
+  <%= link_to 'Not categorized', admin_suspicious_offers_path %>
+  <%= link_to 'No `Provided Id`', admin_suspicious_offers_path(:section => 'provided_id') %>
+  <%= link_to 'No `Ends At`', admin_suspicious_offers_path(:section => 'ends_at') %>
+</div>
+
+
+
+  <div id='offers'>
+    <div id='all-offers'>
+
+      <div id='current-offers-count'>
+        <%= t('offers.checked') -%> <span id='offers-selected-count'><%= @offers.count %></span>
+      </div>
+
+      <div id='offers-section'>
+        <%= render :partial => 'offers/offers' %>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<div class='hidden'>
+  <% if params[:section].nil? %>
+    <%= render :partial => 'admin/suspicious_offers/filter' %>
+  <% else %>
+    <%= text_field_tag params[:section], nil %>
+  <% end %>
+</div>
+
+<%= hidden_field_tag :offer_id, nil %>
+

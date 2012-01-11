@@ -6,10 +6,9 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require cufon
-//= require transponder
 //= require countdown
 //= require cookie
+//= require animate-colors
 //= require api
 //= require_tree .
 
@@ -17,11 +16,14 @@ if ( typeof $.api != 'undefined' ) {
     if ( typeof $.offers != 'undefined' ) $.api.offers = $.offers;
 }
 
+
 // Utils
 
 $.api.utils.appendNotification = function(notification) {
     $( $.api.sections.notifications[ notification.type ] ).text( notification.text );
 }
+
+$.api.loader = function() { return $('#loader .loader').clone() } ;
 
 Array.prototype.include = function(element) {
     for ( var i = 0; i <= this.length; i++ ) {
@@ -29,6 +31,17 @@ Array.prototype.include = function(element) {
     }
 
     return false;
+}
+
+Array.prototype.equals = function(array) {
+    if ( this.length != array.length )
+        return false;
+
+    for (var i = 0; i < this.length; i++) {
+        if ( this[i] != array[i] ) return false;
+    };
+
+    return true;
 }
 
 Array.prototype.unique = function() {
@@ -48,16 +61,29 @@ Array.prototype.unique = function() {
 
 $('document').ready(function() {
 
-    Cufon.replace('.time-left');
+    $('#kuponavt').click(function() {
+        $.cookie( $.offers.cookies_key, null );
+    });
 
-    $('img.help').click( function() {
+
+    $.each( $('.time-left, .time-left-red'), function() {
+        var $this = $(this);
+
+        if ( $this.data('countdown') === undefined ) $this.countdown( new Date($this.text().trim()), { prefix: '', finish: 'Завершено' } )
+    });
+
+    $('#site-description-help').click( function() {
         $('div#site-description').show();
         $(this).addClass('high-opacity');
     });
 
-    $('img.close-popup').click( function() {
+    $('#site-description img.close-popup').click( function() {
         $('div#site-description').hide();
         $('img.help').removeClass('high-opacity');
+    });
+
+    $('img.close-popup').click(function() {
+        $(this).parent().hide();
     });
 
 });

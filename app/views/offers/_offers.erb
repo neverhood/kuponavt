@@ -1,4 +1,11 @@
-<div class='hidden loader'></div>
-<% @offers.each do |offer| %>
-  <%= render :partial => 'offers/offer', :locals => { :offer => offer } %>
+<% if @offers.any? %>
+  <% @offers.each do |offer| %>
+    <%= render :partial => 'offers/offer', :locals => { :offer => offer } %>
+  <% end %>
+<% else %>
+  <% if params[:search] %>
+    <div class='center-aligned no-results-found'>
+      <%= t('offers.nothing_found', :query => params[:search]) %>
+    </div>
+  <% end %>
 <% end %>
