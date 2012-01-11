@@ -5,6 +5,9 @@ ru:
   common:
     of: из
     hrn: грн
+    reset: Сброс
+    rub: руб
+    starts_at: от
 
   views:
     pagination:
@@ -17,20 +20,41 @@ ru:
   offers:
     price: Цена
     discount: Скидка
-    time_left: Времени Осталось
+    ends_at: Времени осталось
+    created_at: Новизна
     checked: Выбрано
     cost: Стоимость
     savings: Экономия
     coupon_price: Цена купона
     buy: Приобрести
     clear_filter: Очистить
-    all_offers: Все купоны
+    all_offers: Все категории
     all_tags: все
     details: Подробнее
+    selected_coupons: Избранные купоны
+    offers_search: Поиск по купонам
+    search_watermark: Введите слово
+    no_categories_selected: Не выбрано ни одной категории
+    unlimited: "&#8734;"
+    time_left: Времени осталось
+    category_id: Категория
+    address: Адрес
+    add_to_favourites: Добавить к избранным
+    clear: очистить
+    nothing_found: "Извините, по Вашему запросу ничего не найдено"
+    choose_categories: Пожалуйста, выберите интересующие Вас купоны =>
+    no_results_for_time_period: В выбраных категориях нет купонов
+    this_only: только эти
+
+    lenses:
+      all: все
+      today: за сегодня
+      yesterday: за вчера
 
   cities:
-    your_city: Ваш Город
+    your_city: Ваш город
 
     kiev: Киев
+    moskva: Москва
     dnepropetrovsk: Днепропетровск
     lvov: Львов

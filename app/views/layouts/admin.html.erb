@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Купонавт. Бороздим просторы купонов на скидку</title>
+  <meta name="description" content="Ежедневно мы собираем для Вас купоны на скидку со всех скидочных сайтов. Благодаря чему Вы экономите крупные суммы денег"/>
+  <meta name="keywords" content="скидки, купоны, купоны на скидку, скидки на карте, купоны со скидкой, скидочные купоны"/>
+  <%= stylesheet_link_tag    "application" %>
+  <%= stylesheet_link_tag    'admin/bot' %>
+  <%= javascript_include_tag "application" %>
+  <%= csrf_meta_tags %>
+  <%= yield :head %>
+</head>
+<body id='<%= params[:controller].parameterize %>-controller'>
+
+  <%= render 'header' %>
+
+  <div id='wrapper'>
+    <%= yield %>
+
+    <div class='hidden' id='loader'>
+      <span class='loader'> <%= image_tag 'loader.gif' %> </span>
+    </div>
+  </div>
+
+</body>
+</html>

@@ -1,38 +1,57 @@
 <div id="filter">
 
-    <p>
+  <p style="margin-top: 15px">
 
-    <%= link_to nil, :class => 'all-categories-links', :id => 'all-offers-check' do %>
-      <span> <%= t('offers.all_offers') %> </span>
-    <% end %>
-    <%= link_to nil, :class => 'all-categories-links', :id => 'all-offers-clear' do %>
-      <span> <%= t('offers.clear_filter') %> </span>
-    <% end %>
+  <%= link_to nil, :class => 'all-categories-links', :id => 'all-offers-check' do %>
+    <span> <%= t('offers.all_offers') %> </span>
+  <% end %>
+  <%= link_to nil, :class => 'all-categories-links', :id => 'all-offers-clear' do %>
+    <span> <%= t('offers.clear_filter') %> </span>
+  <% end %>
 
-		</p>
+  </p>
 
-	<div id="all-categories">	
+  <div id="all-categories">
 
     <% Category.parent_categories.each do |parent_category| %>
 
-      <p class='type'> <%= parent_category.name %> | <span class='all-tags' id='<%= parent_category.id %>'> <%= t('offers.all_tags') %> </span> </p>
+      <% if Category.parent_categories.index(parent_category) == 0 %>
+        <p class='type first-category'> <%= parent_category.name %> |
+        <span class='all-tags' data-clear='<%= t('offers.clear') %>' data-original-text='<%= t('offers.all_tags') %>' id='<%= parent_category.id %>'>
+            <%= t('offers.clear') %>
+          </span>
+        </p>
+      <% else %>
+        <p class='type'> <%= parent_category.name %> |
+        <span class='all-tags' data-clear='<%= t('offers.clear') %>' data-original-text='<%= t('offers.all_tags') %>' id='<%= parent_category.id %>'>
+            <%= t('offers.clear') %>
+          </span>
+        </p>
+      <% end %>
 
       <ul class='<%= parent_category.to_en %>'>
         <% parent_category.nested_categories.each do |nested_category| %>
           <li>
-            <label> <%= check_box_tag nested_category.id, nested_category.id, (@categories && @categories.include?(nested_category.id.to_s)),
-                         :name => nested_category.to_en %> <%= nested_category.name %>
-            </label>
-            <span class='amount'>[<%= nested_category.offers.count %>]</span>
+          <label> <%= check_box_tag nested_category.id, nested_category.id, true,
+            :name => nested_category.to_en %><span style='display:inline-block; position:relative; bottom: 1px'><%= nested_category.name %></span>
+          </label>
+          <span class='amount' title="<%= t('offers.this_only') %>"><%= nested_category.offers.where(city_id: @city.id).count %></span>
           </li>
         <% end %>
       </ul>
 
     <% end %>
 
+  </div>
 
-	</div>
+  <div id='search'>
+    <p> <%= t('offers.offers_search') %> </p>
 
-	
+    <%= form_tag search_offers_path(:city => @city), :method => :get, :remote => true, :id => 'search-form' do %>
+      <%= text_field_tag :search, nil, :placeholder => t('offers.search_watermark') %>
+      <span id='search-button'></span>
+    <% end %>
+  </div>
+
 
 </div>

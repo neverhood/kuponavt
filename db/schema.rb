@@ -11,7 +11,16 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111120145210) do
+ActiveRecord::Schema.define(:version => 20120110133909) do
+
+  create_table "bot_statistics", :force => true do |t|
+    t.integer  "offer_id"
+    t.integer  "category_id"
+    t.string   "match"
+    t.string   "found_in"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "categories", :force => true do |t|
     t.string   "name"
@@ -29,9 +38,20 @@ ActiveRecord::Schema.define(:version => 20111120145210) do
 
   create_table "countries", :force => true do |t|
     t.string "name"
+    t.string "currency"
   end
 
   add_index "countries", ["name"], :name => "index_countries_on_name", :unique => true
+
+  create_table "crawling_exceptions", :force => true do |t|
+    t.text     "stacktrace"
+    t.integer  "provider_id"
+    t.string   "error_text"
+    t.text     "offer_attributes"
+    t.string   "offer_url"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "kupongid", :force => true do |t|
     t.integer  "kupongid_id",  :null => false
@@ -55,5 +75,85 @@ ActiveRecord::Schema.define(:version => 20111120145210) do
   end
 
   add_index "kupongid", ["kupongid_id"], :name => "index_kupongid_on_kupongid_id", :unique => true
+
+  create_table "offer_archive", :force => true do |t|
+    t.integer  "provider_id"
+    t.string   "provided_id"
+    t.integer  "category_id"
+    t.integer  "country_id"
+    t.integer  "city_id"
+    t.string   "title"
+    t.integer  "discount"
+    t.integer  "price"
+    t.integer  "cost"
+    t.string   "image"
+    t.date     "ends_at"
+    t.text     "description"
+    t.string   "subway"
+    t.string   "address"
+    t.string   "url"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.boolean  "retail"
+    t.integer  "retail_price"
+    t.integer  "price_starts_at"
+    t.datetime "archived_at"
+  end
+
+  create_table "offers", :force => true do |t|
+    t.integer  "provider_id"
+    t.string   "provided_id"
+    t.integer  "category_id"
+    t.integer  "country_id"
+    t.integer  "city_id"
+    t.string   "title"
+    t.integer  "discount"
+    t.integer  "price"
+    t.integer  "cost"
+    t.string   "image"
+    t.date     "ends_at"
+    t.text     "description"
+    t.string   "subway"
+    t.string   "address"
+    t.string   "url"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.boolean  "retail"
+    t.integer  "retail_price"
+    t.integer  "price_starts_at"
+  end
+
+  add_index "offers", ["category_id"], :name => "index_offers_on_category_id"
+
+  create_table "providers", :force => true do |t|
+    t.string   "name"
+    t.string   "url"
+    t.string   "auth_url"
+    t.text     "auth_params"
+    t.string   "logo_url"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "ref_url"
+  end
+
+  create_table "users", :force => true do |t|
+    t.string   "email",                                 :default => "", :null => false
+    t.string   "encrypted_password",     :limit => 128, :default => "", :null => false
+    t.string   "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer  "sign_in_count",                         :default => 0
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string   "current_sign_in_ip"
+    t.string   "last_sign_in_ip"
+    t.string   "name"
+    t.boolean  "admin"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "users", ["email"], :name => "index_users_on_email", :unique => true
+  add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
 
 end

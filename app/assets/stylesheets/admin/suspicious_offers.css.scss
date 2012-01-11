@@ -1,0 +1,43 @@
+// Place all the styles related to the admin/suspicious_offers controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+#admin-suspicious_offers-controller {
+
+  #all-offers { position: relative; padding-top: 50px }
+
+  #suspicious-offers-navigation {
+    background: black;
+    color: white;
+    padding: 25px;
+    width: 620px;
+    border-radius: 5px;
+    margin: 15px;
+
+    a {
+      color: white;
+      border-right: 1px solid white;
+      padding: 5px;
+      text-decoration: none;
+      &:visited {
+        color: white;
+        text-decoration: none;
+      }
+    }
+
+  }
+}
+
+#filter {
+  width: 200px;
+
+  #all-categories {
+    margin: 0;
+    padding: 3px
+  }
+
+  p { margin-top: 13px }
+
+  ul li { margin-bottom: 1px }
+
+}

@@ -1,28 +1,31 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.1.1'
-gem 'rack' , '1.3.3' # Bye Bye warning
+gem 'rails', '3.1.3'
+#gem 'rack' , '1.3.3' # Bye Bye warning
 
 # Bundle edge Rails instead:
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'
 
 # Db
-gem 'sqlite3'
-
-# Xml & Html parser
-gem 'hpricot'
+gem 'mysql2'
 
 # Image processor
-gem 'paperclip'
+gem 'carrierwave'
+gem 'rmagick'
 
 # Pagination
 gem 'kaminari'
 
 # Parser
-gem 'mechanize'
+gem 'mechanize', '2.0.1'
 
 # REPL
-gem 'pry'
+gem 'pry-rails'
+
+# YAML DB
+
+# Search
+gem 'tire'
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -34,9 +37,11 @@ end
 
 group :development do
   gem 'rails3-generators'
+  gem 'unicode'
 end
 
-group :development, :test do 
+group :development, :test do
+  gem 'yaml_db'
   gem 'rspec-rails'
   gem 'capybara'
   gem 'spork', '~> 0.9.0.rc'

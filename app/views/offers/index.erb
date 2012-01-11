@@ -1,31 +1,73 @@
 <div id='offers'>
 
-  <div id='sort'>
-      <h2>
-        Киев <span> <%= Time.now.to_date %> </span>
-      </h2>
+  <div id="main-description">
+     <h1>Все купоны на скидку в Вашем городе</h1>
+    <a>Какое добро мы можем Вам причинить?</a>
+    <p>Купонавт (по аналогии со словом "космонавт") - это агрегатор купонов на скидку (? - про купоны).
+    Это значит, что на данном сайте мы собираем актуальные скидочные купоны со всех сайтов коллективных покупок (таких как Groupon, Biglion, WeClever и ещё 112 представителей).</p>
 
-      <div>
-        <%= t('offers.checked') %><span id='offers-selected-count'><%= @offers_selected_count %></span> <%= t('common.of') %> <%= @offers_total_count %>
-        <span><%= t('offers.price') %> | <%= t('offers.discount') %> | <%= t('offers.time_left') %></span>
-      </div>
   </div>
+
+  <div id='sort'>
+
+    <div id="lenses">
+        <ul>
+          <% %w(all today yesterday).each do |lens| %> <li id='<%= lens %>-lens' class='<%= lens == 'all' ? 'pressed' : '' %>'> <%= t("offers.lenses.#{lens}") %> </li> <% end %>
+		    </ul>
+	  </div>
+
+    <div id='current-offers-count'>
+        <%= t('offers.checked') -%> <span id='offers-selected-count'><%= @offers_selected_count %></span> <%= t('common.of') -%> <%= @offers_total_count -%>
+    </div>
+
+    <div id="show-main-map-button">
+      <img src="/assets/map-icon.png" width="35px">
+      <span>Показать на карте</span>
+    </div>
+
+      <ul id='sort-buttons'>
+        <%= notification( t('offers.no_categories_selected') ) %>
+        <% [ 'category_id', 'created_at', 'price', 'discount', 'ends_at' ].each do |sort_link| %><li class='<%= (sort_link == 'category_id' || sort_link == 'ends_at') ? (sort_link == 'category_id' ? 'first-child' : 'last-child') : '' %>' id='<%= "sort-by-#{sort_link}" %>'><%= t("offers.#{sort_link}") %></li><% end %>
+      </ul>
+      <div class='hidden' id='no-results-for-time-period'>
+        <%= t('offers.no_results_for_time_period') %>
+      </div>
+
+      <div class='hidden' id='no-results-to-display'>
+        <%= t('offers.choose_categories') %>
+      </div>
+
+      <div class='hidden' id='no-results-found'>
+        <%= t('offers.nothing_found', :query => params[:search]) %>
+      </div>
+
+  </div>
+
 
   <div id='all-offers' data-city='<%= @city.name %>' data-page='<%= params[:page] || false %>'>
-    <%= render 'offers' %>
+    <div id='offers-section'>
+      <%= render 'offers' %>
+    </div>
   </div>
 
-  <center>
+  <div class='center-aligned'>
     <div id='pagination-bottom'>
       <%= render 'pagination' %>
     </div>
-  </center>
+  </div>
 
 </div>
 
+<% cache action: 'index', action_suffix: 'filter' do %>
+  <%= render 'filter' %>
+<% end %>
 
-<%= render 'filter' %>
 <div class='hidden'>
-  <%= render 'pagination_template' %>
+  <% cache do %>
+    <%= render 'pagination_template' %>
+  <% end %>
 </div>
 
+<div class='hidden'>
+  <%# render 'offer_template' %>
+</div>

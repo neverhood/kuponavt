@@ -7,4 +7,11 @@
     per_page:      number of items to fetch per page
     remote:        data-remote
 -%>
+
+<%# url = ajax_pagination_url(url, page) %>
+<% unless page.current?
+    url = url.split('?')[0] + '?page=' + page.to_s
+   end  %>
+
+
 <span class="page<%= ' current' if page.current? %>"><%= link_to_unless page.current?, page, url, opts = {:remote => remote, :rel => page.next? ? 'next' : page.prev? ? 'prev' : nil} %></span>

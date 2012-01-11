@@ -1,16 +1,35 @@
 Kuponavt::Application.routes.draw do
 
+  devise_for :users
+
   root :to => 'welcome#index'
 
-  resources :countries, :only => :index
-  resources :cities, :only => :index
-  resources :offers, :only => :show
+  namespace :admin do
+    root :to => 'suspicious_offers#index'
 
-  scope ':city' do
-    resources :offers, :only => :index do
-      get ':page' => 'offers#index', :on => :collection, :as => 'page'
+    resources :suspicious_offers, :only => [:index, :update]
+    resources :bot, :only => [ :index, :show, :destroy ] do
+      post :clear, :on => :collection
     end
   end
+
+
+  resources :countries, :only => :index
+
+  resources :offers, :only => :show do
+    get 'favourites', :on => :collection
+    get 'search', :on => :collection
+    get 'refresh', :on => :collection
+    get 'out', :on => :member
+  end
+
+  get '/:city' => 'offers#index', :as => :offers
+  get '/:city/:page' => 'offers#index'
+#  scope ':city' do
+#    resources :offers, :only => :index do
+#      get ':page' => 'offers#index', :on => :collection, :as => 'page'
+#    end
+#  end
 
 #  match ':city/offers' => 'offers#index', :as => 'city_offers'
 #  match ':city/offers/:page' => 'offers#index', :as => 'city_offers_page'
