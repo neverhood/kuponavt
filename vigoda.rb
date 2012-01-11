@@ -66,7 +66,13 @@ cities.keys.each do |city|
       params[:cost] = parser.call('td.price-discount-profit td div').first.text.strip.gsub(',','').to_i
       params[:discount] = parser.call('td.price-discount-profit td div')[1].text.strip.to_i
       params[:image] = open(parser.call('img.pointer-hand').first[:src])
-      params[:description] = parser.call('div.conditions').inner_html.strip
+      #params[:description] = parser.call('div.conditions').inner_html.strip
+      offer_desc = parser.call('div.conditions')
+      offer_desc.css('a').each do |a|
+        a['target'] = '_blank'
+        a['rel'] = 'nofollow'
+      end
+      params[:description] = offer_desc.to_html.strip
       params[:address] = $1 if parser.call('.main-benefits-right').text =~ /Основной адрес:\s*(.*)\s*, Тел/
 #      params[:ends_at] = (Time.parse(offer_xml.xpath('endsell').text.gsub('T',' ')) + 1) if offer_xml
 
