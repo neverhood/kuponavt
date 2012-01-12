@@ -65,7 +65,11 @@ cities.keys.each do |city|
       end
       params[:cost] = parser.call('td.price-discount-profit td div').first.text.strip.gsub(',','').to_i
       params[:discount] = parser.call('td.price-discount-profit td div')[1].text.strip.to_i
-      params[:image] = open(parser.call('img.pointer-hand').first[:src])
+      begin
+        params[:image] = open(parser.call('img.pointer-hand').first[:src])
+      rescue Exception => e
+        params[:image] = nil
+      end
       #params[:description] = parser.call('div.conditions').inner_html.strip
       offer_desc = parser.call('div.conditions')
       offer_desc.css('a').each do |a|

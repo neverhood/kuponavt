@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120110133909) do
+ActiveRecord::Schema.define(:version => 20120112164735) do
 
   create_table "bot_statistics", :force => true do |t|
     t.integer  "offer_id"
@@ -121,6 +121,7 @@ ActiveRecord::Schema.define(:version => 20120110133909) do
     t.boolean  "retail"
     t.integer  "retail_price"
     t.integer  "price_starts_at"
+    t.boolean  "from_kupongid"
   end
 
   add_index "offers", ["category_id"], :name => "index_offers_on_category_id"
