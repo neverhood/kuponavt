@@ -2,6 +2,7 @@
 // All this logic will automatically be available in application.js.
 
 $('document').ready(function() {
+
     if ( document.body.id == 'admin-bot-controller' ) {
 
         $.admin = {};
@@ -16,7 +17,7 @@ $('document').ready(function() {
                     }
                 }
             });
-        }
+        };
 
         $('.bot-entry .cancel').click(function() {
             $.admin.updateOffer( $(this).parents('.bot-entry').attr('id').replace('entry-', '') );

@@ -320,7 +320,7 @@ div#offers {
       width: 235px;
       height: 220px;
       position: relative;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
 
       .info-container { margin-left: 7px }
 
@@ -440,6 +440,20 @@ div#offers {
     }
 
     .offer-description {
+      margin-top: 40px;
+      position: relative;
+
+      .offer-description-roll-up {
+          position: absolute;
+          top: -28px;
+          left: 290px;
+          border-bottom: 1px dashed #007fad;
+          color: #007fad;
+          cursor: pointer;
+          /*opacity: .5;
+
+          &:hover { opacity: 1 }*/
+      }
       
       li { margin-bottom: 10px }
     }

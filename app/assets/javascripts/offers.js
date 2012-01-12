@@ -625,10 +625,13 @@ $('document').ready(function() {
 
     // Offer-bottom-more
 
-    $(".offer-bottom").live('click', function() {
+    $(".offer-description-roll-up").live('click', function() {
         $(this).parents('.offer').find('.offer-details').toggle('1s');
     });
 
+    $(".offer-bottom").live('click', function() {
+        $(this).parents('.offer').find('.offer-details').toggle('1s');
+    });
     // Categories
 
     $('#all-categories input[type="checkbox"]').
