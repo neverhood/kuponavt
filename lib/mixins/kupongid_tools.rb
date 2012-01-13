@@ -48,13 +48,11 @@ module KupongidTools
     def should_follow?
       #not KupongidTools::AVAILABLE_PROVIDERS.include?(offer_id)
       if KupongidTools::AVAILABLE_PROVIDERS.include?(self.provider_id)
-        puts 'EXISTING PROVIDER'
         false
       elsif not KupongidTools::PROVIDERS.keys.include?(self.provider_id)
         puts "UNKNOWN PROVIDER #{self.provider_id} : #{self.url}"
         false
       else
-        puts 'NOT EXISTING PROVIDER'
         true
       end
     end
