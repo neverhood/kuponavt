@@ -28,17 +28,20 @@ cities.keys.each do |city|
       break unless page_index == 1 # 1 is current page
     end
 
-    binding.pry
+  #  binding.pry
 
-    #offer_patterns = bot.page.parser.css('noindex .deal').map { |pattern| KupongidTools::Pattern.new pattern }.
-      #select { |pattern| pattern.should_follow? }
-    #new_offers = offer_patterns.select { |pattern| not existing_offers.include?(pattern.offer_id) }
-    #existing_offers -= offer_patterns.map(&:offer_id)
+    offer_patterns = bot.page.parser.css('noindex .deal').map { |pattern| KupongidTools::Pattern.new pattern }.
+      select { |pattern| pattern.should_follow? }
+    new_offers = offer_patterns.select { |pattern| not existing_offers.include?(pattern.offer_id) }
+    existing_offers -= offer_patterns.map(&:offer_id)
 
-    #new_offers.each do |offer_pattern|
-      #offer = Offer.new( offer_pattern.attributes )
-      #binding.pry unless offer.save
-    #end
+    #binding.pry
+
+    new_offers.each do |offer_pattern|
+      offer = Offer.new( offer_pattern.attributes )
+      binding.pry
+      binding.pry unless offer.save
+    end
   end
 
 end
