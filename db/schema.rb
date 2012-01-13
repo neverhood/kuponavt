@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120112164735) do
+ActiveRecord::Schema.define(:version => 20120113143106) do
 
   create_table "bot_statistics", :force => true do |t|
     t.integer  "offer_id"
@@ -98,6 +98,7 @@ ActiveRecord::Schema.define(:version => 20120112164735) do
     t.integer  "retail_price"
     t.integer  "price_starts_at"
     t.datetime "archived_at"
+    t.boolean  "from_kupongid"
   end
 
   create_table "offers", :force => true do |t|
