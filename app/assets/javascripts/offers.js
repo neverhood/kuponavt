@@ -76,13 +76,19 @@ $.offers.utils.toggleOptions = function() {
     }
 
     if ( shownOffersCount == 0 && timePeriod != 0 && selectedOffersCount > 0 ) {
-        $('.time-period-tag').remove();
+        //$('.time-period-tag').remove();
         options[1].hide();
 
-        $('#no-results-for-time-period').
-            append('<span class="time-period-tag">' + lense.text() + '</span>.' ).
-            append('<p>Попробуйте выбрать другой временной промежуток</p>').
-            show();
+        var info = $('#no-results-for-time-period');
+
+        if ( info.not(':visible') ) info.show();
+
+        if ( info.find('.time-period-tag').length == 0 ) {
+          info.append('<span class="time-period-tag">' + lense.text() + '</span>.').
+               append('<p>Попробуйте выбрать другой временной промежуток</p>').
+               show();
+        }
+
     } else {
         $('#no-results-for-time-period').hide();
     }
@@ -497,7 +503,7 @@ $('document').ready(function() {
                         newFilterCheckboxes = newFilter.find('input[type="checkbox"]').
                             prop('checked', false).
                             bind('change', checkboxCategoryClickHandler),
-                        newFilterTags = newFilter.find('span.all-tags').bind('click', allTagsClickHandler);
+                        newFilterTags = newFilter.find('#all-categories span.all-tags').bind('click', allTagsClickHandler);
 
                     $.each( newFilterCheckboxes, function() {
                         if ( checkedCategories.include( this.id ) ) this.checked = 'checked';
@@ -512,7 +518,7 @@ $('document').ready(function() {
                             $this.text( $this.data('original-text') );
                     });
 
-                    newFilter.find('.amount').bind('click', amountClickHandler);
+                    newFilter.find('#all-categories ul li span.amount').bind('click', amountClickHandler);
                     newFilter.find('#all-offers-check').bind('click', function(event) {
                         allOffersClickHandler(event);
                     });
@@ -540,7 +546,7 @@ $('document').ready(function() {
 
 
         $('#offers-selected-count').text(0);
-        $('#offers-section .offer').remove();
+        $('#offers-section div.offer').remove();
         $( $.offers.sections.pagination ).html('');
 
 
@@ -559,7 +565,7 @@ $('document').ready(function() {
             });
         }
 
-        $.each( $('span.all-tags'), function() {
+        $.each( $('#all-categories span.all-tags'), function() {
             var $this = $(this),
                 ul = $(this).parent().next(),
                 checkboxes = ul.find('input[type="checkbox"]');
@@ -599,7 +605,7 @@ $('document').ready(function() {
 
     // cookies END
 
-    $('.pagination a').live('ajax:complete', function( event, xhr, status ) {
+    $('div#pagination-bottom .pagination a').live('ajax:complete', function( event, xhr, status ) {
         var attributes = $.parseJSON( xhr.responseText );
 
         $('#offers-section').html( attributes.offers );
@@ -608,7 +614,7 @@ $('document').ready(function() {
         $("html:not(:animated)"+( ! $.browser.opera ? ",body:not(:animated)" : "")).animate({scrollTop: 25}, 500);
     });
 
-    $('.pagination a').live({
+    $('div#pagination-bottom .pagination a').live({
         click: function(event) {
             event.preventDefault();
             event.stopPropagation();
@@ -625,16 +631,19 @@ $('document').ready(function() {
 
     // Offer-bottom-more
 
-    $(".offer-bottom").live('click', function() {
-        $(this).parents('.offer').find('.offer-details').toggle('1s');
+    $("#offers-section .offer .offer-description-roll-up").live('click', function() {
+        $(this).parents('.offer').find('.offer-details').toggle(300);
     });
 
+    $("#offers-section .offer .offer-bottom").live('click', function() {
+        $(this).parents('.offer').find('.offer-details').toggle(300);
+    });
     // Categories
 
     $('#all-categories input[type="checkbox"]').
         bind('change', checkboxCategoryClickHandler);
 
-    $('.amount').bind('click', amountClickHandler);
+    $('#all-categories ul li span.amount').bind('click', amountClickHandler);
 
     $('#all-offers-check').bind({
         hover: function() {
@@ -647,7 +656,7 @@ $('document').ready(function() {
         allOffersClearClickHandler(event);
     });
 
-    $('span.all-tags').bind({
+    $('#all-categories span.all-tags').bind({
         hover: function() {
             $(this).parent().next().toggleClass('hover');
         },
@@ -734,7 +743,7 @@ $('document').ready(function() {
 
     $.offers.utils.showFavourites();
 
-    $('div.offer div.add-button').live({
+    $('#offers-section div.offer div.add-button').live({
         click: function() {
             var $this = $(this),
             offerId = $this.parents('div.offer').attr('id').replace('offer-', ''),
@@ -817,7 +826,7 @@ $('document').ready(function() {
             return false;
         } else {
             $('#all-categories input[type="checkbox"]').prop('checked', false);
-            $.each( $('span.all-tags'), function() {
+            $.each( $('#all-categories span.all-tags'), function() {
                 var $this = $(this);
 
                 $this.text( $this.data('original-text') );

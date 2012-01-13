@@ -8,6 +8,10 @@ class Admin::BotController < ApplicationController
     @entries = BotStatistics.order('created_at DESC').page( params[:page] )
   end
 
+  def undefined
+    @entries = BotStatistics.where(category_id: nil).page( params[:page] )
+  end
+
   def show
     @offer = Offer.find( BotStatistics.find(params[:id]).offer_id )
   end
@@ -28,6 +32,5 @@ class Admin::BotController < ApplicationController
   def admin_only
     redirect_to root_path unless current_user && current_user.admin?
   end
-
 
 end

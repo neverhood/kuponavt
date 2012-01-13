@@ -5,32 +5,46 @@
 body#admin-bot-controller {
 
   .bot-entry {
-    border-radius: 5px;
-    border: 1px solid #007FAD;
-    padding: 10px;
     margin-bottom: 25px;
 
     .title {
+      width: 500px;
       color: #007FAD;
-      font-weight: bold;
     }
 
     .category {
+      width: 260px;
       color: #007FAD;
       font-weight: bold;
     }
 
     .match {
+      width: 200px;
       color: red;
       font-weight: bold;
     }
 
     .cancel {
       cursor: pointer;
-      font-weight: bold;
-      color: red;
       width: 50px;
-      text-align: center;
+      font-size: 12px;
+    }
+
+    table {
+        td {
+            font-weight: bold;
+            color: #007FAD;
+            padding: 10px;
+            border: 1px solid #007fad;
+            border-radius: 5px;
+        }
+    }
+
+    .slabak {
+        padding: 10px;
+        border-radius: 5px;
+        border: 2px solid red;
+        font-weight: bold;
     }
   }
 

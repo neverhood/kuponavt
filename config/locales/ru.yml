@@ -30,7 +30,7 @@ ru:
     clear_filter: Очистить
     all_offers: Все категории
     all_tags: все
-    details: Подробнее
+    details: Показать подробности
     selected_coupons: Избранные купоны
     offers_search: Поиск по купонам
     search_watermark: Введите слово
@@ -42,7 +42,7 @@ ru:
     add_to_favourites: Добавить к избранным
     clear: очистить
     nothing_found: "Извините, по Вашему запросу ничего не найдено"
-    choose_categories: Пожалуйста, выберите интересующие Вас купоны =>
+    choose_categories: Пожалуйста, выберите интересующие Вас купоны
     no_results_for_time_period: В выбраных категориях нет купонов
     this_only: только эти
 

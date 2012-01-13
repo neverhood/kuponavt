@@ -1,0 +1,10 @@
+<% @entries.each do |entry| %>
+    <% offer = Offer.find(entry.offer_id) %>
+    <div class='bot-entry' id='entry-<%= entry.id %>'>
+      <div class='slabak'>
+        <span class='title'><%= offer.title %></span>
+      </div>
+    </div>
+<% end %>
+
+<%= paginate @entries %>
