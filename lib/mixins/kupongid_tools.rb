@@ -117,7 +117,7 @@ module KupongidTools
 
     def subway
       sbway = source.css(".address").text.strip.gsub(/\s*-\s*показать/, '').split('|').first
-      return nil if sbway && sbway.gsub(/[ ,-\\"'`]*/, '').empty?
+      return nil if sbway.nil? || sbway.gsub(/[ ,-\\"'`]*/, '').empty?
 
       sbway.strip
     end
