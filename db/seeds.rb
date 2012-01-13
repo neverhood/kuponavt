@@ -58,6 +58,10 @@ providers =
                     url: 'http://www.myfant.ru/',
                     logo_url: 'myfant.png'
                   },
+                  { name: 'clubkupon',
+                    url: 'http://clubkupon.ru/',
+                    logo_url: 'clubkupon.png'
+                  },
                   { name: 'donkupone',
                     url: 'http://donkupone.ru/',
                     logo_url: 'donkupone.png'
