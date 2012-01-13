@@ -87,6 +87,8 @@ $.offers.utils.toggleOptions = function() {
           info.append('<span class="time-period-tag">' + lense.text() + '</span>.').
                append('<p>Попробуйте выбрать другой временной промежуток</p>').
                show();
+        } else {
+          info.find('.time-period-tag').replaceWith('<span class="time-period-tag">' + lense.text() + '</span>');
         }
 
     } else {
