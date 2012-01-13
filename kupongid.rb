@@ -38,8 +38,11 @@ cities.keys.each do |city|
     #binding.pry
 
     new_offers.each do |offer_pattern|
-      offer = Offer.new( offer_pattern.attributes )
-      binding.pry
+      begin
+        offer = Offer.new( offer_pattern.attributes.merge({city_id: city.id, country_id: city.country_id}) )
+      rescue Exception => e
+        binding.pry
+      end
       binding.pry unless offer.save
     end
   end
