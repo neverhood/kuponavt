@@ -17,10 +17,8 @@
 	</div>
 
     <div id='current-offers-count'>
-        <%= t('offers.checked') -%> <span id='offers-selected-count'><%= @offers_selected_count %></span> <%= t('common.of') -%> <%= @offers_total_count -%>
-
-            <span id='loader'> <%= image_tag 'loader.gif' %> </span>
-
+        <div id='ee-yo'><%= t('offers.checked') -%> <span id='offers-selected-count'><%= @offers_selected_count %></span> <%= t('common.of') -%> <%= @offers_total_count -%></div>
+        <div id='loader'> <%= image_tag 'loader.gif' %> </div>
     </div>
 
     <div id="show-main-map-button">
