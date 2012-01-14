@@ -31,9 +31,11 @@ div#offers {
 
   #current-offers-count {
     position: absolute;
-    top: 11px;
+    top: 16px;
     left: 270px;
     text-shadow: 0 1px 1px white;
+
+    #ee-yo { float: left }
 
     #offers-selected-count {
         padding: 1px;
@@ -41,8 +43,11 @@ div#offers {
         color: $main-color;
     }
 
-    #loader { margin-left: 5px;
-        img { vertical-align: -5px; }
+    #loader {
+        display: none;
+        float: left;
+        margin: -4px 0px 0px 7px;
+
     }
   }
 

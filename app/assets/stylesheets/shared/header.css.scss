@@ -77,45 +77,58 @@
   }
 
   #all-cities {
+    display: none;
+    z-index: 100;
     position: absolute;
     top: 35px;
-    left: -140px;
-    z-index: 100;
-    display: none;
-    min-width: 235px;
-    padding: 10px;
+    left: -380px;
+    padding-bottom: 15px;
+    width: 785px;
     background: url(semi-tsp.png) repeat, url(semi-tsp.png) repeat, url(semi-tsp.png) repeat, url(semi-tsp.png) repeat;
     cursor: default;
     box-shadow: 0px 0px 2px #007fad;
     border-radius: 5px;
 
     h3 {
-      padding: 0px 0px 0px 20px;
+      margin-bottom: 5px;
+      padding: 0px 0px 0px 26px;
       font-size: 16px;
       text-shadow: 0 1px white;
     }
 
     #russia {
-      float: left;
+      margin: 11px 0px 30px 11px;
+      height: 435px;
 
-      h3 { background: url(flag-russia.png) no-repeat 0px 4px; }
+      h3 {
+        background: url(flag-russia.png) no-repeat 7px 2px;
+      }
     }
 
     #ukraine {
-      float: left;
-      margin: 0 0 0 35px;
-
-      h3 {  background: url(flag-ukraine.png) no-repeat 0px 4px; }
+      clear: left;
+      margin: 9px 0px 0px 15px;
+      h3 {  background: url(flag-ukraine.png) no-repeat 7px 2px; }
     }
 
-    ul { width: 100px;
+    ul {
+      float: left;
+      width: 153px;
 
       li {
         clear: left;
         float: left;
         cursor: pointer;
 
+        &:hover {
+            border: 1px solid #007fad;
+            border-radius: 3px;
+            margin: -1px 0 -1px -1px;
+        }
+
         a {
+          display: block;
+          padding: 4px 6px 5px 6px;
           font-size: 12px;
           color: #404040;
           text-decoration: none;
@@ -129,3 +142,6 @@
     }
   }
 }
+
+.bold { font-weight: bold }
+.first-letter:first-letter { font-weight: bold }
