@@ -25,7 +25,7 @@ module KupongidTools
   end
 
   def self.existing_offers(city_id)
-    Offer.where(city_id: city_id, from_kupongid: true).map(&:provided_id)
+    Offer.select(:provided_id).where(city_id: city_id, from_kupongid: true).map(&:provided_id)
   end
 
   class Pattern
@@ -39,7 +39,7 @@ module KupongidTools
 
     def initialize(pattern)
       @provider_id = pattern.css('.negotiated a').first['href'].scan(/\d+/).first.to_i
-      @offer_id = pattern.css('div').first['id'].gsub('deal', '')
+      @offer_id = pattern.css('div').first['id'].gsub('deal', '').to_i
       @url = pattern.css('.h2 a').first['href']
       @source = nil
       @image_file = nil

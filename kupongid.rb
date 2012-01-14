@@ -10,6 +10,8 @@ cities = KupongidTools.cities # Cities mapping
 cities.keys.each do |city|
 
   existing_offers = KupongidTools.existing_offers(city.id)
+  processed_offers = []
+
   bot.get( cities[city] )
 
   # Pagination
@@ -35,7 +37,7 @@ cities.keys.each do |city|
     offer_patterns = bot.page.parser.css('noindex .deal').map { |pattern| KupongidTools::Pattern.new pattern }.
       select { |pattern| pattern.should_follow? }
     new_offers = offer_patterns.select { |pattern| not existing_offers.include?(pattern.offer_id) }
-    existing_offers -= offer_patterns.map(&:offer_id)
+    processed_offers += offer_patterns.map(&:offer_id)
 
     new_offers.each do |offer_pattern|
       begin
@@ -46,7 +48,8 @@ cities.keys.each do |city|
       end
     end
   end
+  old_offers = existing_offers - processed_offers
 
-  binding.pry if existing_offers.any?
+  binding.pry if old_offers.any?
 
 end
