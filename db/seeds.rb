@@ -422,15 +422,371 @@ countries =
 ukraine_id = Country.find_by_name('ukraine').id
 russia_id = Country.find_by_name('russia').id
 
-cities =
+es =
+
   City.create([
               { name: 'kiev',
                 country_id: ukraine_id
               },
               { name: 'moskva',
                 country_id: russia_id
+              },
+              { name: 'sankt-peterburg',
+                country_id: russia_id
+              },
+              { name: 'almetyevsk',
+                country_id: russia_id
+              },
+              { name: 'arkhangelsk',
+                country_id: russia_id
+              },
+              { name: 'astrakhan',
+                country_id: russia_id
+              },
+              { name: 'balakovo',
+                country_id: russia_id
+              },
+              { name: 'baltiysk',
+                country_id: russia_id
+              },
+              { name: 'barnaul',
+                country_id: russia_id
+              },
+              { name: 'belgorod',
+                country_id: russia_id
+              },
+              { name: 'bryansk',
+                country_id: russia_id
+              },
+              { name: 'veliky-novgorod',
+                country_id: russia_id
+              },
+              { name: 'vladivostok',
+                country_id: russia_id
+              },
+              { name: 'vladikavkaz',
+                country_id: russia_id
+              },
+              { name: 'vladimir',
+                country_id: russia_id
+              },
+              { name: 'volgograd',
+                country_id: russia_id
+              },
+              { name: 'volzhsky',
+                country_id: russia_id
+              },
+              { name: 'vologda',
+                country_id: russia_id
+              },
+              { name: 'voronezh',
+                country_id: russia_id
+              },
+              { name: 'dmitrovgrad',
+                country_id: russia_id
+              },
+              { name: 'yeisk',
+                country_id: russia_id
+              },
+              { name: 'yekaterinburg',
+                country_id: russia_id
+              },
+              { name: 'ivanovo',
+                country_id: russia_id
+              },
+              { name: 'izhevsk',
+                country_id: russia_id
+              },
+              { name: 'irkutsk',
+                country_id: russia_id
+              },
+              { name: 'yoshkar-ola',
+                country_id: russia_id
+              },
+              { name: 'kazan',
+                country_id: russia_id
+              },
+              { name: 'kaliningrad',
+                country_id: russia_id
+              },
+              { name: 'kaluga',
+                country_id: russia_id
+              },
+              { name: 'kamensk-uralskiy',
+                country_id: russia_id
+              },
+              { name: 'kemerovo',
+                country_id: russia_id
+              },
+              { name: 'kirov',
+                country_id: russia_id
+              },
+              { name: 'komsomolsk-na-amure',
+                country_id: russia_id
+              },
+              { name: 'kostroma',
+                country_id: russia_id
+              },
+              { name: 'krasnodar',
+                country_id: russia_id
+              },
+              { name: 'krasnoyarsk',
+                country_id: russia_id
+              },
+              { name: 'kurgan',
+                country_id: russia_id
+              },
+              { name: 'kursk',
+                country_id: russia_id
+              },
+              { name: 'lipetsk',
+                country_id: russia_id
+              },
+              { name: 'magadan',
+                country_id: russia_id
+              },
+              { name: 'magnitogorsk',
+                country_id: russia_id
+              },
+              { name: 'makhachkala',
+                country_id: russia_id
+              },
+              { name: 'mineralnye-vody',
+                country_id: russia_id
+              },
+              { name: 'murmansk',
+                country_id: russia_id
+              },
+              { name: 'murom',
+                country_id: russia_id
+              },
+              { name: 'naberezhnye-chelny',
+                country_id: russia_id
+              },
+              { name: 'nalchik',
+                country_id: russia_id
+              },
+              { name: 'nizhnevartovsk',
+                country_id: russia_id
+              },
+              { name: 'nizhnekamsk',
+                country_id: russia_id
+              },
+              { name: 'nijnii-novgorod',
+                country_id: russia_id
+              },
+              { name: 'nizhnij-tagil',
+                country_id: russia_id
+              },
+              { name: 'novokuznetsk',
+                country_id: russia_id
+              },
+              { name: 'novorossiysk',
+                country_id: russia_id
+              },
+              { name: 'novosibirsk',
+                country_id: russia_id
+              },
+              { name: 'omsk',
+                country_id: russia_id
+              },
+              { name: 'orel',
+                country_id: russia_id
+              },
+              { name: 'orenburg',
+                country_id: russia_id
+              },
+              { name: 'penza',
+                country_id: russia_id
+              },
+              { name: 'perm',
+                country_id: russia_id
+              },
+              { name: 'petrozavodsk',
+                country_id: russia_id
+              },
+              { name: 'podolsk',
+                country_id: russia_id
+              },
+              { name: 'pskov',
+                country_id: russia_id
+              },
+              { name: 'pyatigorsk',
+                country_id: russia_id
+              },
+              { name: 'rostov',
+                country_id: russia_id
+              },
+              { name: 'rostov-na-donu',
+                country_id: russia_id
+              },
+              { name: 'ryazan',
+                country_id: russia_id
+              },
+              { name: 'samara',
+                country_id: russia_id
+              },
+              { name: 'saransk',
+                country_id: russia_id
+              },
+              { name: 'saratov',
+                country_id: russia_id
+              },
+              { name: 'smolensk',
+                country_id: russia_id
+              },
+              { name: 'solikamsk',
+                country_id: russia_id
+              },
+              { name: 'sochi',
+                country_id: russia_id
+              },
+              { name: 'stavropol',
+                country_id: russia_id
+              },
+              { name: 'sterlitamak',
+                country_id: russia_id
+              },
+              { name: 'surgut',
+                country_id: russia_id
+              },
+              { name: 'siktivkar',
+                country_id: russia_id
+              },
+              { name: 'taganrog',
+                country_id: russia_id
+              },
+              { name: 'tambov',
+                country_id: russia_id
+              },
+              { name: 'tver',
+                country_id: russia_id
+              },
+              { name: 'tolyatti',
+                country_id: russia_id
+              },
+              { name: 'tomsk',
+                country_id: russia_id
+              },
+              { name: 'tula',
+                country_id: russia_id
+              },
+              { name: 'tyumen',
+                country_id: russia_id
+              },
+              { name: 'ulanude',
+                country_id: russia_id
+              },
+              { name: 'ulyanovsk',
+                country_id: russia_id
+              },
+              { name: 'ust-labinsk',
+                country_id: russia_id
+              },
+              { name: 'ufa',
+                country_id: russia_id
+              },
+              { name: 'khabarovsk',
+                country_id: russia_id
+              },
+              { name: 'hantimansiysk',
+                country_id: russia_id
+              },
+              { name: 'cheboksary',
+                country_id: russia_id
+              },
+              { name: 'cheliabinsk',
+                country_id: russia_id
+              },
+              { name: 'cherepovets',
+                country_id: russia_id
+              },
+              { name: 'chita',
+                country_id: russia_id
+              },
+              { name: 'engels',
+                country_id: russia_id
+              },
+              { name: 'yuzhno-sahalinsk',
+                country_id: russia_id
+              },
+              { name: 'yakutsk',
+                country_id: russia_id
+              },
+              { name: 'yaroslavl',
+                country_id: russia_id
+              },
+              { name: 'kiev',
+                country_id: ukraine_id
+              },
+              { name: 'vinnitsa',
+                country_id: ukraine_id
+              },
+              { name: 'dnepropetrovsk',
+                country_id: ukraine_id
+              },
+              { name: 'doneck',
+                country_id: ukraine_id
+              },
+              { name: 'zaporozhye',
+                country_id: ukraine_id
+              },
+              { name: 'ivano-frankovsk',
+                country_id: ukraine_id
+              },
+              { name: 'krivoy-rog',
+                country_id: ukraine_id
+              },
+              { name: 'lugansk',
+                country_id: ukraine_id
+              },
+              { name: 'lvov',
+                country_id: ukraine_id
+              },
+              { name: 'makeevka',
+                country_id: ukraine_id
+              },
+              { name: 'mariupol',
+                country_id: ukraine_id
+              },
+              { name: 'nikolaev',
+                country_id: ukraine_id
+              },
+              { name: 'odessa',
+                country_id: ukraine_id
+              },
+              { name: 'poltava',
+                country_id: ukraine_id
+              },
+              { name: 'sevastopol',
+                country_id: ukraine_id
+              },
+              { name: 'simferopol',
+                country_id: ukraine_id
+              },
+              { name: 'ternopol',
+                country_id: ukraine_id
+              },
+              { name: 'feodosiya',
+                country_id: ukraine_id
+              },
+              { name: 'kharkov',
+                country_id: ukraine_id
+              },
+              { name: 'kherson',
+                country_id: ukraine_id
               }
   ])
+
+#cities =
+  #City.create([
+              #{ name: 'kiev',
+                #country_id: ukraine_id
+              #},
+              #{ name: 'moskva',
+                #country_id: russia_id
+              #}
+  #])
 
 # CATEGORIES
 categories = $categories

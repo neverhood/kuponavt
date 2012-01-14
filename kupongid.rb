@@ -26,7 +26,7 @@ cities.keys.each do |city|
       puts "Going to page #{page_index}"
       begin
         bot.get page_url['href']
-      rescue Net::HTTPGatewayTimeOut
+      rescue Exception
         bot.get page_url['href']
       end
       current_page = page_index
@@ -41,13 +41,14 @@ cities.keys.each do |city|
 
     new_offers.each do |offer_pattern|
       begin
-        offer = Offer.new( offer_pattern.attributes.merge({city_id: city.id, country_id: city.country_id}) )
+        offer = Offer.new(offer_pattern.attributes.merge({city_id: city.id, country_id: city.country_id}))
         puts "Failed to save offer: #{offer_pattern.provider_url}" unless offer.save
-      rescue Net::HTTPGatewayTimeOut
+      rescue Exception
         puts 'faced TIMEOUT, skipping offer: ' + offer_pattern.url
       end
     end
   end
+
   old_offers = existing_offers - processed_offers
 
   binding.pry if old_offers.any?
