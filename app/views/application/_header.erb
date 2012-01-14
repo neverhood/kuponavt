@@ -19,8 +19,8 @@
 
             <div id="russia">
               <h3>Россия</h3>
+              <% letter, expired = nil, true %>
               <% russian_cities.in_groups_of(20, false).each do |city_group| %>
-                <% letter, expired = nil, true %>
                 <ul>
                   <% city_group.each do |city| %>
                     <% if letter != t("cities.#{city.name}").first %>
@@ -42,8 +42,8 @@
 
             <div id="ukraine">
               <h3>Украина</h3>
+              <% letter, expired = nil, true %>
               <% ukrainian_cities.in_groups_of(4, false).each do |city_group| %>
-                <% letter, expired = nil, true %>
                 <ul>
                   <% city_group.each do |city| %>
                     <% if letter != t("cities.#{city.name}").first %>
