@@ -16,6 +16,10 @@ class City < ActiveRecord::Base
     City.where(:name => 'moskva').first
   end
 
+  def capital?
+    [ 'moskva', 'sankt-peterburg', 'kiev' ].include? name
+  end
+
   def to_param
     name
   end

@@ -21,7 +21,7 @@
               <ul>
                 <% russian_cities.each do |city| %>
                   <li>
-                    <%= link_to t("cities.#{city.name}"), t('cities.' + city.name) %>
+                    <%= link_to t("cities.#{city.name}"), city.name, :class => "#{city.capital?? 'bold' : ''}" %>
                   </li>
                 <% end %>
               </ul>
@@ -33,7 +33,7 @@
               <ul>
                 <% ukrainian_cities.each do |city| %>
                   <li>
-                    <%= link_to t("cities.#{city.name}"), t('cities.' + city.name) %>
+                    <%= link_to t("cities.#{city.name}"), city.name, :class => "#{city.capital?? 'bold' : ''}" %>
                   </li>
                 <% end %>
               </ul>
