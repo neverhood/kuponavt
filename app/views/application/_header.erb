@@ -16,28 +16,34 @@
       <span>Ваш город
         <span id="current-city"><%= @city ? t("cities.#{@city.name}") : '' %>
           <div id="all-cities">
+
             <div id="russia">
               <h3>Россия</h3>
-              <ul>
-                <% russian_cities.each do |city| %>
-                  <li>
-                    <%= link_to t("cities.#{city.name}"), city.name, :class => "#{city.capital?? 'bold' : ''}" %>
-                  </li>
-                <% end %>
-              </ul>
+              <% russian_cities.in_groups_of(20, false).each do |city_group| %>
+                <% binding.pry %>
+                <ul>
+                  <% city_group.each do |city| %>
+                    <li>
+                      <%= link_to t("cities.#{city.name}"), city.name, :class => "#{city.capital?? 'bold' : ''}" %>
+                    </li>
+                  <% end %>
+                </ul>
+              <% end %>
             </div>
-
 
             <div id="ukraine">
               <h3>Украина</h3>
-              <ul>
-                <% ukrainian_cities.each do |city| %>
-                  <li>
+              <% ukrainian_cities.in_groups_of(4, false).each do |city_group| %>
+                <ul>
+                  <% city_group.each do |city| %>
+                    <li>
                     <%= link_to t("cities.#{city.name}"), city.name, :class => "#{city.capital?? 'bold' : ''}" %>
-                  </li>
-                <% end %>
-              </ul>
+                    </li>
+                  <% end %>
+                </ul>
+              <% end %>
             </div>
+
           </div>
         </span>
       </span>
