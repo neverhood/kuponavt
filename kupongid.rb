@@ -22,20 +22,20 @@ cities.keys.each do |city|
 
     if page_url
       puts "Going to page #{page_index}"
-      bot.get page_url['href']
+      begin
+        bot.get page_url['href']
+      rescue Net::HTTPGatewayTimeOut
+        bot.get page_url['href']
+      end
       current_page = page_index
     else
       break unless page_index == 1 # 1 is current page
     end
 
-  #  binding.pry
-
     offer_patterns = bot.page.parser.css('noindex .deal').map { |pattern| KupongidTools::Pattern.new pattern }.
       select { |pattern| pattern.should_follow? }
     new_offers = offer_patterns.select { |pattern| not existing_offers.include?(pattern.offer_id) }
     existing_offers -= offer_patterns.map(&:offer_id)
-
-    #binding.pry
 
     new_offers.each do |offer_pattern|
       begin
@@ -46,5 +46,7 @@ cities.keys.each do |city|
       end
     end
   end
+
+  binding.pry if existing_offers.any?
 
 end
