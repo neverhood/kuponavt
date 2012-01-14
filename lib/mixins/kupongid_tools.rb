@@ -18,6 +18,7 @@ module KupongidTools
 
   def self.cities
     Hash[[
+      [ City.find_by_name('sankt-peterburg'), 'sankt-peterburg' ],
       [ City.find_by_name('moskva'), 'moskva' ],
       [ City.find_by_name('kiev'), 'kiev' ]
     ]]
