@@ -42,7 +42,7 @@ cities.keys.each do |city|
     new_offers.each do |offer_pattern|
       begin
         offer = Offer.new( offer_pattern.attributes.merge({city_id: city.id, country_id: city.country_id}) )
-        binding.pry unless offer.save
+        puts "Failed to save offer: #{offer_pattern.provider_url}" unless offer.save
       rescue Net::HTTPGatewayTimeOut
         puts 'faced TIMEOUT, skipping offer: ' + offer_pattern.url
       end
