@@ -10,8 +10,7 @@ module KupongidTools
   def self.authenticate! bot, login_params
     bot.get('http://www.kupongid.ru/')
 
-    bot.page.form_with(id: 'login_form') { |form|
-      form.login = login_params[:login]
+    bot.page.form_with(id: 'login_form') { |form| form.login = login_params[:login]
       form.password = login_params[:password]
     }.submit
     bot
@@ -84,23 +83,23 @@ module KupongidTools
     end
 
     def title
-      source.css('h1').first.text
+      source.css('h1').first.text rescue nil
     end
 
     def discount
-      source.css('.percent').first.text.to_i
+      source.css('.percent').first.text.to_i rescue nil
     end
 
     def cost
-      source.css('.discount .bold1[style]').text.to_i
+      source.css('.discount .bold1[style]').text.to_i rescue nil
     end
 
     def price
-      source.css('.discount .bold1').last.text.to_i
+      source.css('.discount .bold1').last.text.to_i rescue nil
     end
 
     def ends_at
-      (source.css('.countdown').first['data-time-left'].to_i/3600 + 2).hours.from_now.to_date
+      (source.css('.countdown').first['data-time-left'].to_i/3600 + 2).hours.from_now.to_date rescue nil
       #(Time.now + ( 7200 + source.css('.countdown').first['data-time-left'].to_i )).to_date
     end
 
@@ -114,7 +113,7 @@ module KupongidTools
     end
 
     def description
-      source.css('div[style]')[1].css('p')[1].to_html.encode('utf-8')
+      source.css('div[style]')[1].css('p')[1].to_html.encode('utf-8') rescue nil
     end
 
     def subway
