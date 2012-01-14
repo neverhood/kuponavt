@@ -20,10 +20,20 @@
             <div id="russia">
               <h3>Россия</h3>
               <% russian_cities.in_groups_of(20, false).each do |city_group| %>
+                <% letter, expired = nil, true %>
                 <ul>
                   <% city_group.each do |city| %>
+                    <% if letter != t("cities.#{city.name}").first %>
+                      <% letter, expired = t("cities.#{city.name}").first, false %>
+                    <% else %>
+                      <% expired = true %>
+                    <% end %>
                     <li>
-                      <%= link_to t("cities.#{city.name}"), city.name, :class => "#{city.capital?? 'bold' : ''}" %>
+                      <% if city.capital? %>
+                        <%= link_to t("cities.#{city.name}"), city.name, :class => 'bold' %>
+                      <% else %>
+                        <%= link_to t("cities.#{city.name}"), city.name, :class => "#{expired ? '' : 'first-letter' }" %>
+                      <% end %>
                     </li>
                   <% end %>
                 </ul>
@@ -33,10 +43,20 @@
             <div id="ukraine">
               <h3>Украина</h3>
               <% ukrainian_cities.in_groups_of(4, false).each do |city_group| %>
+                <% letter, expired = nil, true %>
                 <ul>
                   <% city_group.each do |city| %>
+                    <% if letter != t("cities.#{city.name}").first %>
+                      <% letter, expired = t("cities.#{city.name}").first, false %>
+                    <% else %>
+                      <% expired = true %>
+                    <% end %>
                     <li>
-                    <%= link_to t("cities.#{city.name}"), city.name, :class => "#{city.capital?? 'bold' : ''}" %>
+                    <% if city.capital? %>
+                      <%= link_to t("cities.#{city.name}"), city.name, :class => 'bold' %>
+                    <% else %>
+                      <%= link_to t("cities.#{city.name}"), city.name, :class => "#{expired ? '' : 'first-letter' }" %>
+                    <% end %>
                     </li>
                   <% end %>
                 </ul>

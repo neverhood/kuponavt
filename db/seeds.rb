@@ -22,6 +22,10 @@ providers =
                     logo_url: 'vigoda.png',
                     ref_url: '/?a_aid=kuponavt'
                   },
+                  { name: 'myredcat',
+                    url: 'http://www.myredcat.ru',
+                    logo_url: 'myredcat.png'
+                  },
                   { name: 'weclever',
                     url: 'http://www.weclever.ru',
                     logo_url: 'weclever.png'
