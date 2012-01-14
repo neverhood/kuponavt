@@ -39,7 +39,7 @@ module KupongidTools
 
     def initialize(pattern)
       @provider_id = pattern.css('.negotiated a').first['href'].scan(/\d+/).first.to_i
-      @offer_id = pattern.css('div').first['id'].gsub('deal', '').to_i
+      @offer_id = pattern.css('div').first['id'].gsub('deal', '')
       @url = pattern.css('.h2 a').first['href']
       @source = nil
       @image_file = nil
