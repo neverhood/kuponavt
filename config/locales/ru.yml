@@ -53,8 +53,129 @@ ru:
 
   cities:
     your_city: Ваш город
-
+    # Ukraine
     kiev: Киев
-    moskva: Москва
+    vinnitsa: Винница
     dnepropetrovsk: Днепропетровск
+    doneck: Донецк
+    zaporozhye: Запорожье
+    ivano-frankovsk: Ивано-Франковск
+    krivoy-rog: Кривой Рог
+    lugansk: Луганск
     lvov: Львов
+    makeevka: Макеевка
+    mariupol: Мариуполь
+    nikolaev: Николаев
+    odessa: Одесса
+    poltava: Полтава
+    sevastopol: Севастополь
+    simferopol: Симферополь
+    ternopol: Тернополь
+    feodosiya: Феодосия
+    kharkov: Харьков
+    kherson: Херсон
+
+    # Russia
+    sankt-peterburg: Санкт-Петербург
+    almetyevsk: Альметьевск
+    arkhangelsk: Архангельск
+    astrakhan: Астрахань
+    balakovo: Балаково
+    baltiysk: Балтийск
+    barnaul: Барнаул
+    belgorod: Белгород
+    bryansk: Брянск
+    veliky-novgorod: Великий Новгород
+    vladivostok: Владивосток
+    vladikavkaz: Владикавказ
+    vladimir: Владимир
+    volgograd: Волгоград
+    volzhsky: Волжский
+    vologda: Вологда
+    voronezh: Воронеж
+    dmitrovgrad: Дмитровград
+    yeisk: Ейск
+    yekaterinburg: Екатеринбург
+    ivanovo: Иваново
+    izhevsk: Ижевск
+    irkutsk: Иркутск
+    yoshkar-ola: Йошкар-Ола
+    kazan: Казань
+    kaliningrad: Калининград
+    kaluga: Калуга
+    kamensk-uralskiy: Каменск-Уральский
+    kemerovo: Кемерово
+    kirov: Киров
+    komsomolsk-na-amure: Комсомольск-на-Амуре
+    kostroma: Кострома
+    krasnodar: Краснодар
+    krasnoyarsk: Красноярск
+    kurgan: Курган
+    kursk: Курск
+    lipetsk: Липецк
+    magadan: Магадан
+    magnitogorsk: Магнитогорск
+    makhachkala: Махачкала
+    mineralnye-vody: Минеральные Воды
+    murmansk: Мурманск
+    murom: Муром
+    moskva: Москва
+    naberezhnye-chelny: Набережные Челны
+    nalchik: Нальчик
+    nizhnevartovsk: Нижневартовск
+    nizhnekamsk: Нижнекамск
+    nijnii-novgorod: Нижний Новгород
+    nizhnij-tagil: Нижний Тагил
+    novokuznetsk: Новокузнецк
+    novorossiysk: Новороссийск
+    novosibirsk: Новосибирск
+    omsk: Омск
+    orel: Орёл
+    orenburg: Оренбург
+    penza: Пенза
+    perm: Пермь
+    petrozavodsk: Петрозаводск
+    podolsk: Подольск
+    pskov: Псков
+    pyatigorsk: Пятигорск
+    rostov: Ростов
+    rostov-na-donu: Ростов-на-Дону
+    ryazan: Рязань
+    samara: Самара
+    saransk: Саранск
+    saratov: Саратов
+    smolensk: Смоленск
+    solikamsk: Соликамск
+    sochi: Сочи
+    stavropol: Ставрополь
+    sterlitamak: Стерлитамак
+    surgut: Сургут
+    siktivkar: Сыктывкар
+    taganrog: Таганрог
+    tambov: Тамбов
+    tver: Тверь
+    tolyatti: Тольятти
+    tomsk: Томск
+    tula: Тула
+    tyumen: Тюмень
+    ulanude: Улан-Удэ
+    ulyanovsk: Ульяновск
+    ust-labinsk: Усть-Лабинск
+    ufa: Уфа
+    khabarovsk: Хабаровск
+    hantimansiysk: Ханты-Мансийск
+    cheboksary: Чебоксары
+    cheliabinsk: Челябинск
+    cherepovets: Череповец
+    chita: Чита
+    engels: Энгельс
+    yuzhno-sahalinsk: Южно-Сахалинск
+    yakutsk: Якутск
+    yaroslavl: Ярославль
+    # Belorussia
+    minsk: Минск
+    brest: Брест
+    vitebsk: Витебск
+    gomel: Гомель
+    grodno: Гродно
+    mogilev: Могилёв

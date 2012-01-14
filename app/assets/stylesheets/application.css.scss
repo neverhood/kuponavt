@@ -79,12 +79,6 @@ body {
   color: white;
 }
 
-.loader {
-  position: absolute;
-  top: -6px;
-  left: 160px;
-}
-
 .notification {
   @include rounded-corners(5px);
 

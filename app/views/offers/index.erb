@@ -13,11 +13,14 @@
     <div id="lenses">
         <ul>
           <% %w(all today yesterday).each do |lens| %> <li id='<%= lens %>-lens' class='<%= lens == 'all' ? 'pressed' : '' %>'> <%= t("offers.lenses.#{lens}") %> </li> <% end %>
-		    </ul>
-	  </div>
+		</ul>
+	</div>
 
     <div id='current-offers-count'>
         <%= t('offers.checked') -%> <span id='offers-selected-count'><%= @offers_selected_count %></span> <%= t('common.of') -%> <%= @offers_total_count -%>
+
+            <span id='loader'> <%= image_tag 'loader.gif' %> </span>
+
     </div>
 
     <div id="show-main-map-button">
