@@ -31,16 +31,16 @@ end
 log = Logger.new(File.expand_path('../logs/skidkaest.log', __FILE__))
 log.info("Starting 'skidkaest' parser...\n #{Time.now}")
 
-saved_offers = []
+saved = 0
 
 cities.keys.each do |city|
 
   log.info("Going to city #{city.name}: #{URL + cities[city]}")
-  saved = 0
+  saved_offers = []
 
   @bot.get URL + cities[city]
   offers = []
-  existing_offers = Offer.where(provider_id: PROVIDER.id, city_id: city.id).map(&:provided_id)
+  existing_offers = city.offers.where(provider_id: PROVIDER.id).map(&:provided_id)
 
   parser('section.catalog-item').each { |pattern| offers << { :provided_id => pattern['id'].gsub('offer-', '') } }
   offers.each do |offer|
@@ -53,8 +53,12 @@ cities.keys.each do |city|
         log.info("Ignoring existing offer #{offer[:provided_id]}")
         existing_offers.delete(offer[:provided_id])
         next
+      elsif Offer.where(provided_id: offer[:provided_id], provider_id: PROVIDER.id).any?
+        existing_model = Offer.where(provided_id: offer[:provided_id], provider_id: PROVIDER.id).first
+        existing_model.cities << city
+        log.info("Added existing offer #{existing_model.provided_id} to #{city.name}")
+        next
       else
-        log.info("Going to crawl offer: #{offer[:url]}")
         @bot.get(offer[:url])
       end
     rescue Exception
@@ -100,8 +104,8 @@ cities.keys.each do |city|
 
     model = Offer.new(offer)
     if model.valid?
-      log.info("saving offer: \n #{offer[:provided_id]}")
-      model.save
+      log.info("saving offer: #{offer[:url]}")
+      city.offers << model
       saved += 1
       saved_offers << model.provided_id
     else
@@ -113,15 +117,14 @@ cities.keys.each do |city|
 
   if existing_offers.any?
     log.info("Going to delete expired offers: #{existing_offers.join(',')}")
-    log.info("Expired total: #{existing_offers.count}")
     Offer.where(provider_id: PROVIDER.id, provided_id: existing_offers).each { |offer| offer.destroy }
   else
     log.info("Everything is up to date")
   end
 
-  log.info("FINISHED parsing city #{city.name}. #{saved} offers were saved to db. #{existing_offers.count} offers are expired and were deleted")
+  log.info("FINISHED parsing city #{city.name}. #{saved_offers.count} offers were saved to db. #{existing_offers.count} offers are expired and were deleted")
 
 end
 
-log.info("FINISHED. Total of #{saved_offers.count} offers added")
+log.info("FINISHED. Total of #{saved} offers added")
 

@@ -4,97 +4,96 @@ require 'open-uri'
 PROVIDER = Provider.where(name: 'vigoda').first
 
 cities = {
-  City.where(name: 'kiev').first => 'http://kiev.vigoda.ru',
-  City.where(name: 'moskva').first => 'http://vigoda.ru'
+  City.where(name: 'kiev').first => 'http://kiev.vigoda.ru/all',
+  City.where(name: 'moskva').first => 'http://vigoda.ru/',
+  City.where(name: 'sankt-peterburg').first => 'http://spb.vigoda.ru/all'
 }
 
-bot = Mechanize.new
-#xml_offers = Nokogiri::XML( open 'http://vigoda.ru/api/xml' ).xpath('//offer')
+@bot = Mechanize.new
+@log = Logger.new(File.expand_path('../logs/vigoda.log', __FILE__))
+saved = 0
 
-categories = {
-  '/cafe' => 2,
-  '/beauty' => 11,
-  '/health' => 10,
-  '/products' => 16,
-  '/fitness' => 12,
-  '/auto' => 18,
-  '/education' => 14,
-  '/events' => 3,
-  '/children' => 20,
-  '/rest' => nil,
-  '/services' => nil
-}
+def parser(selector)
+  @bot.page.parser.css(selector)
+end
 
+@log.debug("Starting vigoda parser: #{Time.now}")
 
 cities.keys.each do |city|
-  existing_offers_ids = city.offers.where(:provider_id => PROVIDER.id).map(&:provided_id)
+  existing_offers = city.offers.where(:provider_id => PROVIDER.id).map(&:provided_id)
+  @saved_offers = []
 
-  bot.get cities[city]
+  @log.info("Going to #{city.name}: #{cities[city]}")
+  @bot.get cities[city]
 
-  categories.keys.each do |category|
-    bot.get category
+  offers = []
+  @bot.page.links_with(:href => /offer/).map(&:href).uniq.each do |offer_url|
+    offer_url.gsub! /%.*/, ''
+    offers << { url: offer_url, provided_id: offer_url.gsub(/\D/, '') }
+  end
 
-    offers = []
-    offer_links = bot.page.links_with(:href => /offer/).map(&:href).uniq.map { |uri| uri.gsub /%.*/, '' }
+  offers.each do |offer|
 
-    offer_links.each do |link|
-      provided_id = $1.to_i if link =~ /\/(\d+)\//
-
-      if existing_offers_ids.include?(provided_id.to_s)
-        existing_offers_ids -= [provided_id.to_s]
-        next
-      end
-
-      params = Hash[[
-        [:provided_id, provided_id],
-        [:url, link.gsub(/\/$/, '') + PROVIDER.ref_url], [:city_id, city.id ], [:country_id, city.country.id],
-        [:provider_id, PROVIDER.id]
-      ]]
-      #offer_xml = xml_offers.find { |o| o.xpath('url').text.include? provided_id.to_s }
-
-      bot.get link
-      parser = lambda { |selector| bot.page.parser.css selector }
-
-      params[:title] = parser.call('table.content div .pointer-hand').first.text.strip
-      params[:price] = parser.call('div.main-buy-label div.pointer-hand div').first
-      next if params[:price].nil?
-      params[:price] = params[:price].text.gsub(',','').to_i if params[:price]
-      if params[:price] == 0 # STARTS_AT
-        params[:price] = nil
-        params[:price_starts_at] = parser.call('div.main-buy-label div.pointer-hand div')[1].text.gsub(',','').to_i
-      end
-      params[:cost] = parser.call('td.price-discount-profit td div').first.text.strip.gsub(',','').to_i
-      params[:discount] = parser.call('td.price-discount-profit td div')[1].text.strip.to_i
-      begin
-        params[:image] = open(parser.call('img.pointer-hand').first[:src])
-      rescue Exception => e
-        params[:image] = nil
-      end
-      #params[:description] = parser.call('div.conditions').inner_html.strip
-      offer_desc = parser.call('div.conditions')
-      offer_desc.css('a').each do |a|
-        a['target'] = '_blank'
-        a['rel'] = 'nofollow'
-      end
-      params[:description] = offer_desc.to_html.strip
-      params[:address] = $1 if parser.call('.main-benefits-right').text =~ /Основной адрес:\s*(.*)\s*, Тел/
-#      params[:ends_at] = (Time.parse(offer_xml.xpath('endsell').text.gsub('T',' ')) + 1) if offer_xml
-
-      offers << params
+    if existing_offers.include?(offer[:provided_id]) || @saved_offers.include?(offer[:provided_id])
+      @log.info("Skipping existing offer: #{offer[:provided_id]}")
+      existing_offers.delete(offer[:provided_id])
+      next
     end
 
-    offers.each do |offer_attributes|
-      Offer.create(offer_attributes) ||
-        CrawlingException.create(provider_id: PROVIDER.id, error_text: 'failed to save offer', offer_attributes: offer_attributes)
+    if Offer.where(provided_id: offer[:provided_id], provider_id: PROVIDER.id).any?
+      existing_model = Offer.where(provided_id: offer[:provided_id], provider_id: PROVIDER.id).first
+      existing_model.cities << city
+      @log.info("Added existing offer #{existing_model.provided_id} to city #{city.name}")
+      next
+    end
+
+    offer[:provider_id] = PROVIDER.id
+    @bot.get offer[:url]
+
+
+    offer[:title] = parser('table.content div .pointer-hand').first.text.strip
+    offer[:price] = parser('div.main-buy-label div.pointer-hand div').first || 0
+    #next if params[:price].nil?
+    offer[:price] = offer[:price].text.gsub(',','').to_i if offer[:price]
+    if offer[:price] == 0 # STARTS_AT
+      offer[:price] = parser('div.main-buy-label div.pointer-hand div')[1].text.gsub(',','').to_i
+    end
+    offer[:cost] = parser('td.price-discount-profit td div').first.text.strip.gsub(',','').to_i
+    offer[:discount] = parser('td.price-discount-profit td div')[1].text.strip.to_i
+    begin
+      offer[:image] = open(parser('img.pointer-hand').first[:src])
+    rescue Exception => e
+      offer[:image] = nil
+    end
+
+    offer_desc = parser('div.conditions')
+    offer_desc.css('a').each do |a|
+      a['target'] = '_blank'
+      a['rel'] = 'nofollow'
+    end
+    offer[:description] = offer_desc.to_html.strip
+    offer[:address] = $1 if parser('.main-benefits-right').text =~ /Основной адрес:\s*(.*)\s*, Тел/
+
+    model = Offer.new(offer)
+    if model.valid?
+      city.offers << model
+      @log.info("Saving offer: #{model.provided_id}")
+      @saved_offers << model.provided_id
+      saved += 1
+    else
+      @log.error("Can't save invalid offer: #{model.provided_id}. \n #{model.errors.full_messages.join(',')}")
+      binding.pry
     end
 
   end
-  if existing_offers_ids.any?
-    Offer.where(provided_id: existing_offers_ids).each do |offer|
-      OfferArchive.create( offer.attributes.merge({archived_at: Time.now}) )
-      offer.destroy
-      offer = nil # garbage
-    end
+
+  existing_offers.each do |expired_offer|
+    @log.info("Removing expired offer #{expired_offer}")
+    Offer.where(provider_id: PROVIDER.id, provided_id: expired_offer).first.destroy
   end
+
+  @log.info("Finished parsing #{city.name}. Total of #{@saved_offers.count} new offers saved, #{existing_offers.count} are expired and were deleted")
 
 end
+
+@log.info "Finished parsing vigoda. Total of #{saved} new offers were added"
