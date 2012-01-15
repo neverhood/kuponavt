@@ -112,7 +112,7 @@ cities.keys.each do |city|
     end
 
     if image
-      offer[:image] = open(image_bot.get(image.gsub(/,$/, '')).uri) rescue binding.pry
+      offer[:image] = open(image_bot.get(image.gsub(/,$/, '')).uri) rescue nil
     else
       offer[:image] = nil
     end
