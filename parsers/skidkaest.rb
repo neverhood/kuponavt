@@ -105,6 +105,7 @@ cities.keys.each do |city|
     else
       log.error("can't save invalid offer: \n #{model.errors.full_messages.join(',')}")
     end
+    [ model, timer, ends_at, description ].each { |variable| variable = nil } # helping gb
 
   end
 
