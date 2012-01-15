@@ -101,6 +101,7 @@ cities.keys.each do |city|
       log.info("saving offer: \n #{offer[:provided_id]}")
       model.save
       saved += 1
+      existing_offers << model.provided_id
     else
       log.error("can't save invalid offer: \n #{model.errors.full_messages.join(',')}")
     end
