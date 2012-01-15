@@ -5,7 +5,7 @@ class Offer < ActiveRecord::Base
 
   attr_accessor :remote_image_url
 
-  belongs_to :city
+  has_and_belongs_to_many :cities
   belongs_to :country
   belongs_to :provider
   belongs_to :category
@@ -16,6 +16,7 @@ class Offer < ActiveRecord::Base
   mount_uploader :image, PictureUploader
 
   after_destroy :destroy_image_and_folder
+  before_create lambda { |offer| offer.url.gsub! /\/$/, '' }
 
   scope :by_categories, lambda { |categories|
     joins(:category).

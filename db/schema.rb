@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120113143106) do
+ActiveRecord::Schema.define(:version => 20120115190810) do
 
   create_table "bot_statistics", :force => true do |t|
     t.integer  "offer_id"
@@ -35,6 +35,14 @@ ActiveRecord::Schema.define(:version => 20120113143106) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "cities_offers", :force => true do |t|
+    t.integer "city_id"
+    t.integer "offer_id"
+  end
+
+  add_index "cities_offers", ["city_id"], :name => "index_cities_offers_on_city_id"
+  add_index "cities_offers", ["offer_id"], :name => "index_cities_offers_on_offer_id"
 
   create_table "countries", :force => true do |t|
     t.string "name"
