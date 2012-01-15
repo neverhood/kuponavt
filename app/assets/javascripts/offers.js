@@ -236,8 +236,8 @@ $.offers.utils.changeCounterAndPaginate = function() {
 };
 
 $.offers.utils.retrieveOffers = function(page) { // Retrieves offers, count and pagination
-    $('div.loader').show();
-    $('#current-offers-count').append( $.api.loader() );
+    $('div#loader').show();
+    //$('#current-offers-count').append( $.api.loader() );
     $( $.offers.sections.offers ).removeAttr('data-search');
 
     $('.notification').hide();
@@ -261,16 +261,17 @@ $.offers.utils.retrieveOffers = function(page) { // Retrieves offers, count and 
             }
 
             $.offers.utils.startCountDown();
-            $('#current-offers-count').find('.loader').remove();
             $.offers.utils.showFavourites();
             $.offers.utils.toggleOptions();
+            $('div#loader').hide();
         });
     } else {
-        $('#current-offers-count').find('.loader').remove();
+        //$('#current-offers-count').find('.loader').remove();
         $('#offers-section').find('.offer').remove();
 
         $.offers.utils.toggleOptions();
         $.offers.utils.changeCounterAndPaginate();
+        $('div#loader').hide();
     }
 };
 
