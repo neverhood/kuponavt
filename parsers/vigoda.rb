@@ -82,7 +82,6 @@ cities.keys.each do |city|
       saved += 1
     else
       @log.error("Can't save invalid offer: #{model.provided_id}. \n #{model.errors.full_messages.join(',')}")
-      binding.pry
     end
 
   end
