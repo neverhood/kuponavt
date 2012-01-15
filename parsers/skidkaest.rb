@@ -123,5 +123,5 @@ cities.keys.each do |city|
 
 end
 
-log.info("FINISHED. Total of #{save_offers.count} offers added")
+log.info("FINISHED. Total of #{saved_offers.count} offers added")
 
