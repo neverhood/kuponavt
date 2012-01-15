@@ -79,8 +79,8 @@ cities.keys.each do |city|
 
     # Contacts
     contacts = parser('div.cupon-contacts p')
-    offer[:address] = contacts[1].text
-    offer[:subway] = contacts[2].text
+    offer[:address] = contacts[1].text rescue nil
+    offer[:subway] = contacts[2].text rescue nil
 
     # Description
     description = parser('div.about-cupon-content')
