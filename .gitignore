@@ -1,4 +1,5 @@
 config/database.yml
+parsers/logs/
 .bundle
 log/*.log
 tmp/
