@@ -31,6 +31,8 @@ end
 log = Logger.new(File.expand_path('../logs/skidkaest.log', __FILE__))
 log.info("Starting 'skidkaest' parser...\n #{Time.now}")
 
+saved_offers = []
+
 cities.keys.each do |city|
 
   log.info("Going to city #{city.name}: #{URL + cities[city]}")
@@ -47,7 +49,7 @@ cities.keys.each do |city|
 
   offers.each do |offer|
     begin
-      if existing_offers.include? offer[:provided_id]
+      if existing_offers.include?(offer[:provided_id]) || saved_offers.include?(offer[:provided_id])
         log.info("Ignoring existing offer #{offer[:provided_id]}")
         existing_offers.delete(offer[:provided_id])
         next
@@ -101,7 +103,7 @@ cities.keys.each do |city|
       log.info("saving offer: \n #{offer[:provided_id]}")
       model.save
       saved += 1
-      existing_offers << model.provided_id
+      saved_offers << model.provided_id
     else
       log.error("can't save invalid offer: \n #{model.errors.full_messages.join(',')}")
     end
@@ -120,4 +122,6 @@ cities.keys.each do |city|
   log.info("FINISHED parsing city #{city.name}. #{saved} offers were saved to db. #{existing_offers.count} offers are expired and were deleted")
 
 end
+
+log.info("FINISHED. Total of #{save_offers.count} offers added")
 
