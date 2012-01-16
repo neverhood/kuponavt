@@ -86,6 +86,7 @@ cities.keys.each do |city|
     else
       @log.error("Can't save invalid offer: #{model.provided_id}. \n #{model.errors.full_messages.join(',')}")
     end
+    @bot = Mechanize.new
 
   end
 
