@@ -8,8 +8,9 @@ include KupongidTools
 
 @bot = Mechanize.new #KupongidTools.authenticate! Mechanize.new, login: 'khomich.vlad@gmail.com', password: 'mfaunbby'
 @log = Logger.new("#{$rails_root}/parsers/logs/kupongid.log")
+@url = 'http://www.kupongid.ru'
 
-@bot.get('http://www.kupongid.ru')
+@bot.get(@url)
 @log.debug("Starting kupongid parser .. #{Time.now}")
 
 cities = KupongidTools.cities # Cities mapping
@@ -34,63 +35,56 @@ cities.keys.each do |city|
     if page_url
       @log.info "Going to page #{page_index}"
       begin
-        @bot.get page_url['href']
+        @bot.get(@url + page_url['href'])
         @pagination = @bot.page.parser.css('.pagination a')
       rescue Exception
-        @bot.get page_url['href']
+        @bot.get(@url + page_url['href'])
         @pagination = @bot.page.parser.css('.pagination a')
       end
       current_page = page_index
     else
       break unless page_index == 1 # 1 is current page
     end
-    @bot = Mechanize.new
 
     offer_patterns = @bot.page.parser.css('noindex .deal').map { |pattern| KupongidTools::Pattern.new pattern }.
       select { |pattern| pattern.should_follow? }
 
+    @bot = Mechanize.new
+
     offer_patterns.each do |offer_pattern|
-      if saved_offers.include?(offer_pattern.provided_id) || existing_offers.include?(offer_pattern.provided_id)
-        @log.info "Ignoring existing offer #{offer_pattern.provided_id}"
-        existing_offers.delete(offer_pattern.provided_id)
+      if saved_offers.include?(offer_pattern.offer_id) || existing_offers.include?(offer_pattern.offer_id)
+        @log.info "Ignoring existing offer #{offer_pattern.offer_id}"
+        existing_offers.delete(offer_pattern.offer_id)
+        next
       end
 
-      if Offer.where(provided_id: offer_pattern.provided_id, from_kupongid: true).any?
-        @log.info "Adding existing offer #{offer_pattern.provided_id} to #{city.name}"
-        existing_model = Offer.where(provided_id: offer_pattern.provided_id, from_kupongid: true).first
+      if Offer.where(provided_id: offer_pattern.offer_id, from_kupongid: true).any?
+        @log.info "Adding existing offer #{offer_pattern.offer_id} to #{city.name}"
+        existing_model = Offer.where(provided_id: offer_pattern.offer_id, from_kupongid: true).first
         existing_model.cities << city
         existing_model = nil
+        next
       end
 
       begin
         model = Offer.new(offer_pattern.attributes.merge({country_id: city.country_id}))
+        model = Offer.new if model.url.nil?
         if model.valid?
           @log.info "Saving offer #{model.provided_id}"
           city_clone = city.clone
           city_clone.offers << model
           city_clone = nil
         else
-          puts "Failed to save offer: #{offer_pattern.provider_url}" unless offer.save
+          puts "Failed to save offer: #{offer_pattern.url}"
         end
 
         saved_offers << model.provided_id
       end
     end
 
-    #new_offers = offer_patterns.select { |pattern| not existing_offers.include?(pattern.offer_id) }
-    #processed_offers += offer_patterns.map(&:offer_id)
-
-    #new_offers.each do |offer_pattern|
-      #begin
-        #offer = Offer.new(offer_pattern.attributes.merge({country_id: city.country_id}))
-        #puts "Failed to save offer: #{offer_pattern.provider_url}" unless offer.save
-      #rescue Exception
-        #puts 'faced TIMEOUT, skipping offer: ' + offer_pattern.url
-      #end
-    #end
-  @log.info "Finished processing #{city.name}"
-
   end
+
+  @log.info "Finished processing #{city.name}"
 
   binding.pry if existing_offers.any?
 
