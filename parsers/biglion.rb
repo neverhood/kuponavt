@@ -1,4 +1,8 @@
-require 'open-uri'
+#require 'open-uri'
+require File.expand_path('../../lib/mixins/parser', __FILE__)
+include Parser
+
+#OpenURI::Buffer::StringMax = 0
 
 URL = 'http://www.biglion.ru/'
 PROVIDER = Provider.where(:name => 'biglion').first
@@ -100,7 +104,7 @@ cities.keys.each do |city|
     pattern = parser('div.single-box-pro')
 
     offer[:provider_id] = PROVIDER.id
-    offer[:country_id] = city.country.id
+    offer[:country_id] = city.country_id
     offer[:title] = pattern.css('h1').first.text
     offer[:price] = pattern.css('div.price-label div.num b').text.to_i
     offer[:cost] = pattern.css('table[1] td[1] b[1]').text.to_i rescue nil

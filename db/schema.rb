@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120115190810) do
+ActiveRecord::Schema.define(:version => 20120116092508) do
 
   create_table "bot_statistics", :force => true do |t|
     t.integer  "offer_id"
@@ -34,6 +34,7 @@ ActiveRecord::Schema.define(:version => 20120115190810) do
     t.integer  "country_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "russian_name"
   end
 
   create_table "cities_offers", :force => true do |t|

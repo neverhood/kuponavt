@@ -1,6 +1,5 @@
-require 'open-uri'
-
-OpenURI::Buffer::StringMax = 0
+require File.expand_path('../../lib/mixins/parser', __FILE__)
+include Parser
 
 URL = 'http://www.skidkaest.ru'
 PROVIDER = Provider.find_by_name 'skidkaest'
@@ -22,7 +21,6 @@ cities = Hash[[
 ]]
 
 @bot = Mechanize.new
-#@bot.get(url + all)
 
 def parser(selector)
   @bot.page.parser.css(selector)
@@ -79,8 +77,7 @@ cities.keys.each do |city|
         next
       end
     end
-    offer[:city_id] = city.id
-    offer[:country_id] = city.country.id
+    offer[:country_id] = city.country_id
     offer[:provider_id] = PROVIDER.id
 
     # Contacts
