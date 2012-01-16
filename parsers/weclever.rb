@@ -1,6 +1,6 @@
 # encoding: UTF-8
-require 'open-uri'
-require 'pry'
+require File.expand_path('../../lib/mixins/parser', __FILE__)
+include Parser
 
 URL = 'http://www.weclever.ru/xml/openstat/kuponavt.com.xml'
 PROVIDER = Provider.find_by_name('weclever')
@@ -55,9 +55,18 @@ cities.keys.each do |city|
 
   offer_attributes, saved_offers = [], []
   existing_offers = city.offers.where(provider_id: PROVIDER.id).map(&:provided_id)
-  city_offers = xml_offers.select { |offer| offer.xpath('region').text == cities[city] }
-
+#  city_offers = xml_offers.select { |offer| offer.xpath('region').text == cities[city] }
+  city_offers = []
+  xml_offers.map do |offer|
+    if offer.xpath('region').text == city.russian_name
+      city_offers << offer
+      nil
+    else
+      offer
+    end
+  end
   log.info("Found #{city_offers.count} offers")
+
 
   city_offers.each do |offer|
     provided_id = offer.xpath('id').text
@@ -86,7 +95,8 @@ cities.keys.each do |city|
       price: offer.xpath('pricecoupon').text.to_i,
       cost: (offer.xpath('price').text.to_i),
       discount: offer.xpath('discount').text.to_i,
-      address: offer.xpath('supplier/addresses/address/name').text
+      address: offer.xpath('supplier/addresses/address/name').text,
+      country_id: city.country_id
     }
     offer_attributes[:price] = offer.xpath('discountprice').text.to_i if offer_attributes[:price] == 0
 
@@ -101,14 +111,15 @@ cities.keys.each do |city|
       binding.pry
     end
 
-    existing_offers.each do |expired_offer|
-      log.info("Removing expired offer #{expired_offer}")
-      Offer.where(provider_id: PROVIDER.id, provided_id: expired_offer).first.destroy
-    end
+  end
 
+  existing_offers.each do |expired_offer|
+    log.info("Removing expired offer #{expired_offer}")
+    Offer.where(provider_id: PROVIDER.id, provided_id: expired_offer).first.destroy
   end
 
   log.info("Finished processing #{city.name} ( #{Time.now} ). Saved #{saved_offers.count} new offers")
+  city_offers = nil # Garbage
 end
 
 log.info("Finished weclever parser. #{saved} offers added. #{Time.now}")

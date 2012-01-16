@@ -1,5 +1,6 @@
 # encoding: UTF-8
-require 'open-uri'
+require File.expand_path('../../lib/mixins/parser', __FILE__)
+include Parser
 
 PROVIDER = Provider.where(name: 'vigoda').first
 
@@ -48,6 +49,8 @@ cities.keys.each do |city|
     end
 
     offer[:provider_id] = PROVIDER.id
+    offer[:country_id] = city.country_id
+
     @bot.get offer[:url]
 
 
