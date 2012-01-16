@@ -24,16 +24,14 @@ module KupongidTools
     ]]
   end
 
-  def self.existing_offers(city_id)
-    Offer.select(:provided_id).where(city_id: city_id, from_kupongid: true).map(&:provided_id)
+  def self.existing_offers(city)
+    city.offers.where(from_kupongid: true).map(&:provided_id)
+    #Offer.select(:provided_id).where(city_id: city_id, from_kupongid: true).map(&:provided_id)
   end
 
   class Pattern
 
-    BOT = Mechanize.new
-    require 'open-uri'
-
-    OpenURI::Buffer::StringMax = 0
+    @@bot = Mechanize.new
 
     attr_accessor :source, :provider_id, :offer_id, :url, :image_file, :cached_attributes
 
@@ -58,7 +56,7 @@ module KupongidTools
     end
 
     def attributes
-      self.source = BOT.get(self.url).
+      self.source = @@bot.get(self.url).
         parser.css('#content')
 
       attrs = {
@@ -80,6 +78,7 @@ module KupongidTools
       else
         cached_attributes = attrs
       end
+      @@bot = Mechanize.new
       cached_attributes
     end
 
@@ -130,7 +129,7 @@ module KupongidTools
 
     def provider_url
       begin
-        out_page = BOT.get(source.css(".formbutton").first['href'])
+        out_page = @@bot.get(source.css(".formbutton").first['href'])
         if out_page.uri.to_s =~ /kupongid/
           out_page.links.last.href.gsub /\?.*/, ''
         else
