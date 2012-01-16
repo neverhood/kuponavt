@@ -124,11 +124,13 @@ cities.keys.each do |city|
       offers << { provided_id: pattern['id'], url: pattern.css('div.actionsItemHeadding a').first['href'] }
     end
   end
+  @bot = Mechanize.new
 
   offers.each do |offer|
     if existing_offers.include?(offer[:provided_id]) || @saved_offers.include?(offer[:provided_id])
       @log.info("Skipping existing offer: #{offer[:provided_id]}")
       existing_offers.delete(offer[:provided_id])
+      offer = nil
       next
     end
 
@@ -136,6 +138,8 @@ cities.keys.each do |city|
       existing_model = Offer.where(provided_id: offer[:provided_id], provider_id: PROVIDER.id).first
       existing_model.cities << city
       @log.info("Added existing offer #{existing_model.provided_id} to city #{city.name}")
+      existing_model = nil # garbage
+      offer = nil
       next
     end
 
@@ -157,6 +161,7 @@ cities.keys.each do |city|
 
     if image
       offer[:image] = open(image_bot.get(image.gsub(/,$/, '')).uri) rescue nil
+      image_bot = Mechanize.new
     else
       offer[:image] = nil
     end
@@ -174,6 +179,7 @@ cities.keys.each do |city|
       end
     end
     offer[:description] = description.to_html
+    description = nil
 
     model = Offer.new(offer)
     if model.valid?
@@ -186,6 +192,9 @@ cities.keys.each do |city|
     else
       @log.error("Can't save invalid offer: #{model.provided_id}. \n #{model.errors.full_messages.join(',')}")
     end
+    model = nil
+    offer = nil
+    @bot = Mechanize.new
 
   end
 
@@ -193,9 +202,11 @@ cities.keys.each do |city|
     @log.info("Removing expired offer #{expired_offer}")
     Offer.where(provider_id: PROVIDER.id, provided_id: expired_offer).first.destroy
   end
-  offers = nil # Garbage
-
   @log.info("Finished parsing #{city.name}. Total of #{@saved_offers.count} new offers saved, #{existing_offers.count} are expired and were deleted")
+  offers = nil # Garbage
+  existing_offers = nil
+  @saved_offers = nil
+
 
 end
 

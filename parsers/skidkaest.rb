@@ -54,6 +54,7 @@ cities.keys.each do |city|
       elsif Offer.where(provided_id: offer[:provided_id], provider_id: PROVIDER.id).any?
         existing_model = Offer.where(provided_id: offer[:provided_id], provider_id: PROVIDER.id).first
         existing_model.cities << city
+        existing_model = nil
         log.info("Added existing offer #{existing_model.provided_id} to #{city.name}")
         next
       else
@@ -102,13 +103,16 @@ cities.keys.each do |city|
     model = Offer.new(offer)
     if model.valid?
       log.info("saving offer: #{offer[:url]}")
-      city.offers << model
+      city_clone = city.clone
+      city_clone.offers << model
       saved += 1
       saved_offers << model.provided_id
+      city_clone = nil
     else
       log.error("can't save invalid offer: \n #{model.errors.full_messages.join(',')}")
     end
-    [ model, timer, ends_at, description ].each { |variable| variable = nil } # helping gb
+    model, timer, ends_at, description, offer = nil, nil, nil, nil, nil  # helping gb
+    @bot = Mechanize.new
 
   end
 
@@ -118,6 +122,7 @@ cities.keys.each do |city|
   else
     log.info("Everything is up to date")
   end
+  existing_offers, saved_offers = nil, nil
 
   log.info("FINISHED parsing city #{city.name}. #{saved_offers.count} offers were saved to db. #{existing_offers.count} offers are expired and were deleted")
 
