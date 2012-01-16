@@ -22,6 +22,46 @@ cities = {
   City.find_by_name('kostroma') => 'kostroma',
   City.find_by_name('magnitogorsk') => 'magnitog',
   City.find_by_name('nijnii-novgorod') => 'nnovgorod',
+  City.find_by_name('voronezh') => 'voronezh',
+  City.find_by_name('kaliningrad') => 'kaliningrad',
+  City.find_by_name('krasnodar') => 'krasnodar',
+  City.find_by_name('makhachkala') => 'mkala',
+  City.find_by_name('nizhnij-tagil') => 'ntagil',
+  City.find_by_name('penza') => 'penza',
+  City.find_by_name('saransk') => 'saransk',
+  City.find_by_name('surgut') => 'surgit',
+  City.find_by_name('tula') => 'tula',
+  City.find_by_name('cheboksary') => 'cheb',
+  City.find_by_name('yekaterinburg') => 'ekaterinburg',
+  City.find_by_name('kaluga') => 'kaluga',
+  City.find_by_name('krasnoyarsk') => 'krasnoyarsk',
+  City.find_by_name('murmansk') => 'murmansk',
+  City.find_by_name('novokuznetsk') => 'novokuznetsk',
+  City.find_by_name('perm') => 'perm',
+  City.find_by_name('saratov') => 'saratov',
+  City.find_by_name('taganrog') => 'taganrog',
+  City.find_by_name('tyumen') => 'tyumen',
+  City.find_by_name('cheliabinsk') => 'chelyabinsk',
+  City.find_by_name('ivanovo') => 'ivanovo',
+  City.find_by_name('kemerovo') => 'kemerovo',
+  City.find_by_name('kurgan') => 'kurgan',
+  City.find_by_name('naberezhnye-chelny') => 'nabchelny',
+  City.find_by_name('novosibirsk') => 'novosibirsk',
+  City.find_by_name('petrozavodsk') => 'petrozavodsk',
+  City.find_by_name('smolensk') => 'smolensk',
+  City.find_by_name('tambov') => 'tambov',
+  City.find_by_name('ulanude') => 'ulan-ude',
+  City.find_by_name('cherepovets') => 'cherepov',
+  City.find_by_name('izhevsk') => 'izh',
+  City.find_by_name('kirov') => 'kirov',
+  City.find_by_name('kursk') => 'kursk',
+  City.find_by_name('nalchik') => 'nalchik',
+  City.find_by_name('omsk') => 'omsk',
+  City.find_by_name('rostov-na-donu') => 'rostovnadonu',
+  City.find_by_name('sochi') => 'sochi',
+  City.find_by_name('tver') => 'tver',
+  City.find_by_name('ulyanovsk') => 'ulyanovsk',
+  City.find_by_name('chita') => 'chita',
   City.find_by_name('orenburg') => 'orenburg',
   City.find_by_name('samara') => 'samara',
   City.find_by_name('sterlitamak') => 'sterlitamak',
@@ -137,10 +177,12 @@ cities.keys.each do |city|
 
     model = Offer.new(offer)
     if model.valid?
-      city.offers << model
+      city_clone = city.clone # city includes offers and raises as fuck ( memory )
+      city_clone.offers << model
       @log.info("Saving offer: #{model.provided_id}")
       @saved_offers << model.provided_id
       saved += 1
+      city_clone = nil # Not sure if it's needed
     else
       @log.error("Can't save invalid offer: #{model.provided_id}. \n #{model.errors.full_messages.join(',')}")
     end
