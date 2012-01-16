@@ -151,6 +151,7 @@ cities.keys.each do |city|
     @log.info("Removing expired offer #{expired_offer}")
     Offer.where(provider_id: PROVIDER.id, provided_id: expired_offer).first.destroy
   end
+  offers = nil # Garbage
 
   @log.info("Finished parsing #{city.name}. Total of #{@saved_offers.count} new offers saved, #{existing_offers.count} are expired and were deleted")
 
