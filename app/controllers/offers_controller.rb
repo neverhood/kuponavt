@@ -59,7 +59,7 @@ class OffersController < ApplicationController
   def out
     @offer = Offer.find(params[:id])
     if @offer
-      redirect_to @offer.url + @offer.provider.ref_url
+      redirect_to @offer.provider.ref_url ? (@offer.url + @offer.provider.ref_url) : @offer.url
     else
       render :nothing => true
     end
