@@ -49,7 +49,6 @@ class Offer < ActiveRecord::Base
   mount_uploader :image, PictureUploader
 
   after_destroy :destroy_image_and_folder
-  after_create :destroy_original_image
 
   before_create lambda { |offer| offer.url.gsub! /\/$/, '' }
 
@@ -96,10 +95,6 @@ class Offer < ActiveRecord::Base
   end
 
   private
-
-  def destroy_original_image
-    FileUtils.rm("public/#{image_url}") # We only need the "thumb" version
-  end
 
   def destroy_image_and_folder
     return unless image_url
