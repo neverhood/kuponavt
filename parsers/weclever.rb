@@ -102,6 +102,7 @@ cities.keys.each do |city|
       city_id: city.id
     }
     offer_attributes[:price] = offer.xpath('discountprice').text.to_i if offer_attributes[:price] == 0
+    offer_attributes[:coordinates] = nil if offer_attributes[:coordinates].blank?
 
     model = Offer.new( offer_attributes )
     if model.valid?

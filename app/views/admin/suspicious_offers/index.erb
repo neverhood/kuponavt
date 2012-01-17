@@ -25,9 +25,14 @@
       </div>
 
     </div>
+
+    <div class='center-aligned'>
+      <%= paginate @offers %>
+    </div>
   </div>
 
 </div>
+
 
 <div class='hidden'>
   <% if params[:section].nil? %>
