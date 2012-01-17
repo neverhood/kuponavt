@@ -3,6 +3,39 @@ class Offer < ActiveRecord::Base
   include Tire::Model::Search
   include Tire::Model::Callbacks
 
+  #settings :number_of_shards => 1,
+           #:number_of_replicas => 1,
+           #:analysis => {
+             #:filter => {
+               #:russian_stemmer => {
+                 #"type" => "stemmer",
+                 #"name" => "light_russian"
+               #}
+             #},
+             #:analyzer => {
+               #:russian_analyzer => {
+                 #"tokenizer" => "lowercase",
+                 #"filter" => ["standard", "lowercase", "russian_stemmer"],
+                 #"type" => "snowball",
+                 #"language" => "russian"
+               #}
+             #}
+           #} do
+             #mapping do
+               #indexes :title, :analyzer => :russian_analyzer, :boost => 2
+               #indexes :description, :analyzer => :rusian_analyzer
+               #indexes :subway, :analyzer => :russian_analyzer
+               #indexes :address, :analyzer => :russian_analyzer
+             #end
+           #end
+
+  mapping do
+    indexes :title, :analyzer => 'snowball'
+    indexes :description, :analyzer => 'snowball'
+    indexes :subway, :analyzer => 'snowball'
+    indexes :address, :analyzer => 'snowball'
+  end
+
   attr_accessor :remote_image_url
 
   has_and_belongs_to_many :cities

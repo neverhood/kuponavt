@@ -53,9 +53,9 @@ cities.keys.each do |city|
         next
       elsif Offer.where(provided_id: offer[:provided_id], provider_id: PROVIDER.id).any?
         existing_model = Offer.where(provided_id: offer[:provided_id], provider_id: PROVIDER.id).first
-        existing_model.cities << city
-        existing_model = nil
+        CitiesOffers.create(city_id: city.id, offer_id: existing_model.id, url: offer[:url])
         log.info("Added existing offer #{existing_model.provided_id} to #{city.name}")
+        existing_model = nil
         next
       else
         @bot.get(offer[:url])

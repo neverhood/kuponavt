@@ -81,9 +81,11 @@ cities.keys.each do |city|
         saved_offers << model.provided_id
       end
     end
+    offer_patterns = nil
 
   end
 
+  saved_offers = nil
   @log.info "Finished processing #{city.name}"
 
   binding.pry if existing_offers.any?

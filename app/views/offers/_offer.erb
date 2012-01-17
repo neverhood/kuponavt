@@ -1,7 +1,7 @@
 <% cache action_suffix: "offer_#{offer.id}" do %>
 <div class='offer' id='offer-<%= offer.id %>' data-category='<%= offer.category_id %>'>
   <h2>
-    <%= link_to offer.title, out_offer_path(offer), :class => 'offer-url', :target => '_blank', :rel => 'nofollow' %>
+    <%= link_to offer.title, out_path(@city, offer), :class => 'offer-url', :target => '_blank', :rel => 'nofollow' %>
   </h2>
 
   <div class='offer-left-side'>
@@ -30,8 +30,7 @@
       </tr>
     </table>
 
-    <p class='info'>
-    <%= t('offers.time_left') %>:
+    <p class='info'> <%= t('offers.time_left') %>:
     </p>
 
     <% if offer.is_about_to_finish? %>
@@ -61,7 +60,7 @@
     </p>
 
     <div class='add-button' title="<%= t('offers.add_to_favourites') %>"></div>
-    <%= link_to t('offers.buy'), nil, :class => 'buy-button' %>
+    <%= link_to t('offers.buy'), out_path(@city, offer), :target => '_blank', :class => 'buy-button' %>
 
     </div>
   </div>
