@@ -43,7 +43,7 @@
             <div id="ukraine">
               <h3>Украина</h3>
               <% letter, expired = nil, true %>
-              <% ukrainian_cities.in_groups_of(4, false).each do |city_group| %>
+              <% ukrainian_cities.in_groups_of(5, false).each do |city_group| %>
                 <ul>
                   <% city_group.each do |city| %>
                     <% if letter != t("cities.#{city.name}").first %>

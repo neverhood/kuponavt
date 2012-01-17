@@ -6,7 +6,7 @@
     per_page:      number of items to fetch per page
     remote:        data-remote
 -%>
-<% url = url.split('?')[0] + '?page=1' #ajax_pagination_url(url, 1) %>
+<% url = url.split('?')[0] + '?page=1' if controller_name = "offers" %>
 
 <span class="first">
   <%= link_to_unless current_page.first?, raw(t 'views.pagination.first'), url, :remote => remote %>

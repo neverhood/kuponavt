@@ -19,8 +19,11 @@ $('document').ready(function() {
             });
         };
 
-        $('.bot-entry .cancel').click(function() {
-            $.admin.updateOffer( $(this).parents('.bot-entry').attr('id').replace('entry-', '') );
+        $('.buy-button').click(function(e) {
+            $.admin.updateOffer( $(this).parents('.offer').attr('id').replace('entry-', '') );
+            return false;
+            e.preventDefault();
+            e.stopPropagation();
         });
 
     }

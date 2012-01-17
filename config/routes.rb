@@ -10,10 +10,8 @@ Kuponavt::Application.routes.draw do
     resources :suspicious_offers, :only => [:index, :update]
     resources :bot, :only => [ :index, :show, :destroy ] do
       post :clear, :on => :collection
-      get :undefined, :on => :collection
     end
   end
-
 
   resources :countries, :only => :index
 

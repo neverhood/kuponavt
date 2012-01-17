@@ -13,8 +13,6 @@
   <%= link_to 'No `Ends At`', admin_suspicious_offers_path(:section => 'ends_at') %>
 </div>
 
-
-
   <div id='offers'>
     <div id='all-offers'>
 
@@ -23,7 +21,7 @@
       </div>
 
       <div id='offers-section'>
-        <%= render :partial => 'offers/offers' %>
+        <%= render :partial => 'offer', :collection => @offers %>
       </div>
 
     </div>
