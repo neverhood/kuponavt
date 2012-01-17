@@ -595,6 +595,9 @@ es =
               { name: 'novosibirsk',
                 country_id: russia_id
               },
+              { name: 'norilsk',
+                country_id: russia_id
+              },
               { name: 'omsk',
                 country_id: russia_id
               },
@@ -613,6 +616,9 @@ es =
               { name: 'petrozavodsk',
                 country_id: russia_id
               },
+              { name: 'petropavlovsk-kamchatsky',
+                country_id: russia_id
+              },
               { name: 'podolsk',
                 country_id: russia_id
               },
@@ -629,6 +635,9 @@ es =
                 country_id: russia_id
               },
               { name: 'ryazan',
+                country_id: russia_id
+              },
+              { name: 'salekhard',
                 country_id: russia_id
               },
               { name: 'samara',
@@ -682,7 +691,7 @@ es =
               { name: 'tyumen',
                 country_id: russia_id
               },
-              { name: 'ulanude',
+              { name: 'ulan-ude',
                 country_id: russia_id
               },
               { name: 'ulyanovsk',
@@ -733,7 +742,7 @@ es =
               { name: 'dnepropetrovsk',
                 country_id: ukraine_id
               },
-              { name: 'doneck',
+              { name: 'donetsk',
                 country_id: ukraine_id
               },
               { name: 'zaporozhye',
@@ -782,6 +791,9 @@ es =
                 country_id: ukraine_id
               },
               { name: 'kherson',
+                country_id: ukraine_id
+              },
+              { name: 'chernigov',
                 country_id: ukraine_id
               }
   ])
