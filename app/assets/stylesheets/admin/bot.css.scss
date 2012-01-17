@@ -4,6 +4,33 @@
 
 body#admin-bot-controller {
 
+  #bot-categories {
+    background: #F0F0F0;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+
+      ul {
+        height: 200px;
+
+          li {
+            display: inline-block;
+            width: 230px;
+            color: white;
+            float: left;
+            font-size: 14px;
+
+              a {
+                color: #007fad;
+
+                &:hover { color: red }
+
+              }
+          }
+      }
+
+  }
+
   .bot-entry {
     margin-bottom: 25px;
 
