@@ -141,9 +141,6 @@ offers.each do |offer|
     offer.save
 
     BotStatistics.create( offer_id: offer.id, category_id: offer.category_id, match: Bot.last_match, found_in: attribute )
-  else
-#    binding.pry
-    BotStatistics.create( offer_id: offer.id, category_id: nil, match: Bot.last_match, found_in: attribute )
   end
   rescue Exception => e
     binding.pry

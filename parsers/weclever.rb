@@ -96,7 +96,8 @@ cities.keys.each do |city|
       price: offer.xpath('pricecoupon').text.to_i,
       cost: (offer.xpath('price').text.to_i),
       discount: offer.xpath('discount').text.to_i,
-      address: offer.xpath('supplier/addresses/address/name').text,
+      address: offer.xpath('supplier/addresses/address/name').map(&:text).map(&:strip).join("||"),
+      coordinates: offer.xpath('supplier/addresses/address/coordinates').map(&:text).join("||"),
       country_id: city.country_id,
       city_id: city.id
     }
@@ -124,5 +125,4 @@ cities.keys.each do |city|
 end
 
 log.info("Finished weclever parser. #{saved} offers added. #{Time.now}")
-
 

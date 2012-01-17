@@ -1,13 +1,24 @@
 # encoding: UTF-8
-require 'pry'
-require 'nokogiri'
-require 'open-uri'
-
-OpenURI::Buffer::StringMax = 0
+require File.expand_path('../../lib/mixins/parser', __FILE__)
+include Parser
 
 PROVIDER = Provider.find_by_name('bigbuzzy')
-xml_offers = Nokogiri::XML( open 'http://bigbuzzy.ru/xml/' ).xpath('//offer')
 @log = Logger.new(File.expand_path('../logs/bigbuzzy.log', __FILE__))
+
+xml_offers = []
+xml = Nokogiri::XML( open('http://bigbuzzy.ru/xml/') )
+
+xml_offers << xml.xpath('//offer').to_a
+xml_current_page = 1
+xml_total_pages = xml.xpath('//navigation/total_pages').text.to_i
+
+(xml_total_pages - 1).times do
+  xml = Nokogiri::XML( open( xml.xpath('//navigation/next_page').text ) )
+  xml_offers << xml.xpath('//offer').to_a
+end
+
+xml_offers = xml_offers.flatten
+
 
 cities = ["Москва", "Санкт-Петербург", "Нижний Новгород", "Казань", "Уфа", "Саратов", "Смоленск", "Ставрополь", "Кемерово",
           "Екатеринбург", "Архангельск", "Астрахань", "Барнаул", "Белгород", "Брянск", "Владивосток", "Владикавказ",
@@ -24,7 +35,6 @@ saved = 0
 
 cities.each do |city|
   city = City.find_by_russian_name(city)
-  binding.pry unless city
 
   @log.info("Processing #{city.name}")
 
@@ -43,9 +53,9 @@ cities.each do |city|
       next
     end
 
-    if Offer.where(provided_id: provided_id, provider_id: PROVIDER.id).any?
-      existing_model = Offer.where(provided_id: provided_id, provider_id: PROVIDER.id).first
-      existing_model.cities << city
+    if Offer.where(title: offer.xpath('name').text, provider_id: PROVIDER.id).any?
+      existing_model = Offer.where(title: offer.xpath('name').text, provider_id: PROVIDER.id).first
+      CitiesOffers.create(city_id: city.id, offer_id: existing_model.id, url: offer.xpath('url').text)
       @log.info("Added existing offer #{existing_model.provided_id} to city #{city.name}")
       next
     end
@@ -61,7 +71,9 @@ cities.each do |city|
       price: offer.xpath('pricecoupon').text.to_i,
       cost: (offer.xpath('price').text.to_i),
       discount: offer.xpath('discount').text.to_i,
-      address: offer.xpath('supplier/addresses/address/name').text,
+      address: offer.xpath('supplier/addresses/address/name').map(&:text).map(&:strip).join('||'),
+      coordinates: offer.xpath('supplier/addresses/address/coordinates').map(&:text).join('||'),
+      city_id: city.id,
       country_id: city.country_id
     }
     offer_attributes[:price] = offer.xpath('discountprice').text.to_i if offer_attributes[:price] == 0
