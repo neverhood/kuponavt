@@ -21,11 +21,12 @@ Kuponavt::Application.routes.draw do
     get 'favourites', :on => :collection
     get 'search', :on => :collection
     get 'refresh', :on => :collection
-    get 'out', :on => :member
+    #get 'out', :on => :member
   end
 
   get '/:city' => 'offers#index', :as => :offers
   get '/:city/:page' => 'offers#index'
+  get '/:city/offers/:id/out' => 'offers#out', :as => :out
 #  scope ':city' do
 #    resources :offers, :only => :index do
 #      get ':page' => 'offers#index', :on => :collection, :as => 'page'

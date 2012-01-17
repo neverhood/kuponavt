@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120116092508) do
+ActiveRecord::Schema.define(:version => 20120117083836) do
 
   create_table "bot_statistics", :force => true do |t|
     t.integer  "offer_id"
@@ -40,6 +40,7 @@ ActiveRecord::Schema.define(:version => 20120116092508) do
   create_table "cities_offers", :force => true do |t|
     t.integer "city_id"
     t.integer "offer_id"
+    t.string  "url"
   end
 
   add_index "cities_offers", ["city_id"], :name => "index_cities_offers_on_city_id"

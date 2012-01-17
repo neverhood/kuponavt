@@ -79,8 +79,9 @@ cities.keys.each do |city|
 
     if Offer.where(provided_id: provided_id, provider_id: PROVIDER.id).any?
       existing_model = Offer.where(provided_id: provided_id, provider_id: PROVIDER.id).first
-      existing_model.cities << city
+      CitiesOffers.create(city_id: city.id, offer_id: existing_model.id, url: offer.xpath('url').text)
       log.info("Added existing offer #{existing_model.provided_id} to city #{city.name}")
+      existing_model = nil
       next
     end
 
@@ -108,7 +109,6 @@ cities.keys.each do |city|
       saved += 1
     else
       log.error("Can't save invalid offer: #{model.provided_id}. \n #{model.errors.full_messages.join(',')}")
-      binding.pry
     end
 
   end

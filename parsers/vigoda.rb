@@ -43,7 +43,7 @@ cities.keys.each do |city|
 
     if Offer.where(provided_id: offer[:provided_id], provider_id: PROVIDER.id).any?
       existing_model = Offer.where(provided_id: offer[:provided_id], provider_id: PROVIDER.id).first
-      existing_model.cities << city
+      CitiesOffers.create(city_id: city.id, offer_id: existing_model.id, url: offer[:url])
       @log.info("Added existing offer #{existing_model.provided_id} to city #{city.name}")
       next
     end
