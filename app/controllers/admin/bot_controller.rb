@@ -1,15 +1,12 @@
 class Admin::BotController < ApplicationController
 
-  layout 'admin'
+  layout 'application'
 
   before_filter :admin_only
+  before_filter :prepare_category, :only => :index
 
   def index
-    @entries = BotStatistics.order('created_at DESC').page( params[:page] )
-  end
-
-  def undefined
-    @entries = BotStatistics.where(category_id: nil).page( params[:page] )
+    @entries ||= BotStatistics.order('created_at DESC').page( params[:page] )
   end
 
   def show
@@ -31,6 +28,14 @@ class Admin::BotController < ApplicationController
 
   def admin_only
     redirect_to root_path unless current_user && current_user.admin?
+  end
+
+  def prepare_category
+    if params[:category]
+      @entries = BotStatistics.order('created_at DESC').
+        where(category_id: params[:category]).
+        page( params[:page] )
+    end
   end
 
 end

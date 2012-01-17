@@ -50,6 +50,7 @@ cities.keys.each do |city|
 
     offer[:provider_id] = PROVIDER.id
     offer[:country_id] = city.country_id
+    offer[:city_id] = city.id
 
     @bot.get offer[:url]
 

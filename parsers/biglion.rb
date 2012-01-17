@@ -149,6 +149,7 @@ cities.keys.each do |city|
 
     offer[:provider_id] = PROVIDER.id
     offer[:country_id] = city.country_id
+    offer[:city_id] = city.id
     offer[:title] = pattern.css('h1').first.text
     offer[:price] = pattern.css('div.price-label div.num b').text.to_i
     offer[:cost] = pattern.css('table[1] td[1] b[1]').text.to_i rescue nil

@@ -79,6 +79,7 @@ cities.keys.each do |city|
       end
     end
     offer[:country_id] = city.country_id
+    offer[:city_id] = city.id
     offer[:provider_id] = PROVIDER.id
 
     # Contacts

@@ -1,29 +1,44 @@
+<% content_for :head do %>
+  <%= javascript_include_tag 'admin/bot' %>
+<% end %>
 <h1> Bot Statistics </h1>
+
 <h1> Всего новостей от бота: <%= @entries.total_count %> </h1>
 <div style='margin: 15px; color:red;'>
   <%= link_to 'ОЧИСТИТЬ НОВОСТИ ОТ БОТА', clear_admin_bot_index_path, :id => :clear_news, :remote => true, :method => :post,
         :confirm => 'are you sure?' %>
-
-  <%= link_to 'bot zassal', undefined_admin_bot_index_path %>
-
 </div>
 
-<% @entries.each do |entry| %>
+<h1> Categories </h1>
+<div style='background: black; color: white; padding: 25px;'>
+  <% Category.where('parent_category_id IS NOT NULL').each do |category| %>
+    <%= link_to category.name, admin_bot_index_path(category: category.id) %>
+  <% end %>
+</div>
 
-  <div class='bot-entry' id='entry-<%= entry.id %>'>
-    <% offer = Offer.find entry.offer_id %>
-    <% if entry.category_id && offer.category %>
-      <table>
-        <tr>
-            <td class='title'><%= offer.title %></td><td class='match'><%= entry.match %> <span style='color: black; font-weight: normal'>(<%= entry.found_in %>)</span></td><td class='category'><%= offer.category.name %></td>
-        </tr>
-      </table>
-      <span class='cancel'>
-        ОТМЕНИТЬ
-      </span>
-    <% end %>
+<div id='offers'>
+
+  <div id="main-description">
+     <h1>Все купоны на скидку в Вашем городе</h1>
+    <a>Какое добро мы можем Вам причинить?</a>
+    <p>Купонавт (по аналогии со словом "космонавт") - это агрегатор купонов на скидку (? - про купоны).
+    Это значит, что на данном сайте мы собираем актуальные скидочные купоны со всех сайтов коллективных покупок (таких как Groupon, Biglion, WeClever и ещё 112 представителей).</p>
   </div>
 
-<% end %>
 
-<%= paginate @entries %>
+  <div id='all-offers'>
+    <div id='offers-section'>
+      <% @entries.each do |entry| %>
+        <% offer = Offer.find entry.offer_id %>
+        <% if entry.category_id && offer.category %>
+          <%= render :partial => 'offer', :locals => { offer: offer, entry: entry } %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class='center-aligned'>
+    <%= paginate @entries %>
+  </div>
+
+</div>

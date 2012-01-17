@@ -97,7 +97,8 @@ cities.keys.each do |city|
       cost: (offer.xpath('price').text.to_i),
       discount: offer.xpath('discount').text.to_i,
       address: offer.xpath('supplier/addresses/address/name').text,
-      country_id: city.country_id
+      country_id: city.country_id,
+      city_id: city.id
     }
     offer_attributes[:price] = offer.xpath('discountprice').text.to_i if offer_attributes[:price] == 0
 

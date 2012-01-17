@@ -8,10 +8,9 @@
 //= require jquery_ujs
 //= require countdown
 //= require cookie
-//= require animate-colors
 //= require api
-//= require_tree .
-
+//= require offers
+//
 if ( typeof $.api != 'undefined' ) {
     if ( typeof $.offers != 'undefined' ) $.api.offers = $.offers;
 }

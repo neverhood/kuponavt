@@ -7,7 +7,7 @@
     remote:        data-remote
 -%>
 <%# url = ajax_pagination_url(url, current_page - 1) %>
-<% url = url.split('?')[0] + '?page=' + (current_page.to_i - 1).to_s %>
+<% url = (url.split('?')[0] + '?page=' + (current_page.to_i - 1).to_s) if controller_name == "offers" %>
 
 <span class="prev">
   <%= link_to_unless current_page.first?, raw(t 'views.pagination.previous'), url, :rel => 'prev', :remote => remote %>
