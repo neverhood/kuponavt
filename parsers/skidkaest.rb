@@ -122,9 +122,9 @@ cities.keys.each do |city|
   else
     log.info("Everything is up to date")
   end
-  existing_offers, saved_offers = nil, nil
 
   log.info("FINISHED parsing city #{city.name}. #{saved_offers.count} offers were saved to db. #{existing_offers.count} offers are expired and were deleted")
+  existing_offers, saved_offers = nil, nil
 
 end
 
