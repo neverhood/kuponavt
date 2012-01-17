@@ -20,6 +20,10 @@ class Category < ActiveRecord::Base
     Category.create :name => category_name, :parent_category_id => id
   end
 
+  def city_offers(city_id)
+    offers.joins(:cities).where(['`cities_offers`.city_id = ?', city_id])
+  end
+
   def parent?
     parent_category_id.nil?
   end

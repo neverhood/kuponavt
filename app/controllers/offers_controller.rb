@@ -6,7 +6,7 @@ class OffersController < ApplicationController
 
   #caches_action :show, :cache_path => Proc.new { |controller| "offers/show/#{controller.params[:id]}.#{request.format.symbol.to_s}" }
 
-  before_filter :validate_city, :only => [ :index, :search, :refresh ]
+  before_filter :validate_city, :only => [ :index, :search, :refresh, :out ]
 
   caches_action :index, :cache_path => Proc.new { |controller| "#{controller.params}.#{@city.name}_index_fragment" }
 
@@ -58,8 +58,9 @@ class OffersController < ApplicationController
 
   def out
     @offer = Offer.find(params[:id])
-    if @offer
-      redirect_to @offer.url
+    if @offer && @city
+      url = CitiesOffers.where(city_id: @city.id, offer_id: @offer.id).first.url || @offer.url
+      redirect_to @offer.provider.ref_url ? (url + @offer.provider.ref_url) : url
     else
       render :nothing => true
     end
