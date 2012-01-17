@@ -11,8 +11,10 @@ class Admin::SuspiciousOffersController < ApplicationController
     @offer = Offer.find params[:id]
 
     if @offer.update_attributes(@suspicious_attribute => params[@suspicious_attribute])
-      expire_fragment /#{@offer.city.name}.*filter/
-      system("find tmp/cache/ -name *#{@offer.city.name}_index_fragment* | xargs rm -rf")
+      @offer.cities.each do |city|
+        expire_fragment /#{city.name}.*filter/
+        system("find tmp/cache/ -name *#{city.name}_index_fragment* | xargs rm -rf")
+      end
 
       render :json => { :status => :success }
     end
@@ -31,7 +33,8 @@ class Admin::SuspiciousOffersController < ApplicationController
                            when 'provided_id' then :provided_id
                            when 'ends_at' then :ends_at
                            end
-    @offers = Offer.where(suspicious_attribute => nil)
+    @offers = Offer.where(suspicious_attribute => nil).
+      page( params[:page] )
   end
 
   def prepare_suspicious_attribute

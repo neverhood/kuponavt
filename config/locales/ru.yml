@@ -7,6 +7,7 @@ ru:
     hrn: грн
     reset: Сброс
     rub: руб
+
     starts_at: от
 
   views:
@@ -57,7 +58,7 @@ ru:
     kiev: Киев
     vinnitsa: Винница
     dnepropetrovsk: Днепропетровск
-    doneck: Донецк
+    donetsk: Донецк
     zaporozhye: Запорожье
     ivano-frankovsk: Ивано-Франковск
     krivoy-rog: Кривой Рог
@@ -94,6 +95,9 @@ ru:
     vologda: Вологда
     voronezh: Воронеж
     dmitrovgrad: Дмитровград
+    norilsk: Норильск
+    petropavlovsk-kamchatsky: Петропавловск Камчатский
+    salekhard: Салехард
     yeisk: Ейск
     yekaterinburg: Екатеринбург
     ivanovo: Иваново
@@ -158,7 +162,7 @@ ru:
     tomsk: Томск
     tula: Тула
     tyumen: Тюмень
-    ulanude: Улан-Удэ
+    ulan-ude: Улан-Удэ
     ulyanovsk: Ульяновск
     ust-labinsk: Усть-Лабинск
     ufa: Уфа
