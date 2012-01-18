@@ -35,15 +35,12 @@ saved = 0
 log.info("Starting myfant parser: #{Time.now}")
 
 cities.each do |city|
-  ss = city
   city = City.find_by_russian_name(city)
-  binding.pry if city.nil?
 
   log.info("Processing #{city.name} offers")
 
   offer_attributes, saved_offers = [], []
   existing_offers = city.offers.where(provider_id: PROVIDER.id).map(&:provided_id)
-#  city_offers = xml_offers.select { |offer| offer.xpath('region').text == cities[city] }
   city_offers = []
   xml_offers.map do |offer|
     if offer.xpath('region').text == city.russian_name

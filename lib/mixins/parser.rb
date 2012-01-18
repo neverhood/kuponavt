@@ -56,10 +56,10 @@ module Parser
   def description(host, description)
     description.css('a').each do |a|
       if a =~ /#{host}/
+        a.remove
+      else
         a['target'] = '_blank'
         a['rel'] = 'nofollow'
-      else
-        a.remove
       end
     end
     description
