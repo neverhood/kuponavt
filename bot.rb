@@ -77,13 +77,14 @@ class Keyword
   attr_accessor :tag
 
   def initialize(pattern)
+    @tag = pattern
     if pattern.include? '_'
       @tag = pattern.gsub('_', ' ')
-    elsif pattern.include? '+'
-      @tag = pattern.split('+')
-    else
-      @tag = pattern
     end
+    if pattern.include? '+'
+      @tag = pattern.split('+')
+    end
+    @tag
   end
 
 end
