@@ -29,7 +29,7 @@ cities = ["Москва",
 ]
 
 
-@log.info("Starting vigoda xml parser: #{Time.now}")
+@log.info("Starting brandel xml parser: #{Time.now}")
 
 saved = 0
 cities.each do |city|
@@ -115,4 +115,4 @@ cities.each do |city|
   @log.info("Finished processing #{city.name} ( #{Time.now} ). Saved #{saved_offers.count} new offers")
 end
 
-@log.info("Finished vigoda xml parser. #{saved} offers added. #{Time.now}")
+@log.info("Finished brandel xml parser. #{saved} offers added. #{Time.now}")

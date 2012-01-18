@@ -142,7 +142,8 @@ providers =
                   },
                   { name: 'brandel',
                     url: 'http://www.brandel.ru/',
-                    logo_url: 'brandel.png'
+                    logo_url: 'brandel.png',
+                    ref_url: '?codep=MTE2MTky'
                   },
                   { name: 'ckidki',
                     url: 'http://ckidki.ru/',

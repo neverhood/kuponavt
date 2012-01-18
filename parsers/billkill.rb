@@ -14,7 +14,7 @@ cities = {
 xml_offers = Nokogiri::XML( open URL ).xpath('//offer')
 saved = 0
 
-log.info("Starting weclever parser: #{Time.now}")
+log.info("Starting billkill parser: #{Time.now}")
 
 cities.keys.each do |city|
   log.info("Processing #{city.name} offers")
@@ -99,5 +99,5 @@ cities.keys.each do |city|
   city_offers = nil # Garbage
 end
 
-log.info("Finished weclever parser. #{saved} offers added. #{Time.now}")
+log.info("Finished billkill parser. #{saved} offers added. #{Time.now}")
 
