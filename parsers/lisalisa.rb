@@ -2,10 +2,10 @@
 require File.expand_path('../../lib/mixins/parser', __FILE__)
 include Parser
 
-URL = 'http://www.weclever.ru/xml/openstat/kuponavt.com.xml'
-PROVIDER = Provider.find_by_name('weclever')
+URL = 'http://www.lisalisa.ru/xml2.php'
+PROVIDER = Provider.find_by_name('lisalisa')
 
-log = Logger.new(File.expand_path('../logs/weclever.log', __FILE__))
+log = Logger.new(File.expand_path('../logs/lisalisa.log', __FILE__))
 
 cities = {
   City.find_by_name('moskva') => 'Москва',
@@ -48,7 +48,8 @@ cities = {
 xml_offers = Nokogiri::XML( open URL ).xpath('//offer')
 saved = 0
 
-log.info("Starting weclever parser: #{Time.now}")
+log.info("Starting lisalisa parser: #{Time.now}")
+
 
 cities.keys.each do |city|
   log.info("Processing #{city.name} offers")
@@ -126,5 +127,5 @@ cities.keys.each do |city|
   city_offers = nil # Garbage
 end
 
-log.info("Finished weclever parser. #{saved} offers added. #{Time.now}")
+log.info("Finished lisalisa parser. #{saved} offers added. #{Time.now}")
 

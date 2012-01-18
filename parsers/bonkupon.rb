@@ -2,60 +2,25 @@
 require File.expand_path('../../lib/mixins/parser', __FILE__)
 include Parser
 
-URL = 'http://www.weclever.ru/xml/openstat/kuponavt.com.xml'
-PROVIDER = Provider.find_by_name('weclever')
+URL = 'http://www.bonkupon.ru/rssexport.xml'
+PROVIDER = Provider.find_by_name('bonkupon')
 
-log = Logger.new(File.expand_path('../logs/weclever.log', __FILE__))
+log = Logger.new(File.expand_path('../logs/bonkupon.log', __FILE__))
 
 cities = {
-  City.find_by_name('moskva') => 'Москва',
-  City.find_by_name('sankt-peterburg') => 'Санкт-Петербург',
-  City.find_by_name('nijnii-novgorod') => 'Нижний Новгород',
-  City.find_by_name('samara') => 'Самара',
-  City.find_by_name('yekaterinburg') => 'Екатеринбург',
-  City.find_by_name('novosibirsk') => 'Новосибирск',
-  City.find_by_name('kazan') => 'Казань',
-  City.find_by_name('krasnoyarsk') => 'Красноярск',
-  City.find_by_name('rostov-na-donu') => 'Ростов-на-Дону',
-  City.find_by_name('cheliabinsk') => 'Челябинск',
-  City.find_by_name('arkhangelsk') => 'Архангельск',
-  City.find_by_name('ufa') => 'Уфа',
-  City.find_by_name('volgograd') => 'Волгоград',
-  City.find_by_name('krasnodar') => 'Краснодар',
-  City.find_by_name('omsk') => 'Омск',
-  City.find_by_name('sochi') => 'Сочи',
-  City.find_by_name('perm') => 'Пермь',
-  City.find_by_name('saratov') => 'Саратов',
-  City.find_by_name('izhevsk') => 'Ижевск',
-  City.find_by_name('ulyanovsk') => 'Ульяновск',
-  City.find_by_name('orenburg') => 'Оренбург',
-  City.find_by_name('penza') => 'Пенза',
-  City.find_by_name('naberezhnye-chelny') => 'Набережные Челны',
-  City.find_by_name('barnaul') => 'Барнаул',
-  City.find_by_name('irkutsk') => 'Иркутск',
-  City.find_by_name('novokuznetsk') => 'Новокузнецк',
-  City.find_by_name('kemerovo') => 'Кемерово',
-  City.find_by_name('tomsk') => 'Томск',
-  City.find_by_name('tyumen') => 'Тюмень',
-  City.find_by_name('voronezh') => 'Воронеж',
-  City.find_by_name('yaroslavl') => 'Ярославль',
-  City.find_by_name('lipetsk') => 'Липецк',
-  City.find_by_name('tula') => 'Тула',
-  City.find_by_name('astrakhan') => 'Астрахань',
-  City.find_by_name('kaliningrad') => 'Калининград',
-  City.find_by_name('tolyatti') => 'Тольятти'
+  City.find_by_name('moskva') => 'Москва'
 }
+
 xml_offers = Nokogiri::XML( open URL ).xpath('//offer')
 saved = 0
 
-log.info("Starting weclever parser: #{Time.now}")
+log.info("Starting bonkupon parser: #{Time.now}")
 
 cities.keys.each do |city|
   log.info("Processing #{city.name} offers")
 
   offer_attributes, saved_offers = [], []
   existing_offers = city.offers.where(provider_id: PROVIDER.id).map(&:provided_id)
-#  city_offers = xml_offers.select { |offer| offer.xpath('region').text == cities[city] }
   city_offers = []
   xml_offers.map do |offer|
     if offer.xpath('region').text == city.russian_name
@@ -126,5 +91,5 @@ cities.keys.each do |city|
   city_offers = nil # Garbage
 end
 
-log.info("Finished weclever parser. #{saved} offers added. #{Time.now}")
+log.info("Finished bonkupon parser. #{saved} offers added. #{Time.now}")
 

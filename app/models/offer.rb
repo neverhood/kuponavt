@@ -49,6 +49,7 @@ class Offer < ActiveRecord::Base
   mount_uploader :image, PictureUploader
 
   after_destroy :destroy_image_and_folder
+
   before_create lambda { |offer| offer.url.gsub! /\/$/, '' }
 
   scope :by_categories, lambda { |categories|

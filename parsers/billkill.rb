@@ -2,53 +2,19 @@
 require File.expand_path('../../lib/mixins/parser', __FILE__)
 include Parser
 
-URL = 'http://www.weclever.ru/xml/openstat/kuponavt.com.xml'
-PROVIDER = Provider.find_by_name('weclever')
+URL = 'http://billkill.ru/xml'
+PROVIDER = Provider.find_by_name('billkill')
 
-log = Logger.new(File.expand_path('../logs/weclever.log', __FILE__))
+log = Logger.new(File.expand_path('../logs/billkill.log', __FILE__))
 
 cities = {
   City.find_by_name('moskva') => 'Москва',
-  City.find_by_name('sankt-peterburg') => 'Санкт-Петербург',
-  City.find_by_name('nijnii-novgorod') => 'Нижний Новгород',
-  City.find_by_name('samara') => 'Самара',
-  City.find_by_name('yekaterinburg') => 'Екатеринбург',
-  City.find_by_name('novosibirsk') => 'Новосибирск',
-  City.find_by_name('kazan') => 'Казань',
-  City.find_by_name('krasnoyarsk') => 'Красноярск',
-  City.find_by_name('rostov-na-donu') => 'Ростов-на-Дону',
-  City.find_by_name('cheliabinsk') => 'Челябинск',
-  City.find_by_name('arkhangelsk') => 'Архангельск',
-  City.find_by_name('ufa') => 'Уфа',
-  City.find_by_name('volgograd') => 'Волгоград',
-  City.find_by_name('krasnodar') => 'Краснодар',
-  City.find_by_name('omsk') => 'Омск',
-  City.find_by_name('sochi') => 'Сочи',
-  City.find_by_name('perm') => 'Пермь',
-  City.find_by_name('saratov') => 'Саратов',
-  City.find_by_name('izhevsk') => 'Ижевск',
-  City.find_by_name('ulyanovsk') => 'Ульяновск',
-  City.find_by_name('orenburg') => 'Оренбург',
-  City.find_by_name('penza') => 'Пенза',
-  City.find_by_name('naberezhnye-chelny') => 'Набережные Челны',
-  City.find_by_name('barnaul') => 'Барнаул',
-  City.find_by_name('irkutsk') => 'Иркутск',
-  City.find_by_name('novokuznetsk') => 'Новокузнецк',
-  City.find_by_name('kemerovo') => 'Кемерово',
-  City.find_by_name('tomsk') => 'Томск',
-  City.find_by_name('tyumen') => 'Тюмень',
-  City.find_by_name('voronezh') => 'Воронеж',
-  City.find_by_name('yaroslavl') => 'Ярославль',
-  City.find_by_name('lipetsk') => 'Липецк',
-  City.find_by_name('tula') => 'Тула',
-  City.find_by_name('astrakhan') => 'Астрахань',
-  City.find_by_name('kaliningrad') => 'Калининград',
-  City.find_by_name('tolyatti') => 'Тольятти'
+  City.find_by_name('sankt-peterburg') => 'Санкт-Петербург'
 }
 xml_offers = Nokogiri::XML( open URL ).xpath('//offer')
 saved = 0
 
-log.info("Starting weclever parser: #{Time.now}")
+log.info("Starting billkill parser: #{Time.now}")
 
 cities.keys.each do |city|
   log.info("Processing #{city.name} offers")
@@ -66,7 +32,6 @@ cities.keys.each do |city|
     end
   end
   log.info("Found #{city_offers.count} offers")
-
 
   city_offers.each do |offer|
     provided_id = offer.xpath('id').text
@@ -86,13 +51,12 @@ cities.keys.each do |city|
     end
 
     offer_attributes = {
-      title: offer.xpath('name').text,
+      title: clear(offer.xpath('name').text),
       provider_id: PROVIDER.id,
       provided_id: offer.xpath('id').text,
       url: offer.xpath('url').text,
-      description: offer.xpath('description').text,
+      description: clear(offer.xpath('description').text.gsub("\n", "<br /> <br />")),
       ends_at: Time.parse(offer.xpath('endsell').text.gsub('T',' ')) + 1,
-      image: open( offer.xpath('picture').text ),
       price: offer.xpath('pricecoupon').text.to_i,
       cost: (offer.xpath('price').text.to_i),
       discount: offer.xpath('discount').text.to_i,
@@ -105,6 +69,14 @@ cities.keys.each do |city|
     offer_attributes[:coordinates] = nil if offer_attributes[:coordinates].blank?
     offer_attributes[:address] = nil if offer_attributes[:address].blank?
 
+    if offer.xpath('picture').text == 'http://billkill.ru/'
+      bot = Mechanize.new
+      bot.get offer_attributes[:url]
+      offer_attributes[:image] = open( 'http://billkill.ru' +  bot.page.parser.css('.banner-block .banner .panel img').first['src'] )
+    else
+      offer_attributes[:image] = open offer.xpath('picture').text
+    end
+
     model = Offer.new( offer_attributes )
     if model.valid?
       log.info("Saving offer #{provided_id}")
@@ -112,6 +84,7 @@ cities.keys.each do |city|
       saved_offers << model.provided_id
       saved += 1
     else
+      binding.pry
       log.error("Can't save invalid offer: #{model.provided_id}. \n #{model.errors.full_messages.join(',')}")
     end
 
@@ -126,5 +99,5 @@ cities.keys.each do |city|
   city_offers = nil # Garbage
 end
 
-log.info("Finished weclever parser. #{saved} offers added. #{Time.now}")
+log.info("Finished billkill parser. #{saved} offers added. #{Time.now}")
 

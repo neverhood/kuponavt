@@ -80,7 +80,8 @@ providers =
                   },
                   { name: 'skidkaest',
                     url: 'http://www.skidkaest.ru/',
-                    logo_url: 'skidkaest.png'
+                    logo_url: 'skidkaest.png',
+                    ref_url: '?ref=ca5bda8d'
                   },
                   { name: 'lisalisa',
                     url: 'http://www.lisalisa.ru/',
@@ -92,7 +93,8 @@ providers =
                   },
                   { name: 'billkill',
                     url: 'http://www.billkill.ru/',
-                    logo_url: 'billkill.png'
+                    logo_url: 'billkill.png',
+                    ref_url: '?partner=199496'
                   },
                   { name: 'discount-today',
                     url: 'http://www.discount-today.ru/',
@@ -140,7 +142,8 @@ providers =
                   },
                   { name: 'brandel',
                     url: 'http://www.brandel.ru/',
-                    logo_url: 'brandel.png'
+                    logo_url: 'brandel.png',
+                    ref_url: '?codep=MTE2MTky'
                   },
                   { name: 'ckidki',
                     url: 'http://ckidki.ru/',

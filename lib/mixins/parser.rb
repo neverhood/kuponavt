@@ -45,6 +45,24 @@ module Parser
     self.set_activerecord
   end
 
+  def clear(text)
+    text.gsub!('&amp;', '').
+      gsub!('laquo;', '').
+      gsub!('raquo;', '')
 
+    text
+  end
+
+  def description(host, description)
+    description.css('a').each do |a|
+      if a =~ /#{host}/
+        a['target'] = '_blank'
+        a['rel'] = 'nofollow'
+      else
+        a.remove
+      end
+    end
+    description
+  end
 
 end
