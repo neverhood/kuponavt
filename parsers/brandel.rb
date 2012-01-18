@@ -3,25 +3,35 @@
 require File.expand_path('../../lib/mixins/parser', __FILE__)
 include Parser
 
-PROVIDER = Provider.find_by_name('vigoda')
-@log = Logger.new(File.expand_path('../logs/vigoda_xml.log', __FILE__))
-xml_offers = Nokogiri::XML( open 'http://vigoda.ru/api/xml' ).xpath('//offer')
+PROVIDER = Provider.find_by_name('brandel')
+@log = Logger.new(File.expand_path('../logs/brandel.log', __FILE__))
+xml_offers = Nokogiri::XML( open 'http://brandel.ru/import.php' ).xpath('//offer')
 
-cities = ["Москва", "Санкт-Петербург", "Альметьевск", "Архангельск", "Астрахань", "Барнаул", "Брянск", "Владивосток",
-          "Волгоград", "Волжский", "Вологда", "Воронеж", "Екатеринбург", "Иваново", "Ижевск", "Иркутск", "Йошкар-Ола",
-          "Казань", "Калининград", "Калуга", "Кемерово", "Киров", "Кострома", "Краснодар", "Красноярск",
-          "Курск", "Липецк", "Магнитогорск", "Мурманск", "Набережные Челны", "Нижнекамск", "Нижний Новгород",
-          "Новокузнецк", "Новосибирск", "Норильск", "Омск", "Орел", "Пенза", "Пермь", "Петрозаводск", "Петропавловск Камчатский",
-          "Псков", "Ростов-на-Дону", "Рязань", "Салехард", "Самара", "Саратов", "Смоленск", "Сочи", "Сургут", "Сыктывкар", "Тверь",
-          "Тольятти", "Томск", "Тула", "Тюмень", "Улан-Удэ", "Ульяновск", "Уфа", "Хабаровск", "Ханты-Мансийск", "Чебоксары",
-          "Челябинск", "Череповец", "Чита", "Южно-Сахалинск", "Якутск", "Ярославль", "Киев", "Днепропетровск", "Донецк",
-          "Запорожье", "Ивано-Франковск", "Луганск", "Львов", "Николаев", "Одесса", "Полтава", "Севастополь", "Тернополь",
-          "Харьков", "Херсон", "Чернигов"]
+cities = ["Москва",
+          "Екатеринбург",
+          "Санкт-Петербург",
+          "Нижний Новгород",
+          "Новосибирск",
+          "Пермь",
+          "Самара",
+          "Омск",
+          "Челябинск",
+          "Волгоград",
+          "Краснодар",
+          "Ростов-на-Дону",
+          "Сочи",
+          "Владивосток",
+          "Иркутск",
+          "Красноярск",
+          "Казань",
+          "Тюмень",
+          "Уфа"
+]
+
 
 @log.info("Starting vigoda xml parser: #{Time.now}")
 
 saved = 0
-
 cities.each do |city|
   city = City.find_by_russian_name(city)
 
@@ -65,7 +75,6 @@ cities.each do |city|
       url: offer.xpath('url').text,
       description: offer.xpath('description').text,
       ends_at: Time.parse(offer.xpath('endsell').text.gsub('T',' ')) + 1,
-      image: open( offer.xpath('picture').text ),
       price: offer.xpath('pricecoupon').text.to_i,
       cost: (offer.xpath('price').text.to_i),
       discount: offer.xpath('discount').text.to_i,
@@ -74,6 +83,13 @@ cities.each do |city|
       country_id: city.country.id,
       city_id: city.id
     }
+    if offer.xpath('picture').text == ""
+      bot = Mechanize.new
+      bot.get offer_attributes[:url]
+      offer_attributes[:image] = open( 'http://brandel.ru' + bot.page.parser.css('.bg_cont img').last['src'] )
+    else
+      offer_attributes[:image] = open( offer.xpath('picture').text )
+    end
     offer_attributes[:price] = offer.xpath('discountprice').text.to_i if offer_attributes[:price] == 0
     offer_attributes[:coordinates] = nil if offer_attributes[:coordinates].blank?
     offer_attributes[:address] = nil if offer_attributes[:address].blank?
