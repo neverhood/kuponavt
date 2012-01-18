@@ -2,18 +2,20 @@
 require File.expand_path('../../lib/mixins/parser', __FILE__)
 include Parser
 
-URL = 'http://bonimani.ru/xml/kuponavt'
-PROVIDER = Provider.find_by_name('bonimani')
+URL = 'http://boombate.com/files/deals.xml'
+PROVIDER = Provider.find_by_name('boombate')
 
-log = Logger.new(File.expand_path('../logs/bonimani.log', __FILE__))
+log = Logger.new(File.expand_path('../logs/boombate.log', __FILE__))
 
 cities = {
   City.find_by_name('moskva') => 'Москва',
+  City.find_by_name('sankt-peterburg') => 'Санкт-Петербург',
+  City.find_by_name('novosibirsk') => 'Новосибирск'
 }
-xml_offers = Nokogiri::XML( open URL ).xpath('//offer')
+xml_offers = Nokogiri::XML( open URL ).xpath('//deal')
 saved = 0
 
-log.info("Starting bonimani parser: #{Time.now}")
+log.info("Starting boombate parser: #{Time.now}")
 
 cities.keys.each do |city|
   log.info("Processing #{city.name} offers")
@@ -31,6 +33,7 @@ cities.keys.each do |city|
     end
   end
   log.info("Found #{city_offers.count} offers")
+
 
   city_offers.each do |offer|
     provided_id = offer.xpath('id').text
@@ -50,22 +53,40 @@ cities.keys.each do |city|
     end
 
     offer_attributes = {
-      title: offer.xpath('name').text,
+      title: offer.xpath('company_name').text + '. ' + offer.xpath('name').text,
       provider_id: PROVIDER.id,
       provided_id: offer.xpath('id').text,
       url: offer.xpath('url').text,
-      description: offer.xpath('description').text,
+      #description: offer.xpath('description').text + offer.xpath('conditions').map(&:text).join("\n"),
       ends_at: Time.parse(offer.xpath('endsell').text.gsub('T',' ')) + 1,
-      image: open( offer.xpath('picture').text ),
-      price: offer.xpath('pricecoupon').text.to_i,
-      cost: (offer.xpath('price').text.to_i),
+      image: open( offer.xpath('img').text ),
+      price: 0,
+      cost: 0,
       discount: offer.xpath('discount').text.to_i,
-      address: offer.xpath('supplier/addresses/address/name').map(&:text).map(&:strip).join("||"),
+      address: offer.xpath('addresses/address/text').map(&:text).map(&:strip).join("||"),
       coordinates: offer.xpath('supplier/addresses/address/coordinates').map(&:text).join("||"),
       country_id: city.country_id,
       city_id: city.id
     }
-    offer_attributes[:price] = offer.xpath('discountprice').text.to_i if offer_attributes[:price] == 0
+    coordinates = []
+    offer.xpath('addresses/address').each do |address|
+      coordinates << (address.xpath('lat').text + ',' + address.xpath('lng').text)
+    end
+
+    bot = Mechanize.new
+    bot.get offer_attributes[:url]
+    description = bot.page.parser.css('.leftside')
+    description.css('a').each do |a|
+      if a['href'] =~ /boombate\/ru/
+        a['target'] = '_blank'
+        a['rel'] = 'nofollow'
+      else
+        a.remove
+      end
+    end
+
+    offer_attributes[:description] = description.to_html
+    offer_attributes[:coordinates] = coordinates.join("||")
     offer_attributes[:coordinates] = nil if offer_attributes[:coordinates].blank?
     offer_attributes[:address] = nil if offer_attributes[:address].blank?
 
@@ -90,5 +111,5 @@ cities.keys.each do |city|
   city_offers = nil # Garbage
 end
 
-log.info("Finished bonimani parser. #{saved} offers added. #{Time.now}")
+log.info("Finished boombate parser. #{saved} offers added. #{Time.now}")
 
