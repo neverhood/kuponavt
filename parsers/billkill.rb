@@ -51,11 +51,11 @@ cities.keys.each do |city|
     end
 
     offer_attributes = {
-      title: offer.xpath('name').text,
+      title: clear(offer.xpath('name').text),
       provider_id: PROVIDER.id,
       provided_id: offer.xpath('id').text,
       url: offer.xpath('url').text,
-      description: offer.xpath('description').text,
+      description: clear(offer.xpath('description').text.gsub("\n", "<br /> <br />")),
       ends_at: Time.parse(offer.xpath('endsell').text.gsub('T',' ')) + 1,
       price: offer.xpath('pricecoupon').text.to_i,
       cost: (offer.xpath('price').text.to_i),

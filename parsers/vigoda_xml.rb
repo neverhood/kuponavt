@@ -63,7 +63,7 @@ cities.each do |city|
       provider_id: PROVIDER.id,
       provided_id: offer.xpath('id').text,
       url: offer.xpath('url').text,
-      description: offer.xpath('description').text,
+      description: offer.xpath('description').text.gsub("\n", "<br />"),
       ends_at: Time.parse(offer.xpath('endsell').text.gsub('T',' ')) + 1,
       image: open( offer.xpath('picture').text ),
       price: offer.xpath('pricecoupon').text.to_i,

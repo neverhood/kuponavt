@@ -65,7 +65,7 @@ cities.each do |city|
       provider_id: PROVIDER.id,
       provided_id: offer.xpath('id').text,
       url: offer.xpath('url').text,
-      description: offer.xpath('description').text,
+      #description: offer.xpath('description').text,
       ends_at: Time.parse(offer.xpath('endsell').text.gsub('T',' ')) + 1,
       image: open( offer.xpath('picture').text ),
       price: offer.xpath('pricecoupon').text.to_i,
@@ -76,6 +76,10 @@ cities.each do |city|
       city_id: city.id,
       country_id: city.country_id
     }
+
+    raw_description = Nokogiri::HTML(offer.xpath('description').text).css('body')
+    offer_attributes[:description] = description('bigbuzzy.ru', raw_description).inner_html
+
     offer_attributes[:price] = offer.xpath('discountprice').text.to_i if offer_attributes[:price] == 0
     offer_attributes[:coordinates] = nil if offer_attributes[:coordinates].blank?
     offer_attributes[:address] = nil if offer_attributes[:address].blank?
