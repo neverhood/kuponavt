@@ -26,6 +26,11 @@ body#admin-bot-controller {
                 &:hover { color: red }
 
               }
+
+              .current-category {
+                color: red;
+                font-weight: bold;
+              }
           }
       }
 
