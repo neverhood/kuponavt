@@ -85,7 +85,8 @@ providers =
                   },
                   { name: 'lisalisa',
                     url: 'http://www.lisalisa.ru/',
-                    logo_url: 'lisalisa.png'
+                    logo_url: 'lisalisa.png',
+                    ref_url: '?refid=69000'
                   },
                   { name: 'cityradar',
                     url: 'http://cityradar.ru/',
@@ -183,7 +184,8 @@ providers =
                   },
                   { name: 'bonkupon',
                     url: 'http://www.bonkupon.ru/',
-                    logo_url: 'bonkupon.png'
+                    logo_url: 'bonkupon.png',
+                    ref_url: '?utm_source=banner&utm_medium=partner&partner_id=62716248'
                   },
                   { name: 'joybuy',
                     url: 'http://joybuy.ru/',
@@ -415,7 +417,8 @@ providers =
                   },
                   { name: 'bonusprice',
                     url: 'http://bonusprice.ru/',
-                    logo_url: 'bonusprice.png'
+                    logo_url: 'bonusprice.png',
+                    ref_url: '?ref=736'
                   }
 
   ])
