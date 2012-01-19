@@ -6,7 +6,6 @@ include Parser
 @provider = PROVIDER = Provider.where(:name => 'fun2mass').first
 @existing_offers = Offer.where(provider_id: @provider.id).map(&:provided_id)
 @log = Logger.new(File.expand_path('../logs/fun2mass.log', __FILE__))
-
 categories = ["http://fun2mass.ru/category/beauty", "http://fun2mass.ru/category/restaurants",
               "http://fun2mass.ru/category/entertainment", "http://fun2mass.ru/category/sport", "http://fun2mass.ru/category/study",
               "http://fun2mass.ru/category/health", "http://fun2mass.ru/category/auto", "http://fun2mass.ru/category/sell",
@@ -77,5 +76,11 @@ offers.each do |offer|
     @log.error("Can't save invalid offer: #{model.provided_id}. \n #{model.errors.full_messages.join(',')}")
   end
 end
+
+@existing_offers.each do |expired_offer|
+  log.info("Removing expired offer #{expired_offer}")
+  Offer.where(provider_id: PROVIDER.id, provided_id: expired_offer).first.destroy
+end
+
 
 @log.info "Finished parsing fun2mass. Total of #{saved} new offers were added"
