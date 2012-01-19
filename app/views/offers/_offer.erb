@@ -67,7 +67,10 @@
 
   <div class='offer-details'>
     <div class='offer-address'> <%= raw(offer.address) %> </div>
-    <div class='offer-description'><div class='offer-description-roll-up'>свернуть</div> <div class='offer-description-overflow'> <%= raw(offer.description) %> </div> </div>
+    <div class='offer-description'>
+      <div class='offer-description-roll-up'>свернуть</div>
+      <div class='offer-description-overflow'> <%= raw(offer.description) %></div>
+    </div>
   </div>
 
   <div class='offer-bottom' title='<%= t('offers.details') %>'>
