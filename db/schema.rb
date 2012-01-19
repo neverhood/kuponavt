@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120117160159) do
+ActiveRecord::Schema.define(:version => 20120119231240) do
 
   create_table "bot_statistics", :force => true do |t|
     t.integer  "offer_id"
@@ -128,15 +128,15 @@ ActiveRecord::Schema.define(:version => 20120117160159) do
     t.string   "address"
     t.string   "url"
     t.datetime "created_at"
-    t.datetime "updated_at"
-    t.boolean  "retail"
-    t.integer  "retail_price"
-    t.integer  "price_starts_at"
     t.boolean  "from_kupongid"
     t.string   "coordinates"
   end
 
   add_index "offers", ["category_id"], :name => "index_offers_on_category_id"
+  add_index "offers", ["created_at"], :name => "index_offers_on_created_at"
+  add_index "offers", ["discount"], :name => "index_offers_on_discount"
+  add_index "offers", ["ends_at"], :name => "index_offers_on_ends_at"
+  add_index "offers", ["price"], :name => "index_offers_on_price"
 
   create_table "providers", :force => true do |t|
     t.string   "name"
