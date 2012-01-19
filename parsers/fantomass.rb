@@ -78,7 +78,7 @@ offers.each do |offer|
 end
 
 @existing_offers.each do |expired_offer|
-  log.info("Removing expired offer #{expired_offer}")
+  @log.info("Removing expired offer #{expired_offer}")
   Offer.where(provider_id: PROVIDER.id, provided_id: expired_offer).first.destroy
 end
 
