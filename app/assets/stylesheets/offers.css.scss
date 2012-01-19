@@ -451,7 +451,7 @@ div#offers {
     .offer-description {
       margin-top: 40px;
       position: relative;
-      width: 600px;
+      width: 639px;
       color: #606060;
       text-shadow: 0px 1px white;
 
@@ -468,6 +468,8 @@ div#offers {
 
           &:hover { opacity: 1 }*/
       }
+
+      .offer-description-overflow { overflow: hidden }
       
       li { margin-bottom: 10px }
     }
