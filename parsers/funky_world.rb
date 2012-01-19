@@ -54,8 +54,12 @@ offers.each do |offer|
   image_url = (@url + $1) if pattern.css('.item_table .l div.image').first['style'] =~ /\((.*)\)/
   offer[:image] = open(image_url) if image_url
   raw_description = pattern.css('.item_desc_table td.l .block_text, .item_desc_table td.l .block_image')
+  desc = description('funkyworld.ru', raw_description)
+  desc.css('img').each do |img|
+    img['src'] = @url + img['src']
+  end
 
-  offer[:description] = description('funkyworld.ru', raw_description).to_html.encode('utf-8')
+  offer[:description] = desc.to_html.encode('utf-8')
   offer[:city_id] = city.id
   offer[:country_id] = city.country_id
   offer[:address] = $1 if pattern.css('.item_desc_table td.l div.right p').text =~ /адрес.*:\s*(.*)/i
