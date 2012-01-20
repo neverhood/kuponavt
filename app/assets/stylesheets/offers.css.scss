@@ -615,7 +615,7 @@ div#offers {
 
     span#search-button {
       position: absolute;
-      bottom: 18px;
+      bottom: 19px;
       right: 17px;
       background: url(search.png);
       display: inline-block;
@@ -625,7 +625,7 @@ div#offers {
       -webkit-transition: all .1s linear;
       -moz-transition: all .1s linear;
       &:active {
-        bottom: 17px;
+        bottom: 18px;
       }
     }
 
