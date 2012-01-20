@@ -53,8 +53,9 @@ class Offer < ActiveRecord::Base
   before_create lambda { |offer| offer.url.gsub! /\/$/, '' }
 
   scope :by_categories, lambda { |categories|
-    joins(:category).
-      where(['categories.name IN (:category_names)', :category_names => categories.join(',')])
+    where(category_id: categories.join(','))
+    #joins(:category).
+      #where(['categories.name IN (:category_names)', :category_names => categories.join(',')])
   }
   scope :categorized, where('`offers`.`category_id` IS NOT NULL').order('`offers`.`category_id` DESC')
   scope :newest_first, order('`offers`.`created_at` DESC')
@@ -73,11 +74,10 @@ class Offer < ActiveRecord::Base
   end
 
 
-  def price
-    return read_attribute(:price) if read_attribute(:price)
+  #def price
+    #return read_attribute(:price) if read_attribute(:price)
 
-    retail ? retail_price : price_starts_at
-  end
+  #end
 
   def ends_at
     case read_attribute(:ends_at)

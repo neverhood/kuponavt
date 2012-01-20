@@ -46,9 +46,10 @@ module Parser
   end
 
   def clear(text)
-    text.gsub!('&amp;', '').
-      gsub!('laquo;', '').
-      gsub!('raquo;', '')
+    text = text.gsub('&amp;', '').
+      gsub('laquo;', '').
+      gsub('raquo;', '').
+      gsub('&quot;', '')
 
     text
   end
