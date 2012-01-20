@@ -14,11 +14,8 @@ class OffersController < ApplicationController
   before_filter :prepare_sort_attributes, :only => :index
   before_filter :prepare_time_period, :only => :index
   before_filter :prepare_page_index, :only => [ :index, :search ]
-
   before_filter :validate_offer, :only => :show
-
   before_filter :validate_favourites, :only => :favourites, :if => lambda { |controller| controller.request.xhr? }
-
   before_filter :validate_search, :only => :search
 
   def index
