@@ -583,7 +583,7 @@ $('document').ready(function() {
             });
         }
 
-        setInterval( refreshFilter, 90000 );
+        //setInterval( refreshFilter, 90000 );
     }
 
     // cookies
