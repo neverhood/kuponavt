@@ -32,7 +32,6 @@
     </table>
 
     <p class='info'> <%= t('offers.time_left') %>:
-    </p>
 
     <% ends_at = offer['ends_at'] ? offer['ends_at'] : 1.day.from_now.to_date %>
     <% if ends_at == 1.day.from_now.to_date %>
@@ -40,6 +39,7 @@
     <% else %>
       <p class='time-left'> <%= (ends_at < Time.now.to_date) ? 1.day.ago.to_date.to_js : ends_at.to_js %>
     <% end %>
+    </p>
 
     <br />
 
