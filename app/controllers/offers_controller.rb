@@ -30,16 +30,6 @@ class OffersController < ApplicationController
     else
       @offers = @city.offers.categorized.page(@page)
     end
-    #@offers = if request.xhr?
-                #@categories ? @city.offers.
-                  #where(category_id: @categories).
-                  #by_time_period(@time_period).
-                  #order(@sort_by).
-                  #page( @page ) :
-                  #[]
-              #else
-                #@city.offers.categorized.page(@page)
-              #end
 
     @offers_total_count = @city.offers.categorized.count
 
@@ -49,10 +39,12 @@ class OffersController < ApplicationController
       @offers_selected_count = @categories ? @city.offers.where(category_id: @categories).count : @city.offers.categorized.count
     end
 
+    @raw_offers = MysqlClient.query( @offers.to_sql )
+
     respond_to do |format|
       format.html
       format.js do
-        render :json => { :offers => render_to_string(:partial => 'offer', :collection => @offers),
+        render :json => { :offers => render_to_string(partial: 'offers'),
           :pagination => render_to_string(:partial => 'pagination'), :count => @offers_selected_count
         }, :layout => false
       end
