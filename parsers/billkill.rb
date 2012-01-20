@@ -49,6 +49,7 @@ cities.keys.each do |city|
       existing_model = nil
       next
     end
+    next if offer.xpath('name').text.nil?
 
     offer_attributes = {
       title: clear(offer.xpath('name').text),
