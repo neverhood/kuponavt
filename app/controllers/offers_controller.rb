@@ -22,20 +22,32 @@ class OffersController < ApplicationController
   before_filter :validate_search, :only => :search
 
   def index
-    @offers = if request.xhr?
-                @categories ? @city.offers.
-                  where(category_id: @categories).
-                  by_time_period(@time_period).
-                  order(@sort_by).
-                  page( @page ) :
-                  []
-              else
-                @city.offers.categorized.page(@page)
-              end
+    if request.xhr?
+      @offers = @categories ? @city.offers.where(category_id: @categories).order(@sort_by).page( @page ) : []
+      if @time_period && @categories
+        @offers = @offers.by_time_period(@time_period)
+      end
+    else
+      @offers = @city.offers.categorized.page(@page)
+    end
+    #@offers = if request.xhr?
+                #@categories ? @city.offers.
+                  #where(category_id: @categories).
+                  #by_time_period(@time_period).
+                  #order(@sort_by).
+                  #page( @page ) :
+                  #[]
+              #else
+                #@city.offers.categorized.page(@page)
+              #end
 
     @offers_total_count = @city.offers.categorized.count
-    @offers_selected_count = @categories ? @city.offers.by_categories(@categories).
-        by_time_period(@time_period).count : @city.offers.categorized.count
+
+    if @time_period
+      @offers_selected_count = @categories ? @city.offers.where(category_id: @categories).by_time_period(@time_period).count : @city.offers.categorized.count
+    else
+      @offers_selected_count = @categories ? @city.offers.where(category_id: @categories).count : @city.offers.categorized.count
+    end
 
     respond_to do |format|
       format.html
@@ -122,7 +134,6 @@ class OffersController < ApplicationController
     @time_period = case time_period
                      when 1 then [Time.now.utc.to_date]
                      when 2 then [1.day.ago.utc.to_date, Time.now.utc.to_date]
-                     else [365.days.ago]
                    end
   end
 
