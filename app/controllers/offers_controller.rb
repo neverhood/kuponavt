@@ -36,6 +36,7 @@ class OffersController < ApplicationController
       @offers_selected_count = @categories ? @city.offers.where(category_id: @categories).count : @city.offers.categorized.count
     end
 
+    binding.pry
     @raw_offers = MysqlClient.query( @offers.to_sql )
 
     respond_to do |format|
