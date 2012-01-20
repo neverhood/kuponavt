@@ -46,16 +46,9 @@
     </p>
 
     <p class='price'>
-      <span class='offer-price'>
-        <% if offer.price_starts_at %>
-          <span class='starts-at'>
-            <%= t('common.starts_at') %>
-          </span>
-          <%= offer.price_starts_at %>
-        <% else %>
-          <%= offer.price %>
-        <% end %>
-      </span>
+    <span class='offer-price'>
+      <%= offer.price %>
+    </span>
       <span class='currency'> <%= offer.country.currency %> </span>
     </p>
 
