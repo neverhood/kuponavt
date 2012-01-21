@@ -51,6 +51,7 @@ cities.keys.each do |city|
     end
     next if offer.xpath('name').text.nil?
 
+    binding.pry if offer.xpath('name').text.nil?
     offer_attributes = {
       title: clear(offer.xpath('name').text),
       provider_id: PROVIDER.id,

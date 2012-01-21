@@ -6,7 +6,14 @@ include Parser
 require File.expand_path('../../lib/mixins/kupongid_tools', __FILE__)
 include KupongidTools
 
-@bot = Mechanize.new #KupongidTools.authenticate! Mechanize.new, login: 'khomich.vlad@gmail.com', password: 'mfaunbby'
+require 'tor-privoxy'
+#@bot = Mechanize.new #KupongidTools.authenticate! Mechanize.new, login: 'khomich.vlad@gmail.com', password: 'mfaunbby'
+@proxy = TorPrivoxy::Switcher.new '127.0.0.1', '', {8118 => 9050}
+@bot = Mechanize.new
+@bot.set_proxy(@proxy.host, @proxy.port)
+
+puts @bot.get('http://ifconfig.me/ip').body
+
 @log = Logger.new("#{$rails_root}/parsers/logs/kupongid.log")
 @url = 'http://www.kupongid.ru'
 
@@ -22,7 +29,7 @@ cities.keys.each do |city|
   existing_offers = KupongidTools.existing_offers(city)
   saved_offers = []
 
-  @bot.get( cities[city] )
+  @bot.get( @url + '/' + cities[city] )
 
   # Pagination
   current_page = 0
@@ -50,6 +57,7 @@ cities.keys.each do |city|
       select { |pattern| pattern.should_follow? }
 
     @bot = Mechanize.new
+    @bot.set_proxy(@proxy.host, @proxy.port)
 
     offer_patterns.each do |offer_pattern|
       if saved_offers.include?(offer_pattern.offer_id) || existing_offers.include?(offer_pattern.offer_id)
@@ -67,7 +75,7 @@ cities.keys.each do |city|
       end
 
       begin
-        model = Offer.new(offer_pattern.attributes.merge({country_id: city.country_id}))
+        model = Offer.new(offer_pattern.attributes.merge({country_id: city.country_id, city_id: city.id}))
         model = Offer.new if model.url.nil?
         if model.valid?
           @log.info "Saving offer #{model.provided_id}"

@@ -2,7 +2,7 @@
 module KupongidTools
 
   # 1 - biglion, 10 - vigoda, 202 - discounter, 12 - weclever, 3 - kupikupon, 231 - yakupon, 15 - kupibonus, 8 - fun2mass, 271 - discounti, 113 - myfant, 43 - alkupone, 17 - skidkaest, 118 - lisalisa, 11 - cityradar, 14 - billkill, 44 - discount-today, 230 - qpon, 193 - ladykupon, 243 - carpot, 55 - boombate, 51 - hipclub, 28 - sellberry, 106 - funkyworld, 171 - newnotion, 186 - kuponya, 255 - ostrovok, 34 - brandel, 58 - ckidki, 93 - vkusoflife, 192 - saleforman, 208 - planet-eds, 22 - dailysmiles, 160 - maxbery, 126 - citycoupon, 175 - mafam, 68 - bestkupon, 73 - bonkupon, 9 - joybuy, 16 - megakupon, 184 - obval, 98 - kingcoupon, 153 - darget, 249 - halyavaproject, 217 - lotbest, 40 - skuponom, 85 - gorodinfo, 2 - groupon, 220 - salesforyou, 191 - megackidki, 83 - kidskupon, 127 - kupon, 226 - hotbaklazhan, 187 - diprice, 101 - slonkupon, 222 - ctwoman, 180 - saynobody, 144 - mydarin, 224 - azbuka-skidok, 71 - autokupon, 120 - wildprice, 25 - glavskidka, 163 - couponhouse, 151 - 5ine, 212 - skidkumne, 56 - expresskupon, 122 - etook, 233 - shopogoliq, 195 - bonimani, 135 - bank-skidki, 154 - viptalon, 13 - izumgoroda, 203 - polzagroup, 174 - vacaloca, 155 - kupontravel, 7 - bigbuzzy, 74 - vipkupon, 229 - skidogolik, 182 - biglift, 228 - restoran-city, 263 - appiny, 273 - intercoupon, 63 - skidman, 246 - kuponid, 259 - darrom, 260 - dealtimes, 253 - pluskupon, 238 - city-kupon, 266 - pro-cent, 252 - dringo, 242 - bankskidok, 138 - kupiotpusk, 272 - sugarsales, 265 - bontalon, 225 - bigsaving, 119 - skidka50, 82 - bonusprice
-  AVAILABLE_PROVIDERS = [ 1, 10, 90, 7, 12 ]
+  AVAILABLE_PROVIDERS = [ 1, 10, 7, 14, 195, 34, 90, 17, 12, 55, 85, 118, 73, 8, 82, 44, 9, 113, 2, 106, 71, 126, 43, 11, 113, 208 ]
   PROVIDERS = {1=>"biglion", 10=>"vigoda", 165=>'planear', 205=>'myredcat', 165 => 'donkupone', 202=>"discounter", 12=>"weclever", 3=>"kupikupon", 231=>"yakupon", 15=>"kupibonus", 8=>"fun2mass", 271=>"discounti", 113=>"myfant", 43=>"alkupone", 17=>"skidkaest", 118=>"lisalisa", 11=>"cityradar", 14=>"billkill", 44=>"discount-today", 230=>"qpon", 193=>"ladykupon", 194=>'clubkupon', 243=>"carpot", 55=>"boombate", 51=>"hipclub", 28=>"sellberry", 106=>"funkyworld", 171=>"newnotion", 186=>"kuponya", 255=>"ostrovok", 34=>"brandel", 58=>"ckidki", 93=>"vkusoflife", 192=>"saleforman", 208=>"planet-eds", 22=>"dailysmiles", 160=>"maxbery", 126=>"citycoupon", 175=>"mafam", 68=>"bestkupon", 73=>"bonkupon", 9=>"joybuy", 16=>"megakupon", 184=>"obval", 98=>"kingcoupon", 153=>"darget", 249=>"halyavaproject", 217=>"lotbest", 40=>"skuponom", 85=>"gorodinfo", 2=>"groupon", 220=>"salesforyou", 191=>"megackidki", 83=>"kidskupon", 127=>"kupon", 226=>"hotbaklazhan", 187=>"diprice", 101=>"slonkupon", 222=>"ctwoman", 180=>"saynobody", 144=>"mydarin", 224=>"azbuka-skidok", 71=>"autokupon", 120=>"wildprice", 25=>"glavskidka", 163=>"couponhouse", 151=>"5ine", 212=>"skidkumne", 56=>"expresskupon", 122=>"etook", 233=>"shopogoliq", 195=>"bonimani", 135=>"bank-skidki", 154=>"viptalon", 13=>"izumgoroda", 203=>"polzagroup", 174=>"vacaloca", 155=>"kupontravel", 7=>"bigbuzzy", 74=>"vipkupon", 229=>"skidogolik", 182=>"biglift", 228=>"restoran-city", 263=>"appiny", 273=>"intercoupon", 63=>"skidman", 246=>"kuponid", 259=>"darrom", 260=>"dealtimes", 253=>"pluskupon", 238=>"city-kupon", 266=>"pro-cent", 252=>"dringo", 242=>"bankskidok", 138=>"kupiotpusk", 272=>"sugarsales", 265=>"bontalon", 225=>"bigsaving", 119=>"skidka50", 82=>"bonusprice"}
 
   providers = { 10 => 'biglion'}
@@ -18,8 +18,8 @@ module KupongidTools
 
   def self.cities
     Hash[[
-      [ City.find_by_name('sankt-peterburg'), 'sankt-peterburg' ],
       [ City.find_by_name('moskva'), 'moskva' ],
+      [ City.find_by_name('sankt-peterburg'), 'sankt-peterburg' ],
       [ City.find_by_name('kiev'), 'kiev' ]
     ]]
   end
@@ -30,8 +30,12 @@ module KupongidTools
   end
 
   class Pattern
+    require 'tor-privoxy'
 
+    @@proxy = TorPrivoxy::Switcher.new '127.0.0.1', '', {8118 => 9050}
     @@bot = Mechanize.new
+    @@bot.set_proxy(@@proxy.host, @@proxy.port)
+
 
     attr_accessor :source, :provider_id, :offer_id, :url, :image_file, :cached_attributes
 
@@ -79,6 +83,7 @@ module KupongidTools
         cached_attributes = attrs
       end
       @@bot = Mechanize.new
+      @@bot.set_proxy(@@proxy.host, @@proxy.port)
       cached_attributes
     end
 
@@ -113,7 +118,18 @@ module KupongidTools
     end
 
     def description
-      source.css('div[style]')[1].css('p')[1].to_html.encode('utf-8') rescue nil
+      raw_description = source.css('div[style]')[1].css('p')[1]
+      return nil if raw_description.nil? or raw_description.blank?
+      raw_description.css('a').each do |a|
+         if a['href'] =~ /kupongid/
+            a.remove
+         else
+            a['target'] = 'blank'
+            a['rel'] = 'nofollow'
+         end
+      end
+       
+      raw_description.to_html.encode('utf-8') rescue nil
     end
 
     def subway
