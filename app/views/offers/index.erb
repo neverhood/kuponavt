@@ -46,7 +46,6 @@
 
   </div>
 
-
   <div id='all-offers' data-city='<%= @city.name %>' data-page='<%= params[:page] || false %>'>
     <div id='offers-section'>
       <%= render 'offers' %>
@@ -57,6 +56,10 @@
     <div id='pagination-bottom'>
       <%= render 'pagination' %>
     </div>
+  </div>
+
+  <div id='offers-for-page' class='center-aligned hidden'>
+    по <span class='current'>25</span><span>50</span><span>100</span> купонов на страницу
   </div>
 
 </div>

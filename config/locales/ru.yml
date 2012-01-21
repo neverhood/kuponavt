@@ -13,10 +13,10 @@ ru:
   views:
     pagination:
       truncate: ...
-      next: Следующая
+      next: Следующая &rarr;
       last: Последняя
       first: Первая
-      previous: Предыдущая
+      previous: "&larr; Предыдущая"
 
   offers:
     price: Цена
