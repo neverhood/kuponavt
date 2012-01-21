@@ -30,8 +30,8 @@
   <div id='all-offers'>
     <div id='offers-section'>
       <% @entries.each do |entry| %>
-        <% offer = Offer.find entry.offer_id %>
-        <% if entry.category_id && offer.category %>
+        <% offer = Offer.where(:id => entry.offer_id).first %>
+        <% if entry.category_id && offer && offer.category %>
           <%= render :partial => 'offer', :locals => { offer: offer, entry: entry } %>
         <% end %>
       <% end %>
