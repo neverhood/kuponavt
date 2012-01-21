@@ -108,7 +108,7 @@ $.offers.utils.showFavourites = function() {
         var offers = $.cookie('favourites').split(',');
 
         $.each( offers, function() {
-            $('div#offer-' + this).find('.add-button').addClass('add-button-added');
+            $('div#offer-' + this.replace(/_.*/, '')).find('.add-button').addClass('add-button-added');
         });
     }
 };
@@ -759,7 +759,11 @@ $('document').ready(function() {
     // Favourites
 
     if ( /\/offers\/favourites/.test(window.location.href) && $.cookie('favourites') ) {
-        $.getJSON( '/offers/favourites?offers=' + $.cookie('favourites'), function(data) {
+        var offerIds = [];
+        $.each( $.cookie('favourites').split(','), function() {
+            offerIds.push( this.replace(/_.*/, '') );
+        });
+        $.getJSON( '/offers/favourites?offers=' + offerIds.join(','), function(data) {
             var countContainer = $('#offers-selected-count');
 
             $( $.offers.sections.offers ).append( data.offers );
@@ -775,8 +779,16 @@ $('document').ready(function() {
                 var addedOffers = $.cookie('favourites').split(','),
                     offer = $(this).parents('div.offer'),
                     offerId = offer.attr('id').replace('offer-', ''),
-                    index = addedOffers.indexOf(offerId),
+                    regexp = new RegExp(offerId, 'g'),
                     currentCount = parseInt( countContainer.text() );
+
+                $.each(addedOffers, function(index, string) {
+                    if ( regexp.test( string ) ) {
+                      offerId = offerId + '_' + string.replace(/.*_/, '');
+                    }
+                });
+
+                var index = addedOffers.indexOf(offerId);
 
                 if ( index != -1 ) {
                     addedOffers.splice(index, 1);
@@ -798,7 +810,8 @@ $('document').ready(function() {
     $('#offers-section div.offer div.add-button').live({
         click: function() {
             var $this = $(this),
-            offerId = $this.parents('div.offer').attr('id').replace('offer-', ''),
+            city = $.offers.utils.city(),
+            offerId = $this.parents('div.offer').attr('id').replace('offer-', '') + '_' + city,
             options = { expires: 7, path: '/' };
 
             if ( $.cookie('favourites') ) {
@@ -815,12 +828,10 @@ $('document').ready(function() {
                     $this.addClass('add-button-added');
                 }
                 $.cookie( 'favourites', addedOffers.unique(), options );
-
             } else {
                 $.cookie( 'favourites', offerId, options );
                 $this.addClass('add-button-added');
             }
-
         }
     });
 

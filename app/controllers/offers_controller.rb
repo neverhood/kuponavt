@@ -6,7 +6,7 @@ class OffersController < ApplicationController
 
   #caches_action :show, :cache_path => Proc.new { |controller| "offers/show/#{controller.params[:id]}.#{request.format.symbol.to_s}" }
 
-  before_filter :validate_city, :only => [ :index, :search, :refresh, :out ]
+  before_filter :validate_city, :only => [ :index, :search, :refresh ]
 
   caches_action :index, :cache_path => Proc.new { |controller| "#{controller.params}.#{@city.name}_index_fragment" }
 
@@ -36,7 +36,6 @@ class OffersController < ApplicationController
       @offers_selected_count = @categories ? @city.offers.where(category_id: @categories).count : @city.offers.categorized.count
     end
 
-    binding.pry
     @raw_offers = MysqlClient.query( @offers.to_sql )
 
     respond_to do |format|
@@ -59,6 +58,10 @@ class OffersController < ApplicationController
   end
 
   def out
+    offer = cookies[:favourites].split(',').find { |offer| offer =~ /#{params[:id]}/ }
+    if offer # favourited cookie
+      @city = City.where(name: offer.gsub(/.*_/, '')).first
+    end
     @offer = Offer.find(params[:id])
     if @offer && @city
       url = CitiesOffers.where(city_id: @city.id, offer_id: @offer.id).first.url || @offer.url
