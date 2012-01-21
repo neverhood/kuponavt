@@ -3,7 +3,7 @@
   <%= javascript_include_tag 'admin/bot' %>
 <% end %>
 
-<h1> Всего новостей от бота: <%= @entries.total_count %> </h1>
+<h1> Кракатор справился со стольким кол-вом купонов: <%= @entries.total_count %> </h1>
 <div style='margin: 15px; color:red; font-size: 12px'>
   <%= link_to 'ОЧИСТИТЬ НОВОСТИ ОТ БОТА', clear_admin_bot_index_path, :id => :clear_news, :remote => true, :method => :post,
         :confirm => 'are you sure?' %>
