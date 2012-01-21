@@ -106,7 +106,7 @@ cities.keys.each do |city|
     offer[:title] = pattern.css('h1').first.text
     offer[:price] = info.css('.price').text.gsub(/\D/, '').to_i
     offer[:cost] = info.css('table td').first.text.gsub(/\D/, '').to_i
-    offer[:discount] = info.css('table td').last.text.gsub(/\D/, '').to_i
+    offer[:discount] = info.css('table td')[1].text.gsub(/\D/, '').to_i
     offer[:ends_at] = Time.at(info.css('strong[data-timestamp]').first['data-timestamp'].to_i + (120*60))
     offer[:image] = open( @bot.page.parser.css('.slideshow img').first['src'] )
     offer[:description] = description('groupon.ru', @bot.page.parser.css('.description').first).to_html.gsub(/\n|\r\n/, "<br /><br />")
