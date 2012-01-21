@@ -6,7 +6,7 @@ class OffersController < ApplicationController
 
   #caches_action :show, :cache_path => Proc.new { |controller| "offers/show/#{controller.params[:id]}.#{request.format.symbol.to_s}" }
 
-  before_filter :validate_city, :only => [ :index, :search, :refresh, :out ]
+  before_filter :validate_city, :only => [ :index, :search, :refresh ]
 
   caches_action :index, :cache_path => Proc.new { |controller| "#{controller.params}.#{@city.name}_index_fragment" }
 
@@ -14,11 +14,8 @@ class OffersController < ApplicationController
   before_filter :prepare_sort_attributes, :only => :index
   before_filter :prepare_time_period, :only => :index
   before_filter :prepare_page_index, :only => [ :index, :search ]
-
   before_filter :validate_offer, :only => :show
-
   before_filter :validate_favourites, :only => :favourites, :if => lambda { |controller| controller.request.xhr? }
-
   before_filter :validate_search, :only => :search
 
   def index
@@ -30,16 +27,6 @@ class OffersController < ApplicationController
     else
       @offers = @city.offers.categorized.page(@page)
     end
-    #@offers = if request.xhr?
-                #@categories ? @city.offers.
-                  #where(category_id: @categories).
-                  #by_time_period(@time_period).
-                  #order(@sort_by).
-                  #page( @page ) :
-                  #[]
-              #else
-                #@city.offers.categorized.page(@page)
-              #end
 
     @offers_total_count = @city.offers.categorized.count
 
@@ -49,10 +36,12 @@ class OffersController < ApplicationController
       @offers_selected_count = @categories ? @city.offers.where(category_id: @categories).count : @city.offers.categorized.count
     end
 
+    @raw_offers = MysqlClient.query( @offers.to_sql )
+
     respond_to do |format|
       format.html
       format.js do
-        render :json => { :offers => render_to_string(:partial => 'offer', :collection => @offers),
+        render :json => { :offers => render_to_string(partial: 'offers'),
           :pagination => render_to_string(:partial => 'pagination'), :count => @offers_selected_count
         }, :layout => false
       end
@@ -69,6 +58,10 @@ class OffersController < ApplicationController
   end
 
   def out
+    offer = cookies[:favourites].split(',').find { |offer| offer =~ /#{params[:id]}/ }
+    if offer # favourited cookie
+      @city = City.where(name: offer.gsub(/.*_/, '')).first
+    end
     @offer = Offer.find(params[:id])
     if @offer && @city
       url = CitiesOffers.where(city_id: @city.id, offer_id: @offer.id).first.url || @offer.url

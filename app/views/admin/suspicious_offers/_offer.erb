@@ -1,4 +1,3 @@
-<% cache action_suffix: "offer_#{offer.id}" do %>
 <div class='offer' id='offer-<%= offer.id %>' data-category='<%= offer.category_id %>'>
   <h2>
     <%= link_to offer.title, nil, :class => 'offer-url', :target => '_blank', :rel => 'nofollow' %>
@@ -47,14 +46,7 @@
 
     <p class='price'>
       <span class='offer-price'>
-        <% if offer.price_starts_at %>
-          <span class='starts-at'>
-            <%= t('common.starts_at') %>
-          </span>
-          <%= offer.price_starts_at %>
-        <% else %>
-          <%= offer.price %>
-        <% end %>
+        <%= offer.price %>
       </span>
       <span class='currency'> <%= offer.country.currency %> </span>
     </p>
@@ -75,4 +67,3 @@
   </div>
 
 </div>
-<% end %>
