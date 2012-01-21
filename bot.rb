@@ -78,10 +78,11 @@ class Keyword
   attr_accessor :tag
 
   def initialize(pattern)
+    pattern.gsub!('_', ' ')
     @tag = pattern
-    if pattern.include? '_'
-      @tag = pattern.gsub('_', ' ')
-    end
+    #if pattern.include? '_'
+      #@tag = pattern.gsub('_', ' ')
+    #end
     if pattern.include? '+'
       @tag = pattern.split('+')
     end
@@ -110,7 +111,7 @@ class Bot
 
     def find_keywords text
       categories.each do |category|
-        return category if category_fits?($categories[category], ' ' + text)
+        return category if category_fits?($categories[category], ' ' + text.gsub('-', ' '))
       end
 
       nil
@@ -133,6 +134,10 @@ end
 
 require 'unicode'
 require 'pry'
+#Offer = Struct.new(:title)
+#s = Offer.new("Клубная карта на постоянные скидки в шоу-руме брендовой одежды")
+#c = Bot.find_category(s)
+#binding.pry
 
 offers = Offer.where(category_id: nil)
 offers.each do |offer|
