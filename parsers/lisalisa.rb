@@ -78,8 +78,8 @@ cities.keys.each do |city|
       next
     end
 
-    if Offer.where(provided_id: provided_id, provider_id: PROVIDER.id).any?
-      existing_model = Offer.where(provided_id: provided_id, provider_id: PROVIDER.id).first
+    if Offer.where(title: offer.xpath('name').text, provider_id: PROVIDER.id).any?
+      existing_model = Offer.where(title: offer.xpath('name').text, provider_id: PROVIDER.id).first
       CitiesOffers.create(city_id: city.id, offer_id: existing_model.id, url: offer.xpath('url').text)
       log.info("Added existing offer #{existing_model.provided_id} to city #{city.name}")
       existing_model = nil
