@@ -1,4 +1,4 @@
-<% if @raw_offers.any? %>
+<% if @offers.any? %>
   <% @offers.each do |offer| %>
     <%= render :partial => 'offers/offer', :locals => { :offer => offer } %>
   <% end %>

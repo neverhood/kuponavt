@@ -1,24 +1,22 @@
-<% cache action_suffix: "offer_#{offer['id']}" do %>
-<div class='offer' id='offer-<%= offer['id'] %>' data-category='<%= offer['category_id'] %>'>
+<% cache action_suffix: "offer_#{offer.id}" do %>
+<div class='offer' id='offer-<%= offer.id %>' data-category='<%= offer.category_id %>'>
   <h2>
-    <%= link_to offer['title'], out_path(city: (@city || offer['city_id']), id: offer['id']), :class => 'offer-url', :target => '_blank', :rel => 'nofollow' %>
+    <%= link_to offer.title, out_path(@city, offer), :class => 'offer-url', :target => '_blank', :rel => 'nofollow' %>
   </h2>
 
   <div class='offer-left-side'>
-    <%= image_tag "/uploads/offer/image/#{offer['id']}/thumb_" + offer['image'], class: 'offer-image' %>
-    <%# image_tag offer.image_url(:thumb), :class => 'offer-image' %>
+    <%= image_tag offer.image_url(:thumb), :class => 'offer-image' %>
     <div class="offer-image-bottom">
       <div class="subway"></div>
       <span class="subway-station">
-        <%= offer['subway'] %>
+        <%= offer.subway %>
       </span>
-      <%= image_tag Provider.find(offer['provider_id']).logo_url, :class => 'provider' %>
+      <%= image_tag offer.provider.logo_url, :class => 'provider' %>
     </div>
   </div>
 
   <div class='offer-right-side'>
     <div class="info-container">
-
     <table>
       <tr>
         <td><%= t('offers.cost') %></td>
@@ -26,21 +24,20 @@
         <td><%= t('offers.savings') %></td>
       </tr>
       <tr>
-        <td class='offer-cost'> <%= offer['cost'] > 0 ? offer['cost'] : t('offers.unlimited').html_safe %> </td>
-        <td class='offer-discount'> <%= offer['discount'] %>% </td>
-        <td class='offer-savings'> <%= (offer['cost'] && offer['cost'] > 0) ? offer['cost']/100 * offer['discount'] : t('offers.unlimited').html_safe %> </td>
+        <td class='offer-cost'> <%= offer.cost > 0 ? offer.cost : t('offers.unlimited').html_safe %> </td>
+        <td class='offer-discount'> <%= offer.discount %>% </td>
+        <td class='offer-savings'> <%= (offer.cost && offer.cost > 0) ? offer.cost/100 * offer.discount : t('offers.unlimited').html_safe %> </td>
       </tr>
     </table>
 
     <p class='info'> <%= t('offers.time_left') %>:
-
-    <% ends_at = offer['ends_at'] ? offer['ends_at'] : 1.day.from_now.to_date %>
-    <% if ends_at == 1.day.from_now.to_date %>
-      <p class='time-left-red'> <%= ends_at.to_js %>
-    <% else %>
-      <p class='time-left'> <%= (ends_at < Time.now.to_date) ? 1.day.ago.to_date.to_js : ends_at.to_js %>
-    <% end %>
     </p>
+
+    <% if offer.is_about_to_finish? %>
+      <p class='time-left-red'> <%= offer.ends_at.to_js %> </p>
+    <% else %>
+      <p class='time-left'> <%= offer.finished?? 1.day.ago.to_date.to_js : offer.ends_at.to_js %> </p>
+    <% end %>
 
     <br />
 
@@ -50,22 +47,22 @@
 
     <p class='price'>
     <span class='offer-price'>
-      <%= offer['price'] %>
+      <%= offer.price %>
     </span>
-      <span class='currency'> <%= Country.find(offer['country_id']).currency %> </span>
+      <span class='currency'> <%= offer.country.currency %> </span>
     </p>
 
     <div class='add-button' title="<%= t('offers.add_to_favourites') %>"></div>
-    <%= link_to t('offers.buy'), out_path(city: (@city || offer['city_id']), id: offer['id']), :target => '_blank', :class => 'buy-button' %>
+    <%= link_to t('offers.buy'), out_path(@city, offer), :target => '_blank', :class => 'buy-button' %>
 
     </div>
   </div>
 
   <div class='offer-details'>
-    <div class='offer-address'> <%= raw(offer['address']) %> </div>
+    <div class='offer-address'> <%= raw(offer.address) %> </div>
     <div class='offer-description'>
       <div class='offer-description-roll-up'>свернуть</div>
-      <div class='offer-description-overflow'> <%= raw(offer['description']) %></div>
+      <div class='offer-description-overflow'> <%= raw(offer.description) %></div>
     </div>
   </div>
 
