@@ -28,12 +28,12 @@ class OffersController < ApplicationController
       @offers = @city.offers.categorized.page(@page)
     end
 
-    @offers_total_count = @city.offers.categorized.count
+    @offers_total_count = @city.offers.where('"offers".category_id is NOT NULL').count
 
     if @time_period
       @offers_selected_count = @categories ? @city.offers.where(category_id: @categories).by_time_period(@time_period).count : @city.offers.categorized.count
     else
-      @offers_selected_count = @categories ? @city.offers.where(category_id: @categories).count : @city.offers.categorized.count
+      @offers_selected_count = @categories ? @city.offers.where(category_id: @categories).count : @city.offers.where('"offers".category_id is NOT NULL').count
     end
 
     respond_to do |format|

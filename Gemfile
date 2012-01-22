@@ -8,6 +8,7 @@ gem 'rails', '3.1.3'
 
 # Db
 gem 'mysql2'
+gem 'pg'
 
 # Image processor
 gem 'carrierwave'
@@ -40,8 +41,8 @@ group :development do
   gem 'unicode'
 end
 
-group :development, :test do
   gem 'yaml_db'
+group :development, :test do
   gem 'rspec-rails'
   gem 'capybara'
   gem 'spork', '~> 0.9.0.rc'
