@@ -36,12 +36,10 @@ class OffersController < ApplicationController
       @offers_selected_count = @categories ? @city.offers.where(category_id: @categories).count : @city.offers.categorized.count
     end
 
-    @raw_offers = MysqlClient.query( @offers.to_sql )
-
     respond_to do |format|
       format.html
       format.js do
-        render :json => { :offers => render_to_string(partial: 'offers'),
+        render :json => { :offers => render_to_string(partial: 'offer', collection: @offers),
           :pagination => render_to_string(:partial => 'pagination'), :count => @offers_selected_count
         }, :layout => false
       end

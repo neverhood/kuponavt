@@ -1,4 +1,9 @@
 # encoding: UTF-8
+require File.expand_path('../lib/mixins/parser', __FILE__)
+include Parser
+
+require 'app/models/category'
+require 'app/models/bot_statistics'
 
 $categories = {
   'Кафе, рестораны' => [ %w(кофе+хауз романт+свидан романт+ужин чайн+церемон кафе ресторан меню _чай+_бар чайн+клуб), %w(суши пицца техн+кухн кафел стрип) ],
@@ -133,7 +138,6 @@ class Bot
 end
 
 require 'unicode'
-require 'pry'
 #Offer = Struct.new(:title)
 #s = Offer.new("Клубная карта на постоянные скидки в шоу-руме брендовой одежды")
 #c = Bot.find_category(s)
