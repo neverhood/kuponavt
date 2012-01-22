@@ -20,7 +20,7 @@ class OffersController < ApplicationController
 
   def index
     if request.xhr?
-      @offers = @categories ? @city.offers.where(category_id: @categories).order(@sort_by).page( @page ) : []
+      @offers = @categories ? @city.offers.with_dependencies.where(category_id: @categories).order(@sort_by).page( @page ) : []
       if @time_period && @categories
         @offers = @offers.by_time_period(@time_period)
       end
@@ -59,6 +59,8 @@ class OffersController < ApplicationController
     offer = cookies[:favourites].split(',').find { |offer| offer =~ /#{params[:id]}/ }
     if offer # favourited cookie
       @city = City.where(name: offer.gsub(/.*_/, '')).first
+    else
+      @city = City.where(name: params['city']).first
     end
     @offer = Offer.find(params[:id])
     if @offer && @city
