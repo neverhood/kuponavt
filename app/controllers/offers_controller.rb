@@ -59,6 +59,8 @@ class OffersController < ApplicationController
     offer = cookies[:favourites].split(',').find { |offer| offer =~ /#{params[:id]}/ }
     if offer # favourited cookie
       @city = City.where(name: offer.gsub(/.*_/, '')).first
+    else
+      @city = City.where(name: params['city']).first
     end
     @offer = Offer.find(params[:id])
     if @offer && @city
