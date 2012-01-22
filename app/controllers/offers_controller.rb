@@ -20,7 +20,7 @@ class OffersController < ApplicationController
 
   def index
     if request.xhr?
-      @offers = @categories ? @city.offers.where(category_id: @categories).order(@sort_by).page( @page ) : []
+      @offers = @categories ? @city.offers.with_dependencies.where(category_id: @categories).order(@sort_by).page( @page ) : []
       if @time_period && @categories
         @offers = @offers.by_time_period(@time_period)
       end
