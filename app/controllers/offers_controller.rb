@@ -7,9 +7,9 @@ class OffersController < ApplicationController
   #caches_action :show, :cache_path => Proc.new { |controller| "offers/show/#{controller.params[:id]}.#{request.format.symbol.to_s}" }
 
 
+  before_filter :validate_city, :only => [ :index, :search, :refresh ]
   caches_action :index, :cache_path => Proc.new { |controller| "#{controller.params}.#{@city.name}_index_fragment" }
 
-  before_filter :validate_city, :only => [ :index, :search, :refresh ]
   before_filter :prepare_categories_array, :only => :index
   before_filter :prepare_sort_attributes, :only => :index
   before_filter :prepare_time_period, :only => :index
