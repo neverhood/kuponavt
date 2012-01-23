@@ -142,7 +142,7 @@ class OffersController < ApplicationController
 
   def validate_favourites
     offers = params[:offers].split(',').keep_if { |offer_id| offer_id =~ /^\d+$/ }
-    @offers = Offer.where(['`offers`.`id` IN (?)', offers])
+    @offers = Offer.where(['"offers"."id" IN (?)', offers])
 
     render(:json => { :count => 0 }) unless @offers.count >= 1
   end
