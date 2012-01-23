@@ -104,7 +104,6 @@ cities.each do |city|
     offer_attributes[:coordinates] = nil if offer_attributes[:coordinates].blank?
     offer_attributes[:address] = nil if offer_attributes[:address].blank?
 
-    binding.pry
     model = Offer.new( offer_attributes )
     if model.valid?
       log.info("Saving offer #{provided_id}")
