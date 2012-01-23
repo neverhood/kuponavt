@@ -51,7 +51,7 @@ offers.each do |offer|
   offer[:title] = pattern.css('.content-block h1').first.text
   offer[:price] = pattern.css('.s1-price .s1-value').text.gsub(/\D/, '').to_i
   offer[:cost] = info.first.text.gsub(/\D/, '').to_i
-  offer[:discount] = info[1].text.gsub(/\D/, '').to_i
+  offer[:discount] = info[1].text.gsub(/\D/, '').to_i rescue 0
   offer[:ends_at] = $1 if timer.text =~ /targetDate:\s*"(.*)"/
   offer[:image] = open( @url + pattern.css('.slider-overview img').first['src'] )
   offer[:description] = pattern.css('#s1-tab-about').to_html

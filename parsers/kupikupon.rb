@@ -83,20 +83,28 @@ cities.each do |city|
       provider_id: PROVIDER.id,
       provided_id: provided_id,
       url: offer.xpath('url').text,
-      description: offer.xpath('description').text.strip,
+      description: offer.xpath('description').text.strip.gsub(/\s+/, " "),
       ends_at: Time.parse(offer.xpath('end_date').text),
       image: open( offer.xpath('image').text ),
       price: offer.xpath('price').text.to_i,
       cost: (offer.xpath('value').text.to_i),
       discount: offer.xpath('discount_percent').text.to_i,
-      address: offer.xpath('contacts').text.strip,
       coordinates: "#{offer.xpath('latitude').text},#{offer.xpath('longitude').text}",
       country_id: city.country_id,
       city_id: city.id
     }
+    contacts = Nokogiri::HTML(offer.xpath('contacts').first.text).text.gsub(/\+.*/m, '').split("\n").map(&:strip).
+      delete_if { |s| s.blank? }
+    offer_attributes[:address] = contacts[0]
+    offer_attributes[:subway] = contacts[1]
+
+    offer_attributes[:subway] = nil if offer_attributes[:address] =~ /Москва$/i ||
+      offer_attributes[:subway] =~ /дом|офис|улица|телефон|Время работы|\d+/i
+
     offer_attributes[:coordinates] = nil if offer_attributes[:coordinates].blank?
     offer_attributes[:address] = nil if offer_attributes[:address].blank?
 
+    binding.pry
     model = Offer.new( offer_attributes )
     if model.valid?
       log.info("Saving offer #{provided_id}")
