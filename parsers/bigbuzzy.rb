@@ -71,8 +71,8 @@ cities.each do |city|
       price: offer.xpath('pricecoupon').text.to_i,
       cost: (offer.xpath('price').text.to_i),
       discount: offer.xpath('discount').text.to_i,
-      address: offer.xpath('supplier/addresses/address/name').map(&:text).map(&:strip).join('||'),
-      coordinates: offer.xpath('supplier/addresses/address/coordinates').map(&:text).join('||'),
+      address: offer.xpath('supplier/addresses/address/name').map(&:text).map(&:strip).map { |a| a.gsub(/Телефоны.*/im, '').gsub("\n", '') }.map(&:strip)[0..2].join("||"),
+      coordinates: offer.xpath('supplier/addresses/address/coordinates').map(&:text)[0..2].join('||'),
       city_id: city.id,
       country_id: city.country_id
     }
@@ -84,6 +84,7 @@ cities.each do |city|
     offer_attributes[:coordinates] = nil if offer_attributes[:coordinates].blank?
     offer_attributes[:address] = nil if offer_attributes[:address].blank?
 
+begin
     model = Offer.new( offer_attributes )
     if model.valid?
       @log.info("Saving offer #{provided_id}")
@@ -94,7 +95,9 @@ cities.each do |city|
       @log.error("Can't save invalid offer: #{model.provided_id}. \n #{model.errors.full_messages.join(',')}")
       binding.pry
     end
-
+rescue Exception => e
+binding.pry
+end
   end
 
   existing_offers.each do |expired_offer|
