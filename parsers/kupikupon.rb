@@ -76,8 +76,6 @@ cities.each do |city|
       next
     end
 
-    binding.pry if Offer.where(title: offer.xpath('title').text.strip, provider_id: PROVIDER.id).any?
-
     offer_attributes = {
       title: offer.xpath('title').text.strip,
       provider_id: PROVIDER.id,

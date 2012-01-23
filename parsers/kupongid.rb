@@ -95,7 +95,12 @@ cities.keys.each do |city|
 
   saved_offers = nil
   @log.info "Finished processing #{city.name}"
+  if existing_offers.any?
+    Offer.where(from_kupongid: true, provided_id: existing_offers).each { |o|
+        @log.info("Destroying expired offer #{o.provided_id}")
+	o.destroy 
+    }
+  end
 
-  binding.pry if existing_offers.any?
 
 end

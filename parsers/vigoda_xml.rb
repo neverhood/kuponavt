@@ -23,7 +23,11 @@ cities = ["Москва", "Санкт-Петербург", "Альметьевс
 saved = 0
 
 cities.each do |city|
-  city = City.find_by_russian_name(city)
+  if city == 'Орел'
+    city = City.find_by_russian_name('Орёл')
+  else
+    city = City.find_by_russian_name(city)
+  end
 
   @log.info("Processing #{city.name}")
 
@@ -64,7 +68,6 @@ cities.each do |city|
       provided_id: offer.xpath('id').text,
       url: offer.xpath('url').text,
       description: offer.xpath('description').text.gsub("\n", "<br />"),
-      ends_at: Time.parse(offer.xpath('endsell').text.gsub('T',' ')) + 1,
       image: open( offer.xpath('picture').text ),
       price: offer.xpath('pricecoupon').text.to_i,
       cost: (offer.xpath('price').text.to_i),
@@ -77,6 +80,7 @@ cities.each do |city|
     offer_attributes[:price] = offer.xpath('discountprice').text.to_i if offer_attributes[:price] == 0
     offer_attributes[:coordinates] = nil if offer_attributes[:coordinates].blank?
     offer_attributes[:address] = nil if offer_attributes[:address].blank?
+    offer_attributes[:ends_at] = Time.parse(offer.xpath('endsell').text.gsub('T',' ')) + 1 rescue nil
 
     model = Offer.new( offer_attributes )
     if model.valid?
