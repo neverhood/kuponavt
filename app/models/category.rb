@@ -21,7 +21,7 @@ class Category < ActiveRecord::Base
   end
 
   def city_offers(city_id)
-    offers.joins(:cities).where(['"cities_offers".city_id = ?', city_id])
+    offers.joins(:cities).where(['cities_offers.city_id = ?', city_id])
   end
 
   def parent?

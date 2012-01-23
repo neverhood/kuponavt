@@ -6,10 +6,10 @@ class OffersController < ApplicationController
 
   #caches_action :show, :cache_path => Proc.new { |controller| "offers/show/#{controller.params[:id]}.#{request.format.symbol.to_s}" }
 
-  before_filter :validate_city, :only => [ :index, :search, :refresh ]
 
   caches_action :index, :cache_path => Proc.new { |controller| "#{controller.params}.#{@city.name}_index_fragment" }
 
+  before_filter :validate_city, :only => [ :index, :search, :refresh ]
   before_filter :prepare_categories_array, :only => :index
   before_filter :prepare_sort_attributes, :only => :index
   before_filter :prepare_time_period, :only => :index
@@ -28,12 +28,13 @@ class OffersController < ApplicationController
       @offers = @city.offers.categorized.page(@page)
     end
 
-    @offers_total_count = @city.offers.where('"offers".category_id is NOT NULL').count
+    #@offers_total_count = @city.offers.where('"offers".category_id is NOT NULL').count
+    @offers_total_count = @city.offers.where('offers.category_id is NOT NULL').count
 
     if @time_period
       @offers_selected_count = @categories ? @city.offers.where(category_id: @categories).by_time_period(@time_period).count : @city.offers.categorized.count
     else
-      @offers_selected_count = @categories ? @city.offers.where(category_id: @categories).count : @city.offers.where('"offers".category_id is NOT NULL').count
+      @offers_selected_count = @categories ? @city.offers.where(category_id: @categories).count : @city.offers.where('offers.category_id is NOT NULL').count
     end
 
     respond_to do |format|

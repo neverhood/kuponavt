@@ -48,7 +48,7 @@
 
   <div id='all-offers' data-city='<%= @city.name %>' data-page='<%= params[:page] || false %>'>
     <div id='offers-section'>
-      <%= render 'offers' %>
+      <%= render partial: 'offer', collection: @offers %>
     </div>
   </div>
 
