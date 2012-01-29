@@ -110,6 +110,8 @@ $.offers.utils.showFavourites = function() {
         $.each( offers, function() {
             $('div#offer-' + this.replace(/_.*/, '')).find('.add-button').addClass('add-button-added');
         });
+
+        if ( offers.length > 0 ) $('#favourites-count').text( offers.length );
     }
 };
 
@@ -799,6 +801,8 @@ $('document').ready(function() {
                     countContainer.text( currentCount - 1 );
                 }
 
+                if ( $.cookie('favourites') ) $('#favourites-count').text( $.cookie('favourites').split(',').length );
+
                 event.preventDefault();
                 event.stopPropagation();
             });
@@ -832,6 +836,8 @@ $('document').ready(function() {
                 $.cookie( 'favourites', offerId, options );
                 $this.addClass('add-button-added');
             }
+
+           if ( $.cookie('favourites') ) $('#favourites-count').text( $.cookie('favourites').split(',').length );
         }
     });
 
