@@ -121,6 +121,10 @@ providers =
                     url: 'http://hipclub.ru',
                     logo_url: 'hipclub.png'
                   },
+                  { name: 'skidkabum',
+                    url: 'http://skidkabum.ru',
+                    logo_url: 'skidkabum.png'
+                  },
                   { name: 'sellberry',
                     url: 'http://sellberry.ru',
                     logo_url: 'sellberry.png'
