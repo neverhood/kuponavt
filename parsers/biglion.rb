@@ -168,7 +168,7 @@ cities.keys.each do |city|
     end
     offer[:address] = pattern.css('div.links div[1]').children.first.text.strip rescue nil
     offer[:subway] = pattern.css('div.links div[1] div').text.strip rescue nil
-    offer[:subway] = nil if offer[:subway].blank?
+    offer[:subway] = nil if offer[:subway].blank? || offer[:subway].length >= 255
 
     description = pattern.css('div.ppOffer-info')
     description.css('a').each do |a|

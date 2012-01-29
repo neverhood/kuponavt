@@ -1,7 +1,7 @@
 <div class='offer' id='entry-<%= entry.id %>' data-category='<%= offer.category_id %>'>
   <h2>
     <% title = offer.title -%>
-    <% entry.match.gsub(/[\n-]/, '').split.each do |match| %>
+    <% entry.match.gsub(/[-\n'!]/, '').split.each do |match| %>
       <% high = "<span style='background: yellow'>#{match}</span>" %>
       <% title.gsub!(/#{match}/i, high) %>
     <% end %>
