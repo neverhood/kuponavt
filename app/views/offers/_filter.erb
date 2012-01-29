@@ -16,13 +16,13 @@
     <% Category.parent_categories.each do |parent_category| %>
 
       <% if Category.parent_categories.index(parent_category) == 0 %>
-        <p class='type first-category'> <%= parent_category.name %> |
+        <p class='type first-category'> <span><%= parent_category.name %></span> |
         <span class='all-tags' data-clear='<%= t('offers.clear') %>' data-original-text='<%= t('offers.all_tags') %>' id='<%= parent_category.id %>'>
             <%= t('offers.clear') %>
           </span>
         </p>
       <% else %>
-        <p class='type'> <%= parent_category.name %> |
+        <p class='type'> <span><%= parent_category.name %></span> |
         <span class='all-tags' data-clear='<%= t('offers.clear') %>' data-original-text='<%= t('offers.all_tags') %>' id='<%= parent_category.id %>'>
             <%= t('offers.clear') %>
           </span>

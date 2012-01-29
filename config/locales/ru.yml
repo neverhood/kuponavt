@@ -32,7 +32,7 @@ ru:
     all_offers: Все категории
     all_tags: все
     details: Показать подробности
-    selected_coupons: Избранные купоны
+    selected_coupons: "Отмеченных купонов:"
     offers_search: Поиск по купонам
     search_watermark: Введите слово
     no_categories_selected: Не выбрано ни одной категории
@@ -40,7 +40,7 @@ ru:
     time_left: Времени осталось
     category_id: Категория
     address: Адрес
-    add_to_favourites: Добавить к избранным
+    add_to_favourites: Добавить к отмеченным
     clear: очистить
     nothing_found: "Извините, по Вашему запросу ничего не найдено"
     choose_categories: Пожалуйста, выберите интересующие Вас купоны
