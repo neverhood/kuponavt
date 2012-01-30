@@ -116,7 +116,7 @@ class Bot
 
     def find_keywords text
       categories.each do |category|
-        return category if category_fits?($categories[category], ' ' + text.gsub(/[-"']/, ' '))
+        return category if category_fits?($categories[category], ' ' + text.gsub(/[-"'.!?«»]/, ' '))
       end
 
       nil
