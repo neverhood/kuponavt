@@ -10,7 +10,7 @@
 
   <div id='sort'>
 
-    <div id="lenses">
+    <div id="lenses" class='hidden'>
         <ul>
           <% %w(all today yesterday).each do |lens| %> <li id='<%= lens %>-lens' class='<%= lens == 'all' ? 'pressed' : '' %>'> <%= t("offers.lenses.#{lens}") %> </li> <% end %>
 		</ul>
@@ -26,7 +26,7 @@
       <span>Показать на карте</span>
     </div>
 
-      <ul id='sort-buttons'>
+      <ul id='sort-buttons' class='hidden'>
         <%= notification( t('offers.no_categories_selected') ) %>
         <% [ 'category_id', 'created_at', 'price', 'discount', 'ends_at' ].each do |sort_link| %><li class='<%= (sort_link == 'category_id' || sort_link == 'ends_at') ? (sort_link == 'category_id' ? 'first-child' : 'last-child') : '' %>' id='<%= "sort-by-#{sort_link}" %>'><%= t("offers.#{sort_link}") %></li><% end %>
       </ul>
@@ -35,7 +35,7 @@
         <div id='no-results-arrow-up'></div>
       </div>
 
-      <div class='hidden' id='no-results-to-display'>
+      <div class='' id='no-results-to-display'>
         <%= t('offers.choose_categories') %>
         <div id='no-results-arrow-right'></div>
       </div>
@@ -53,9 +53,9 @@
   </div>
 
   <div class='center-aligned'>
-    <div id='pagination-bottom'>
-      <%= render 'pagination' %>
-    </div>
+      <div id='pagination-bottom'>
+        <%= render 'pagination' %>
+      </div>
   </div>
 
   <div id='offers-for-page' class='center-aligned hidden'>

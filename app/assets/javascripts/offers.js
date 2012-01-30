@@ -709,8 +709,11 @@ $('document').ready(function() {
         click: function(event) { allOffersClickHandler(event) }
     });
 
-    $('#all-offers-clear').bind('click', function(event) {
-        allOffersClearClickHandler(event);
+    $('#all-offers-clear').bind({
+        hover: function() {
+            $('#all-categories').toggleClass('hover');
+        },
+        click: function(event) { allOffersClearClickHandler(event) }
     });
 
     $('#all-categories span.all-tags').bind({
