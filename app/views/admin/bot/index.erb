@@ -12,7 +12,7 @@
 <div id='bot-categories'>
   <ul>
   <% Category.where('parent_category_id IS NOT NULL').each do |category| %>
-    <li><%= link_to category.name, admin_bot_index_path(category: category.id) %></li>
+    <li><%= link_to category.name, admin_bot_index_path(category: category.id) %><span style="color:black">(<%= BotStatistics.where(category_id: category.id).count %>)</span></li>
   <% end %>
   </ul>
 </div>
