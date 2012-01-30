@@ -72,13 +72,13 @@ cities.each do |city|
       price: offer.xpath('pricecoupon').text.to_i,
       cost: (offer.xpath('price').text.to_i),
       discount: offer.xpath('discount').text.to_i,
-      address: offer.xpath('supplier/addresses/address/name').map(&:text).map(&:strip).join("||"),
+      address: offer.xpath('supplier/addresses/address/name').map(&:text).map(&:strip)[0..2].join("||"),
       coordinates: offer.xpath('supplier/addresses/address/coordinates').map(&:text).join("||"),
       country_id: city.country.id,
       city_id: city.id
     }
     offer_attributes[:price] = offer.xpath('discountprice').text.to_i if offer_attributes[:price] == 0
-    offer_attributes[:coordinates] = nil if offer_attributes[:coordinates].blank?
+    offer_attributes[:coordinates] = nil if offer_attributes[:coordinates].blank? || offer_attributes[:coordinates].gsub(/|/, '').blank?
     offer_attributes[:address] = nil if offer_attributes[:address].blank?
     offer_attributes[:ends_at] = Time.parse(offer.xpath('endsell').text.gsub('T',' ')) + 1 rescue nil
 
