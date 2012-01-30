@@ -70,6 +70,7 @@ cities.each do |city|
       end
     end
     offer[:description] = description('citycoupon.ru', raw_description).to_html
+    offer[:subway] = nil if offer[:subway].length >= 255
 
     model = Offer.new( offer )
 

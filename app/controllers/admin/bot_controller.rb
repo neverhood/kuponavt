@@ -20,7 +20,11 @@ class Admin::BotController < ApplicationController
   end
 
   def clear
-    BotStatistics.delete_all
+    if params[:category]
+      BotStatistics.where(category_id: params[:category]).delete_all
+    else
+      BotStatistics.delete_all
+    end
     render :json => { :status => :success }
   end
 

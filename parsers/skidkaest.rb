@@ -69,7 +69,7 @@ cities.keys.each do |city|
     offer[:title] = parser('section#site-content header.offer-cupon-header').text
     offer[:price] = parser('div.offer-price strong').first.text.to_i
     offer[:discount] = parser('div.item-discount span').text.gsub(/\D/, '').to_i
-    offer[:cost] = parser('div.item-price strong').text.gsub(/\D/, '').to_i
+    offer[:cost] = parser('div.item-price strong').text.gsub(/-.*/, '').gsub(/\D/, '').to_i
     #offer[:image] = open( URL + parser('span.slideshow img').first['src'] ) rescue binding.pry
     parser('span.slideshow img').each do |img|
       begin

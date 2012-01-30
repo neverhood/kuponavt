@@ -24,18 +24,18 @@ class OffersController < ApplicationController
       if @time_period && @categories
         @offers = @offers.by_time_period(@time_period)
       end
+
+      if @time_period
+        @offers_selected_count = @categories ? @city.offers.where(category_id: @categories).by_time_period(@time_period).count : @city.offers.categorized.count
+      else
+        @offers_selected_count = @categories ? @city.offers.where(category_id: @categories).count : @city.offers.where('offers.category_id is NOT NULL').count
+      end
     else
-      @offers = @city.offers.categorized.page(@page)
+      @offers = Offer.where('id < 0').page( params[:page] ) # empty scope for pagination
+      @offers_selected_count = 0
     end
 
-    #@offers_total_count = @city.offers.where('"offers".category_id is NOT NULL').count
     @offers_total_count = @city.offers.where('offers.category_id is NOT NULL').count
-
-    if @time_period
-      @offers_selected_count = @categories ? @city.offers.where(category_id: @categories).by_time_period(@time_period).count : @city.offers.categorized.count
-    else
-      @offers_selected_count = @categories ? @city.offers.where(category_id: @categories).count : @city.offers.where('offers.category_id is NOT NULL').count
-    end
 
     respond_to do |format|
       format.html
@@ -142,7 +142,7 @@ class OffersController < ApplicationController
 
   def validate_favourites
     offers = params[:offers].split(',').keep_if { |offer_id| offer_id =~ /^\d+$/ }
-    @offers = Offer.where(['"offers"."id" IN (?)', offers])
+    @offers = Offer.where(:id => offers)
 
     render(:json => { :count => 0 }) unless @offers.count >= 1
   end

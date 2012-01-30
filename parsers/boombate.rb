@@ -89,6 +89,7 @@ cities.keys.each do |city|
     offer_attributes[:coordinates] = coordinates.join("||")
     offer_attributes[:coordinates] = nil if offer_attributes[:coordinates].blank?
     offer_attributes[:address] = nil if offer_attributes[:address].blank?
+    next if offer_attributes[:url].length >= 255
 
     model = Offer.new( offer_attributes )
     if model.valid?
