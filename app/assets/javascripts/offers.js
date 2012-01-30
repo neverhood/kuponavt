@@ -111,7 +111,10 @@ $.offers.utils.showFavourites = function() {
             $('div#offer-' + this.replace(/_.*/, '')).find('.add-button').addClass('add-button-added');
         });
 
-        if ( offers.length > 0 ) $('#favourites-count').text( offers.length );
+        if ( offers.length > 0 )
+            $('#favourites-count').text( offers.length );
+        else
+            $('#favourites-count').text( 0 );
     }
 };
 
@@ -801,7 +804,10 @@ $('document').ready(function() {
                     countContainer.text( currentCount - 1 );
                 }
 
-                if ( $.cookie('favourites') ) $('#favourites-count').text( $.cookie('favourites').split(',').length );
+                if ( $.cookie('favourites') )
+                    $('#favourites-count').text( $.cookie('favourites').split(',').length );
+                else
+                    $('#favourites-count').text( 0 );
 
                 event.preventDefault();
                 event.stopPropagation();
@@ -837,7 +843,10 @@ $('document').ready(function() {
                 $this.addClass('add-button-added');
             }
 
-           if ( $.cookie('favourites') ) $('#favourites-count').text( $.cookie('favourites').split(',').length );
+           if ( $.cookie('favourites') )
+               $('#favourites-count').text( $.cookie('favourites').split(',').length );
+           else
+               $('#favourites-count').text( 0 );
         }
     });
 
