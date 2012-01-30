@@ -3,10 +3,10 @@
   <%= javascript_include_tag 'admin/bot' %>
 <% end %>
 
-<h1> Кракатор справился со стольким кол-вом купонов: <%= @entries.total_count %> </h1>
+<h1> Кракатор справился со стольким кол-вом купонов: <strong id='krakator-count'><%= @entries.total_count %></strong> </h1>
 <div style='margin: 15px; color:red; font-size: 12px'>
-  <%= link_to 'ОЧИСТИТЬ НОВОСТИ ОТ БОТА', clear_admin_bot_index_path, :id => :clear_news, :remote => true, :method => :post,
-        :confirm => 'are you sure?' %>
+  <%= link_to 'ОЧИСТИТЬ НОВОСТИ ОТ БОТА', clear_admin_bot_index_path(:category => (params[:category] ? params[:category] : nil)),
+    :id => :clear_news, :remote => true, :method => :post, :confirm => 'are you sure?' %>
 </div>
 
 <div id='bot-categories'>

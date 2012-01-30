@@ -26,5 +26,10 @@ $('document').ready(function() {
             e.stopPropagation();
         });
 
+        $('#clear_news').bind('ajax:complete', function(event, xhr, status) {
+            $('#offers-section').html('');
+            $('#krakator-count').html(0);
+        });
+
     }
 });
