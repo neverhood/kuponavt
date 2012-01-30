@@ -15,8 +15,7 @@ saved = 0
 
 @log.info("Starting pro-cent parser: #{Time.now} ... ")
 
-def prepare_index(uri)
-  uri.split('-').map { |piece| piece[0] }.join
+def prepare_index(uri) uri.split('-').map { |piece| piece[0] }.join
 end
 
 @bot.get @url
@@ -63,6 +62,7 @@ offers.each do |offer|
   offer[:description] = pattern.css('.section .visible').text.gsub("\n", "<br />")
   offer[:address] = @bot.page.parser.css('.addressBlock .data .value').first.text
   offer[:address] = nil if offer[:address].blank?
+  offer[:title].gsub!(/\..*/, '') if offer[:title].length >= 255
 
   model = Offer.new( offer )
 
