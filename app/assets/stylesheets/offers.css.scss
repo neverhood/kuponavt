@@ -53,11 +53,12 @@ div#offers {
 
   div#sort {
     position: relative;
-    height: 90px;
+    height: 100px;
 
     #lenses {
-        float: left;
-        margin: 14px 0 0 15px;
+        position: absolute;
+        top: 14px;
+        left: 15px;
 
         li {
             margin-right: 1px;
@@ -110,8 +111,9 @@ div#offers {
     }
 
     #sort-buttons {
-        float: right;
-        margin: 13px 85px 25px 0px;
+        position: absolute;
+        top: 50px;
+        left: 100px;
 
         .first-child {
             border-radius: 3px 0 0 3px;
@@ -219,7 +221,7 @@ div#offers {
   #no-results-for-time-period {
     position: relative;
     float: left;
-    margin: 70px 0px 110px 150px;
+    margin: 105px 0px 110px 150px;
     clear: both;
     color: #007FAD;
     font-weight: bold;
