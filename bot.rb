@@ -116,7 +116,8 @@ class Bot
 
     def find_keywords text
       categories.each do |category|
-        return category if category_fits?($categories[category], ' ' + text.gsub(/[-"']/, ' '))
+        binding.pry if category == 'Тренинги, мастер-классы'
+        return category if category_fits?($categories[category], ' ' + text.gsub(/[-"'!?«»(),:;_\[\]\/.]/, ' '))
       end
 
       nil
@@ -139,7 +140,7 @@ end
 
 require 'unicode'
 #Offer = Struct.new(:title)
-#s = Offer.new("Клубная карта на постоянные скидки в шоу-руме брендовой одежды")
+#s = Offer.new("Эффективная коммуникация с помощью техник НЛП. Скидка 91%")
 #c = Bot.find_category(s)
 #binding.pry
 

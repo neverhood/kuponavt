@@ -21,6 +21,7 @@ include KupongidTools
 @log.debug("Starting kupongid parser .. #{Time.now}")
 
 cities = KupongidTools.cities # Cities mapping
+saved = 0
 
 cities.keys.each do |city|
 
@@ -52,7 +53,7 @@ cities.keys.each do |city|
       provided_id = url.gsub(/\D/, '')
       description = pattern.css('.coupon-popup-tab').first.css('p')
 
-      if existing_offers.include? provided_id
+      if existing_offers.include?(provided_id) || saved_offers.include?(provided_id)
         existing_offers.delete( provided_id )
         @log.info("Skipping existing offer #{provided_id}")
         next
@@ -76,15 +77,18 @@ cities.keys.each do |city|
         subway: pattern.css('.location noindex b').text,
         address: address.count > 0 ? address[1].gsub(/Захотели купить.*/, '').strip : nil,
         price: pattern.css('.price-and-time strong').text.to_i,
+        cost: pattern.css('.price-and-time .bold1').text.to_i,
         discount: pattern.css('.discount').text.to_i,
         provider_id: Provider.find_by_name(KupongidTools::PROVIDERS[kupongid_provider_id]).id,
         city_id: city.id,
-        country_id: city.country_id
+        country_id: city.country_id,
+        from_kupongid: true
       }
 
       model = Offer.new( offer )
+      #binding.pry
       if model.valid?
-        log.info("Saving offer #{model.provided_id}")
+        @log.info("Saving offer #{model.provided_id}")
         city_clone = city.clone
         city_clone.offers << model
         saved += 1
