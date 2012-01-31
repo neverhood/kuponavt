@@ -30,11 +30,11 @@ module KupongidTools
   end
 
   class Pattern
-    require 'tor-privoxy'
+    #require 'tor-privoxy'
 
-    @@proxy = TorPrivoxy::Switcher.new '127.0.0.1', '', {8118 => 9050}
+    #@@proxy = TorPrivoxy::Switcher.new '127.0.0.1', '', {8118 => 9050}
     @@bot = Mechanize.new
-    @@bot.set_proxy(@@proxy.host, @@proxy.port)
+    #@@bot.set_proxy(@@proxy.host, @@proxy.port)
 
 
     attr_accessor :source, :provider_id, :offer_id, :url, :image_file, :cached_attributes
@@ -48,7 +48,6 @@ module KupongidTools
     end
 
     def should_follow?
-      #not KupongidTools::AVAILABLE_PROVIDERS.include?(offer_id)
       if KupongidTools::AVAILABLE_PROVIDERS.include?(self.provider_id)
         false
       elsif not KupongidTools::PROVIDERS.keys.include?(self.provider_id)
@@ -83,7 +82,7 @@ module KupongidTools
         cached_attributes = attrs
       end
       @@bot = Mechanize.new
-      @@bot.set_proxy(@@proxy.host, @@proxy.port)
+      #@@bot.set_proxy(@@proxy.host, @@proxy.port)
       cached_attributes
     end
 
