@@ -1,7 +1,7 @@
 <div id='header'>
 
   <div id='logo'>
-    <%= link_to image_tag('logo.png', :id => 'kuponavt'), root_path %>
+    <%= link_to image_tag('logo.png', :id => 'kuponavt'), offers_path(city: session[:city] ? session[:city] : City.default) %>
     <%= image_tag 'help.png', :class => 'help', :id => 'site-description-help' %>
   </div>
 

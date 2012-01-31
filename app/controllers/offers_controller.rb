@@ -20,15 +20,15 @@ class OffersController < ApplicationController
 
   def index
     if request.xhr?
-      @offers = @categories ? @city.offers.with_dependencies.where(category_id: @categories).order(@sort_by).page( @page ) : []
+      @offers = @categories ? @city.offers.with_dependencies.where(category_id: @categories, from_kupongid: true).order(@sort_by).page( @page ) : []
       if @time_period && @categories
         @offers = @offers.by_time_period(@time_period)
       end
 
       if @time_period
-        @offers_selected_count = @categories ? @city.offers.where(category_id: @categories).by_time_period(@time_period).count : @city.offers.categorized.count
+        @offers_selected_count = @categories ? @city.offers.where(category_id: @categories, from_kupongid: true).by_time_period(@time_period).count : @city.offers.categorized.count
       else
-        @offers_selected_count = @categories ? @city.offers.where(category_id: @categories).count : @city.offers.where('offers.category_id is NOT NULL').count
+        @offers_selected_count = @categories ? @city.offers.where(category_id: @categories, from_kupongid: true).count : @city.offers.where('offers.category_id is NOT NULL').count
       end
     else
       @offers = Offer.where('id < 0').page( params[:page] ) # empty scope for pagination
@@ -133,6 +133,7 @@ class OffersController < ApplicationController
 
   def validate_city
     @city = City.where(:name => params[:city]).first
+    session[:city] = @city.name if @city
     redirect_to root_path unless @city
   end
 
