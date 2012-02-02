@@ -4,15 +4,24 @@ class OffersController < ApplicationController
 
   layout Proc.new { |controller| controller.request.xhr?? false : 'application' }
 
-  #caches_action :show, :cache_path => Proc.new { |controller| "offers/show/#{controller.params[:id]}.#{request.format.symbol.to_s}" }
-
   before_filter :validate_city, :only => [ :index, :search, :refresh ]
-  caches_action :index, :cache_path => Proc.new { |controller| "#{controller.params}.#{@city.name}_index_fragment" }
+  before_filter :prepare_page_index, :only => [ :index, :search ]
+
+  caches_action :index, :cache_path => Proc.new { |controller|
+    p = controller.params
+    categories = p['categories'] ? p['categories'].gsub(',','-') : ''
+    sort = p['sort'] ? (p['sort']['attribute'] + '_' + p['sort']['direction']) : ''
+    page = p['page'] || 1
+    city = p['city']
+    per_page = @per_page || 25
+    "#{[categories, sort, page, per_page, city].join('_')}.index_fragment"
+    # 2-3_category_id_desc_2_100_moskva.index_fragment
+    # ^ category ids ^ sort ^ page ^ per_page ^ city
+  }
 
   before_filter :prepare_categories_array, :only => :index
   before_filter :prepare_sort_attributes, :only => :index
   before_filter :prepare_time_period, :only => :index
-  before_filter :prepare_page_index, :only => [ :index, :search ]
   before_filter :validate_offer, :only => :show
   before_filter :validate_favourites, :only => :favourites, :if => lambda { |controller| controller.request.xhr? }
   before_filter :validate_search, :only => :search
