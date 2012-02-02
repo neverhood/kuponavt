@@ -8,3 +8,7 @@
   <span class='next'> <%= link_to raw(t 'views.pagination.next'), "#{@city.name}/offers?page=2", :rel => 'next' %> </span>
   <span class='last'> <%= link_to t('views.pagination.last'), "#{@city.name}/offers?page=LAST_PAGE" %> </span>
 </nav>
+
+<div id='offers-per-page' class='center-aligned'>
+  по <% [25,50,100].each do |per_page| %> <span class='per_page'><%= per_page %></span> <% end %> купонов на страницу
+</div>

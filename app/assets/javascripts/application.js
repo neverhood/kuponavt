@@ -60,10 +60,46 @@ Array.prototype.unique = function() {
 
 $('document').ready(function() {
 
+
+
+    // Init settings
+
+    if ( $('#settings-container').length ) {
+        if ( typeof $.offers.cookies.offers_per_page === 'undefined' ) {
+            $.offers.utils.setCookie('offers_per_page', 25);
+        }
+
+        var offersPerPage = $('#settings-container .offers-per-page .per_page');
+
+        offersPerPage.removeClass('current');
+        offersPerPage.filter('.per_page:contains("' + $.offers.cookies.offers_per_page + '")').
+            addClass('current');
+
+        offersPerPage.bind('click', offersPerPageSwitcherHandler );
+    }
+
     //$('#kuponavt').click(function() {
         //$.cookie( $.offers.cookies_key, null );
     //});
 
+    $('html').click(function(event) {
+        var citiesContainer = $('#all-cities'),
+            settingsContainer = $('#settings-container'),
+            target = $(event.target),
+            targetId = target.attr('id');
+
+        if ( target.parents('#all-cities').length === 0 && targetId != 'current-city' && targetId != 'all-cities' && citiesContainer.is(':visible') ) {
+            citiesContainer.toggle();
+        }
+
+        if ( target.parents('#settings').length === 0 && targetId != 'settings-button' && targetId != 'settings-container' && settingsContainer.is(':visible') ) {
+            settingsContainer.toggle();
+        }
+    });
+
+    $('#settings-button').click(function() {
+        $('#settings-container').toggle();
+    });
 
     $.each( $('.time-left, .time-left-red'), function() {
         var $this = $(this);
