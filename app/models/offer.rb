@@ -50,7 +50,7 @@ class Offer < ActiveRecord::Base
 
   after_destroy :destroy_image_and_folder
 
-  before_create lambda { |offer| offer.url.gsub! /\/$/, '' }
+  before_create lambda { |offer| offer.url.gsub! /\/$/, '' if offer.url }
 
   scope :by_categories, lambda { |categories|
     where(category_id: categories.join(','))
