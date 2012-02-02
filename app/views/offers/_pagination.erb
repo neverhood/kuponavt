@@ -1,1 +1,7 @@
 <%= paginate @offers %>
+<% if @offers.total_count > ( @per_page || 25 ) %>
+  <div id='offers-per-page' class='center-aligned'>
+    по <% [25,50,100].each do |per_page| %> <span class='per_page'><%= per_page %></span> <% end %> купонов на страницу
+  </div>
+<% end %>
+

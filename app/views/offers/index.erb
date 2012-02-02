@@ -58,9 +58,6 @@
       </div>
   </div>
 
-  <div id='offers-for-page' class='center-aligned hidden'>
-    по <span class='current'>25</span><span>50</span><span>100</span> купонов на страницу
-  </div>
 
 </div>
 
@@ -68,7 +65,7 @@
   <%= render 'filter' %>
 <% end %>
 
-<div class='hidden'>
+<div class='hidden' id='pagination-template'>
   <% cache do %>
     <%= render 'pagination_template' %>
   <% end %>
