@@ -5,7 +5,7 @@ class Category < ActiveRecord::Base
   has_many :offers, :dependent => :destroy
   has_many :nested_categories, :class_name => 'Category', :foreign_key => 'parent_category_id', :dependent => :destroy
 
-  scope :parent_categories, where(:parent_category_id => nil)
+  scope :parent_categories, where(:parent_category_id => nil, special: nil)
   scope :nested_categories, where(['parent_category_id IS NOT NULL'])
 
   scope :food_and_fun, find_by_parent_category_id(1)
@@ -22,6 +22,12 @@ class Category < ActiveRecord::Base
 
   def city_offers(city_id)
     offers.joins(:cities).where(['cities_offers.city_id = ?', city_id])
+  end
+
+  def nested_categories_offers(city_id)
+    Offer.joins(:cities).
+      where(['cities_offers.city_id = ?', city_id]).
+      where(category_id: nested_categories.map(&:id))
   end
 
   def parent?

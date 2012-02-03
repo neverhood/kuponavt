@@ -16,28 +16,31 @@
     <% groups = { special: Category.where(special: true), parent: Category.parent_categories } %>
     <% groups.keys.each do |group| %>
       <% groups[group].each do |parent_category| %>
+        <% count = parent_category.nested_categories_offers(@city.id).count %>
 
-        <% if group == :special && groups[group].index(parent_category) == 0 %>
-          <p class='type first-category'> <span class='<%= group == :special ? "all-tags red" : "all-tags" %>'><%= parent_category.name %></span>
-          </p>
-        <% else %>
-          <p class='type'> <span class='all-tags'><%= parent_category.name %></span>
-          </p>
-        <% end %>
-
-        <ul class='<%= parent_category.to_en %>'>
-          <% parent_category.nested_categories.each do |nested_category| %>
-            <% count = nested_category.city_offers(@city.id).count %>
-            <% if count > 0 %>
-              <li>
-              <label> <%= check_box_tag nested_category.id, nested_category.id, false,
-                :name => nested_category.to_en %><span class='sub-category-text'><%= nested_category.name %></span>
-              </label>
-              <span class='amount' title="<%= t('offers.this_only') %>"><%= count %></span>
-              </li>
-            <% end %>
+        <% if count > 0 %>
+          <% if group == :special && groups[group].index(parent_category) == 0 %>
+            <p class='type first-category'> <span class='<%= group == :special ? "all-tags red" : "all-tags" %>'><%= parent_category.name %></span>
+            </p>
+          <% else %>
+            <p class='type'> <span class='all-tags'><%= parent_category.name %></span>
+            </p>
           <% end %>
-        </ul>
+
+          <ul class='<%= parent_category.to_en %>'>
+            <% parent_category.nested_categories.each do |nested_category| %>
+              <% count = nested_category.city_offers(@city.id).count %>
+              <% if count > 0 %>
+                <li>
+                <label> <%= check_box_tag nested_category.id, nested_category.id, false,
+                  :name => nested_category.to_en %><span class='sub-category-text'><%= nested_category.name %></span>
+                </label>
+                <span class='amount' title="<%= t('offers.this_only') %>"><%= count %></span>
+                </li>
+              <% end %>
+            <% end %>
+          </ul>
+        <% end %>
       <% end %>
     <% end %>
 
