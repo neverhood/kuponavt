@@ -297,7 +297,7 @@ $.offers.utils.retrieveOffers = function(page) { // Retrieves offers, count and 
 };
 
 $.offers.utils.getOffers = function(categoryIds) { // Retrieves just offers
-    $('.notification').hide();
+    //$('.notification').hide();
     $( $.offers.sections.offers ).removeAttr('data-search');
 
     if ( $( $.offers.sections.offers ).attr('data-sort-by') ) {
