@@ -4,31 +4,45 @@ class OffersController < ApplicationController
 
   layout Proc.new { |controller| controller.request.xhr?? false : 'application' }
 
-  #caches_action :show, :cache_path => Proc.new { |controller| "offers/show/#{controller.params[:id]}.#{request.format.symbol.to_s}" }
-
-
   before_filter :validate_city, :only => [ :index, :search, :refresh ]
-  caches_action :index, :cache_path => Proc.new { |controller| "#{controller.params}.#{@city.name}_index_fragment" }
+  before_filter :prepare_page_index, :only => [ :index, :search ]
+
+  caches_action :index, :cache_path => Proc.new { |controller|
+    p = controller.params
+    categories = p['categories'] ? p['categories'].gsub(',','-') : ''
+    sort = p['sort'] ? (p['sort']['attribute'] + '_' + p['sort']['direction']) : ''
+    page = p['page'] || 1
+    city = p['city']
+    per_page = @per_page || 25
+    "#{[categories, sort, page, per_page, city].join('_')}.index_fragment"
+    # 2-3_category_id_desc_2_100_moskva.index_fragment
+    # ^ category ids ^ sort ^ page ^ per_page ^ city
+  }
 
   before_filter :prepare_categories_array, :only => :index
   before_filter :prepare_sort_attributes, :only => :index
   before_filter :prepare_time_period, :only => :index
-  before_filter :prepare_page_index, :only => [ :index, :search ]
   before_filter :validate_offer, :only => :show
   before_filter :validate_favourites, :only => :favourites, :if => lambda { |controller| controller.request.xhr? }
   before_filter :validate_search, :only => :search
 
   def index
     if request.xhr?
-      @offers = @categories ? @city.offers.with_dependencies.where(category_id: @categories, from_kupongid: true).order(@sort_by).page( @page ) : []
+      @offers = @categories ? @city.offers.with_dependencies.
+        where(category_id: @categories).
+        order(@sort_by).
+        page( @page ).per( @per_page )
+      : []
       if @time_period && @categories
         @offers = @offers.by_time_period(@time_period)
       end
 
       if @time_period
-        @offers_selected_count = @categories ? @city.offers.where(category_id: @categories, from_kupongid: true).by_time_period(@time_period).count : @city.offers.categorized.count
+        @offers_selected_count = @categories ? @city.offers.
+          where(category_id: @categories).by_time_period(@time_period).count : @city.offers.categorized.count
       else
-        @offers_selected_count = @categories ? @city.offers.where(category_id: @categories, from_kupongid: true).count : @city.offers.where('offers.category_id is NOT NULL').count
+        @offers_selected_count = @categories ? @city.offers.
+          where(category_id: @categories).count : @city.offers.where('offers.category_id is NOT NULL').count
       end
     else
       @offers = Offer.where('id < 0').page( params[:page] ) # empty scope for pagination
@@ -139,6 +153,13 @@ class OffersController < ApplicationController
 
   def prepare_page_index
     @page = params[:page] ? params[:page].to_i : 1
+    if cookies['kuponavt_params']
+      if cookies['kuponavt_params'].split('|').last =~ /\d+/
+        @per_page = cookies['kuponavt_params'].split('|').last.to_i
+      else
+        @per_page = 25
+      end
+    end
   end
 
   def validate_favourites

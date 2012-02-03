@@ -15,14 +15,15 @@ $.offers = {
         sort: 'category_id desc',
         categories: 'all',
         time_period: 0,
-        page: 1
+        page: 1,
+        offers_per_page: 25
     },
     cookies_changed: false
 };
 
 $.offers.utils.setCookies = function() {
     var cookies = $.offers.cookies,
-        string = cookies.sort + '|' + cookies.categories + '|' + cookies.time_period + '|' + cookies.page;
+        string = cookies.sort + '|' + cookies.categories + '|' + cookies.time_period + '|' + cookies.page + '|' + cookies.offers_per_page;
 
     $.cookie( $.offers.cookies_key, string, { expires: 7 } );
 };
@@ -34,7 +35,8 @@ $.offers.utils.copyCookies = function() {
         sort: params[0],
         categories: params[1],
         time_period: params[2],
-        page: params[3]
+        page: params[3],
+        offers_per_page: params[4]
     }
 };
 
@@ -240,12 +242,23 @@ $.offers.utils.changeCounterAndPaginate = function() {
     $('#offers-selected-count').text( totalSelectedOffersCount );
 };
 
+$.offers.utils.setOffersPerPage = function() {
+    var offersPerPage = $('#offers-per-page');
+
+    offersPerPage.find('.per_page').removeClass('current');
+    offersPerPage.find('.per_page:contains("' + $.offers.cookies.offers_per_page + '")').
+        addClass('current');
+
+    offersPerPage.find('.per_page').bind('click', offersPerPageSwitcherHandler );
+};
+
 $.offers.utils.retrieveOffers = function(page) { // Retrieves offers, count and pagination
     $('div#loader').show();
     //$('#current-offers-count').append( $.api.loader() );
     $( $.offers.sections.offers ).removeAttr('data-search');
+    $.offers.utils.setCookie('page', page);
 
-    $('.notification').hide();
+    //$('.notification').hide();
 
     var checkedCategories = $.offers.utils.checkedCategories();
     if ( (checkedCategories.length > 0 && $.offers.utils.selectedOffersCount() > 0) || $( $.offers.sections.offers ).attr('data-search') ) {
@@ -264,6 +277,9 @@ $.offers.utils.retrieveOffers = function(page) { // Retrieves offers, count and 
                     $.offers.utils.changeCounterAndPaginate();
                 }
             }
+
+            // Set offers-per-page switcher
+            $.offers.utils.setOffersPerPage();
 
             $.offers.utils.startCountDown();
             $.offers.utils.showFavourites();
@@ -356,8 +372,8 @@ $.offers.utils.selectedOffersCount = function() {
 };
 
 $.offers.utils.paginate = function(offersCount) {
-    var rawCount = offersCount/$.offers.offersPerPage,
-        template = $('.pagination-template').clone().removeClass('pagination-template'),
+    var rawCount = offersCount/$.offers.cookies.offers_per_page,
+        template = $('#pagination-template .pagination-template').clone().removeClass('pagination-template'),
         pagesCount = ( rawCount > parseInt( rawCount ) ) ? (parseInt( rawCount ) + 1) : rawCount,
         paginationContainer = $('#pagination-bottom').html('');
 
@@ -375,12 +391,35 @@ $.offers.utils.paginate = function(offersCount) {
         var lastPage = template.find('.last').find('a');
         lastPage.attr('href', lastPage.attr('href').replace('LAST_PAGE', pagesCount));
 
-        paginationContainer.html( template );
+        paginationContainer.html( template ).
+            append( $('#pagination-template .pagination-template').next().clone() );
     }
-
 };
 
 // Bindings
+
+var offersPerPageSwitcherHandler = function() {
+    var $this = $(this),
+        places = {
+            header: $('#settings-container .offers-per-page .per_page'),
+            pagination: $('#offers-per-page .per_page')
+        };
+
+    if ( $this.hasClass('current') ) return false;
+
+    places.header.removeClass('current');
+    places.pagination.removeClass('current');
+    $this.addClass('current');
+
+    if ( $this.parents('#settings-container').length ) {
+        places.pagination.filter(':contains("' + $this.text() + '")').addClass('current');
+    } else {
+        places.header.filter(':contains("' + $this.text() + '")').addClass('current');
+    }
+
+    $.offers.utils.setCookie('offers_per_page', parseInt( $this.text() ));
+    $.offers.utils.retrieveOffers( 1 );
+};
 
 var searchSubmitHandler = function() {
   var valueLength = $(this).find('#search').val().replace(/\s+/, '').length;
@@ -853,15 +892,6 @@ $('document').ready(function() {
         }
     });
 
-    $('html').click(function(event) {
-        var citiesContainer = $('#all-cities'),
-            target = $(event.target),
-            targetId = target.attr('id');
-
-        if ( target.parents('#all-cities').length === 0 && targetId != 'current-city' && targetId != 'all-cities' && citiesContainer.is(':visible') ) {
-            citiesContainer.toggle();
-        }
-    });
 // City selection 
     $('#current-city').click(function(event) {
         if ( event.target.id == 'current-city') $('#all-cities').toggle();

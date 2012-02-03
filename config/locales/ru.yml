@@ -7,7 +7,9 @@ ru:
     hrn: грн
     reset: Сброс
     rub: руб
-
+    settings: Настройки
+    offers_per_page: купонов на страницу
+    free: бесплатно
     starts_at: от
 
   views:

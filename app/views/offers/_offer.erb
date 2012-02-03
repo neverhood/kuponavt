@@ -47,9 +47,9 @@
 
     <p class='price'>
     <span class='offer-price'>
-      <%= offer.price %>
+      <%= offer.price > 0 ? offer.price : t('common.free') %>
     </span>
-      <span class='currency'> <%= offer.country.currency %> </span>
+      <span class='currency'> <%= offer.country.currency unless offer.price.zero? %> </span>
     </p>
 
     <div class='add-button' title="<%= t('offers.add_to_favourites') %>"></div>

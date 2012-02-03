@@ -6,16 +6,16 @@ include Parser
 require File.expand_path('../../lib/mixins/kupongid_tools', __FILE__)
 include KupongidTools
 
-#require 'tor-privoxy'
+require 'tor-privoxy'
 
-#@proxy = TorPrivoxy::Switcher.new '127.0.0.1', '', {8118 => 9050}
+@proxy = TorPrivoxy::Switcher.new '127.0.0.1', '', {8118 => 9050}
 @bot = Mechanize.new
-#@bot.set_proxy(@proxy.host, @proxy.port)
-
-#puts @bot.get('http://ifconfig.me/ip').body
+@bot.set_proxy(@proxy.host, @proxy.port)
 
 @log = Logger.new("#{$rails_root}/parsers/logs/kupongid.log")
 @url = 'http://www.kupongid.ru'
+
+@log.info @bot.get('http://ifconfig.me/ip').body
 
 @bot.get(@url)
 @log.debug("Starting kupongid parser .. #{Time.now}")
@@ -33,14 +33,15 @@ cities.keys.each do |city|
   @bot.get( @url + '/' + cities[city] )
 
   # Pagination
-  pagination_url = cities[city] + '?kuponmap=1&deal_groupID=0&select=select_all&offset=0'
   current_page, offset, offers_per_page, total_count = 1, 0, 20, @bot.page.parser.css('.total').first.text.to_i
   pages_count = (total_count % offers_per_page == 0) ? total_count/offers_per_page : total_count/offers_per_page + 1
+  timeouts = 0
 
   pages_count.times do
     offset = current_page == 1 ? 0 : current_page * offers_per_page
-    @bot.get cities[city] + '?kuponmap=1&deal_groupID=0&select=select_all&offset=' + offset.to_s rescue binding.pry
+    @bot.get 'http://kupongid.ru/index.php?kuponmap=1&deal_groupID=0&select=select_all&offset=' + offset.to_s rescue retry if timeouts <= 3
     current_page += 1
+    timeouts = 0
 
     offer_patterns = @bot.page.parser.css('div.coupon')
 
@@ -88,11 +89,21 @@ cities.keys.each do |city|
                        nil
                      end
 
+      if Offer.where(from_kupongid: true, provided_id: provided_id).any?
+	existing_model = Offer.where(from_kupongid: true, provided_id: provided_id).first
+	CitiesOffers.create(city_id: city.id, offer_id: existing_model.id, url: provider_url)
+	@log.info("Added existing offer #{existing_model.provided_id} to city #{city.name}")
+	existing_model = nil
+	next
+      end
+
+      @bot = Mechanize.new
+      @bot.set_proxy(@proxy.host, @proxy.port)
+
       offer = {
         url: provider_url,
         title: pattern.css('.description h2 a.local').text,
         provided_id: url.gsub(/\D/, ''),
-        image: open( pattern.css('.image img').first['src'].gsub('_small', '') ),
         description: raw_description.css('p').count == 1 ? raw_description.text.gsub(/\n|\t|\r\n/, '') : raw_description.css('p')[1].text.gsub(/\n|\t|\r\n/, ''),
         ends_at: pattern.css('.time').text =~ /\dд/ ? pattern.css('.time').text.gsub(/д.*/, '').to_i.days.from_now : nil,
         subway: pattern.css('.location noindex b').text,
@@ -106,25 +117,29 @@ cities.keys.each do |city|
         from_kupongid: true
       }
 
+      offer[:image] = open( pattern.css('.image img').first['src'].gsub('_small', '') ) rescue nil
+
       model = Offer.new( offer )
-      binding.pry
       if model.valid?
         @log.info("Saving offer #{model.provided_id}")
         city_clone = city.clone
         city_clone.offers << model
         saved += 1
         saved_offers << model.provided_id
+      else
+	binding.pry
       end
     end
   end
 
   @log.info("Finished processing #{city.name} ( #{Time.now} ). Saved #{saved_offers.count} new offers")
 
-end
+  existing_offers.each do |expired_offer|
+    @log.info "Removing expired offer #{expired_offer}"
+    model = Offer.where(from_kupongid: true, provided_id: expired_offer).first
+    model.destroy if model
+  end
 
-existing_offers.each do |expired_offer|
-  @log.info "Removing expired offer #{expired_offer}"
-  Offer.where(from_kupongid: true, provided_id: expired_offer).destroy
 end
 
 @log.info("Finished kupongid parser. Total #{saved} offers added, #{existing_offers.count} expired offers were removed")

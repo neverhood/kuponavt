@@ -25,12 +25,15 @@
 
       <ul class='<%= parent_category.to_en %>'>
         <% parent_category.nested_categories.each do |nested_category| %>
-          <li>
-          <label> <%= check_box_tag nested_category.id, nested_category.id, false,
-            :name => nested_category.to_en %><span class='sub-category-text'><%= nested_category.name %></span>
-          </label>
-          <span class='amount' title="<%= t('offers.this_only') %>"><%= nested_category.city_offers(@city.id).count %></span>
-          </li>
+          <% count = nested_category.city_offers(@city.id).count %>
+          <% if count > 0 %>
+            <li>
+            <label> <%= check_box_tag nested_category.id, nested_category.id, false,
+              :name => nested_category.to_en %><span class='sub-category-text'><%= nested_category.name %></span>
+            </label>
+            <span class='amount' title="<%= t('offers.this_only') %>"><%= count %></span>
+            </li>
+          <% end %>
         <% end %>
       </ul>
 

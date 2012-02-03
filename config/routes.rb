@@ -7,7 +7,9 @@ Kuponavt::Application.routes.draw do
   namespace :admin do
     root :to => 'suspicious_offers#index'
 
-    resources :suspicious_offers, :only => [:index, :update]
+    resources :suspicious_offers, :only => [:index, :update] do
+      post :clear_cache, :on => :collection
+    end
     resources :bot, :only => [ :index, :show, :destroy ] do
       post :clear, :on => :collection
     end

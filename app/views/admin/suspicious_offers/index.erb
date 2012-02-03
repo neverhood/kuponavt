@@ -11,6 +11,7 @@
   <%= link_to 'Not categorized', admin_suspicious_offers_path %>
   <%= link_to 'No `Provided Id`', admin_suspicious_offers_path(:section => 'provided_id') %>
   <%= link_to 'No `Ends At`', admin_suspicious_offers_path(:section => 'ends_at') %>
+  <%= link_to 'Clear Cache', clear_cache_admin_suspicious_offers_path, remote: true, method: 'post', confirm: 'Are you sure?' %>
 </div>
 
   <div id='offers'>

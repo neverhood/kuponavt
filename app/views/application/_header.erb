@@ -69,8 +69,20 @@
     </div>
   <% end %>
 
-  <div class='selected-deals-link'>
+  <div id='selected-deals-link'>
     <%= link_to t('offers.selected_coupons'), favourites_offers_path %> <span id='favourites-count'>0</span>
   </div>
+
+  <div id='settings'>
+    <strong id='settings-button'><%= t('common.settings') %></strong>
+
+    <div id='settings-container'>
+      <h3><%= t('common.offers_per_page') %></h3>
+      <div class='center-aligned offers-per-page'>
+        по <% [25,50,100].each do |per_page| %> <span class='per_page'><%= per_page %></span> <% end %> <%= t('common.offers_per_page') %>
+      </div>
+    </div>
+  </div>
+
 
 </div>

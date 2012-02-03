@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120119231240) do
+ActiveRecord::Schema.define(:version => 20120202113813) do
 
   create_table "bot_statistics", :force => true do |t|
     t.integer  "offer_id"
@@ -27,6 +27,7 @@ ActiveRecord::Schema.define(:version => 20120119231240) do
     t.integer  "parent_category_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "special"
   end
 
   create_table "cities", :force => true do |t|
