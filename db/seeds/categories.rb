@@ -1,6 +1,11 @@
 # encoding: UTF-8
 
 $categories = [
+  { name: 'Специальные предложения', nested_categories: [
+                             { name: 'День святого Валентина'}
+                           ]
+
+  }
   { name: 'Еда и напитки', nested_categories: [
                              { name: 'Кафе, рестораны' },
                              { name: 'Бары, клубы, караоке' },

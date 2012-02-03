@@ -90,7 +90,8 @@ providers =
                   },
                   { name: 'cityradar',
                     url: 'http://cityradar.ru/',
-                    logo_url: 'cityradar.png'
+                    logo_url: 'cityradar.png',
+		    ref_url: '/ref/57417'
                   },
                   { name: 'billkill',
                     url: 'http://www.billkill.ru/',
@@ -164,7 +165,8 @@ providers =
                   },
                   { name: 'planet-eds',
                     url: 'http://planet-eds.ru/',
-                    logo_url: 'planet-eds.png'
+                    logo_url: 'planet-eds.png',
+		    ref_url: '&utm_source=kuponavt&utm_medium=agregator&utm_campaign=partner'
                   },
                   { name: 'dailysmiles',
                     url: 'http://www.dailysmiles.ru/',
@@ -176,7 +178,8 @@ providers =
                   },
                   { name: 'citycoupon',
                     url: 'http://citycoupon.ru/',
-                    logo_url: 'citycoupon.png'
+                    logo_url: 'citycoupon.png',
+		    ref_url: '?ref=45431'
                   },
                   { name: 'mafam',
                     url: 'http://mafam.ru/',
@@ -277,7 +280,8 @@ providers =
                   },
                   { name: 'autokupon',
                     url: 'http://autokupon.ru/',
-                    logo_url: 'autokupon.png'
+                    logo_url: 'autokupon.png',
+		    ref_url: '?domain=kuponavt.com'
                   },
                   { name: 'wildprice',
                     url: 'http://wildprice.ru/',
