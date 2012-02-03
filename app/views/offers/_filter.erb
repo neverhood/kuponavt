@@ -18,7 +18,7 @@
       <% groups[group].each do |parent_category| %>
 
         <% if group == :special && groups[group].index(parent_category) == 0 %>
-          <p class='type first-category'> <span class='all-tags'><%= parent_category.name %></span>
+          <p class='type first-category'> <span class='<%= group == :special ? "all-tags red" : "all-tags" %>'><%= parent_category.name %></span>
           </p>
         <% else %>
           <p class='type'> <span class='all-tags'><%= parent_category.name %></span>
