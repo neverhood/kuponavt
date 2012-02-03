@@ -76,6 +76,7 @@ cities.each do |city|
       next
     end
 
+    begin
     offer_attributes = {
       title: offer.xpath('title').text.strip,
       provider_id: PROVIDER.id,
@@ -91,6 +92,9 @@ cities.each do |city|
       country_id: city.country_id,
       city_id: city.id
     }
+    rescue
+      next
+    end
     contacts = Nokogiri::HTML(offer.xpath('contacts').first.text).text.gsub(/\+.*/m, '').split("\n").map(&:strip).
       delete_if { |s| s.blank? }
     offer_attributes[:address] = contacts[0]
@@ -102,6 +106,7 @@ cities.each do |city|
     offer_attributes[:coordinates] = nil if offer_attributes[:coordinates].blank?
     offer_attributes[:address] = nil if offer_attributes[:address].blank?
 
+    begin
     model = Offer.new( offer_attributes )
     if model.valid?
       log.info("Saving offer #{provided_id}")
@@ -110,6 +115,9 @@ cities.each do |city|
       saved += 1
     else
       log.error("Can't save invalid offer: #{model.provided_id}. \n #{model.errors.full_messages.join(',')}")
+    end
+    rescue
+      next
     end
 
   end
