@@ -7,7 +7,6 @@ PROVIDER = Provider.find_by_name('bigbuzzy')
 
 xml_offers = []
 xml = Nokogiri::XML( open('http://bigbuzzy.ru/xml/') )
-
 xml_offers << xml.xpath('//offer').to_a
 xml_current_page = 1
 xml_total_pages = xml.xpath('//navigation/total_pages').text.to_i
@@ -83,8 +82,8 @@ cities.each do |city|
     offer_attributes[:price] = offer.xpath('discountprice').text.to_i if offer_attributes[:price] == 0
     offer_attributes[:coordinates] = nil if offer_attributes[:coordinates].blank?
     offer_attributes[:address] = nil if offer_attributes[:address].blank?
+    offer_attributes[:address] = offer_attributes[:address].split('||').first if offer_attributes[:address] && offer_attributes[:address].length >= 255
 
-begin
     model = Offer.new( offer_attributes )
     if model.valid?
       @log.info("Saving offer #{provided_id}")
@@ -93,11 +92,7 @@ begin
       saved += 1
     else
       @log.error("Can't save invalid offer: #{model.provided_id}. \n #{model.errors.full_messages.join(',')}")
-      binding.pry
     end
-rescue Exception => e
-binding.pry
-end
   end
 
   existing_offers.each do |expired_offer|
