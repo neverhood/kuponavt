@@ -30,9 +30,9 @@
                     <% end %>
                     <li>
                       <% if city.capital? %>
-                        <%= link_to t("cities.#{city.name}"), city.name, :class => 'bold' %>
+                        <%= link_to t("cities.#{city.name}"), offers_path(city), :class => 'bold' %>
                       <% else %>
-                        <%= link_to t("cities.#{city.name}"), city.name, :class => "#{expired ? '' : 'first-letter' }" %>
+                        <%= link_to t("cities.#{city.name}"), offers_path(city), :class => "#{expired ? '' : 'first-letter' }" %>
                       <% end %>
                     </li>
                   <% end %>
@@ -53,9 +53,9 @@
                     <% end %>
                     <li>
                     <% if city.capital? %>
-                      <%= link_to t("cities.#{city.name}"), city.name, :class => 'bold' %>
+                      <%= link_to t("cities.#{city.name}"), offers_path(city), :class => 'bold' %>
                     <% else %>
-                      <%= link_to t("cities.#{city.name}"), city.name, :class => "#{expired ? '' : 'first-letter' }" %>
+                      <%= link_to t("cities.#{city.name}"), offers_path(city), :class => "#{expired ? '' : 'first-letter' }" %>
                     <% end %>
                     </li>
                   <% end %>

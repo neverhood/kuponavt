@@ -141,7 +141,7 @@ $.offers.utils.hideLenses = function() {
 };
 
 $.offers.utils.page = function() {
-    var currentPage = $('#pagination-bottom .current').text();
+    var currentPage = $('#pagination-bottom span.page.current').text();
 
     return currentPage.length ? parseInt(currentPage) : 1;
 };
