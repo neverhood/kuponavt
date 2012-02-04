@@ -14,7 +14,8 @@ class OffersController < ApplicationController
     page = p['page'] || 1
     city = p['city']
     per_page = @per_page || 25
-    "#{[categories, sort, page, per_page, city].join('_')}.index_fragment"
+    time_period = p['time_period']
+    "#{[categories, sort, time_period, page, per_page, city].join('_')}.index_fragment"
     # 2-3_category_id_desc_2_100_moskva.index_fragment
     # ^ category ids ^ sort ^ page ^ per_page ^ city
   }
