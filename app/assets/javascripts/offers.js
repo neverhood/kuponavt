@@ -584,22 +584,24 @@ var allOffersClearClickHandler = function(event) {
 
 $('document').ready(function() {
 
-    var filter = $('#filter'),
-        filterOffset = filter.offset(),
-        filterHeight = filter.height(),
-        showScrollTopAt = filterOffset.top + filterHeight - 250;
+    if ( document.body.id == 'offers-controller' && ! /favourites/.test(window.location.href) ) {
+        var filter = $('#filter'),
+            filterOffset = filter.offset(),
+            filterHeight = filter.height(),
+            showScrollTopAt = filterOffset.top + filterHeight - 250;
 
-    $(window).scroll(function() {
-        if ( window.pageYOffset >= showScrollTopAt ) {
-            $('div#scroll-up').show();
-        } else {
-            $('div#scroll-up').hide();
-        }
-    });
+        $(window).scroll(function() {
+            if ( window.pageYOffset >= showScrollTopAt ) {
+                $('div#scroll-up').show();
+            } else {
+                $('div#scroll-up').hide();
+            }
+        });
 
-    $('div#scroll-up').click(function() {
-        $("html:not(:animated)"+( ! $.browser.opera ? ",body:not(:animated)" : "")).animate({scrollTop: 0}, 100);
-    });
+        $('div#scroll-up').click(function() {
+            $("html:not(:animated)"+( ! $.browser.opera ? ",body:not(:animated)" : "")).animate({scrollTop: 0}, 100);
+        });
+    }
 
     // Refresh
 
@@ -744,13 +746,28 @@ $('document').ready(function() {
 
     // Offer-bottom-more
 
-    $("#offers-section .offer .offer-description-roll-up").live('click', function() {
-        $(this).parents('.offer').find('.offer-details').toggle(100);
+    $("#offers-section div.offer div.offer-description-roll-up, #offers-section div.offer div.offer-bottom").live('click', function() {
+        var offer = $(this).parents('div.offer'),
+            offerBottom = offer.find('div.offer-bottom'),
+            offerBottomInner = offerBottom.find('div.offer-bottom-inner-border');
+
+        if ( offerBottomInner.hasClass('arrow-up') ) {
+            offerBottom.attr('title', offerBottom.data('original-title'));
+        } else {
+            offerBottom.data('original-title', offerBottom.attr('title'));
+            offerBottom.attr('title', 'Скрыть подробности');
+        }
+
+        offerBottomInner.toggleClass('arrow-down arrow-up');
+        offer.find('div.offer-details').toggle(100);
     });
 
-    $("#offers-section .offer .offer-bottom").live('click', function() {
-        $(this).parents('.offer').find('.offer-details').toggle(100);
-    });
+    //$("#offers-section div.offer .offer-bottom").live('click', function() {
+        //var $this = $(this);
+
+        //$this.find('.offer-bottom-inner-border').toggleClass('arrow-down arrow-up');
+        //$this.parents('div.offer').find('div.offer-details').toggle(100);
+    //});
     // Categories
 
     $('#all-categories input[type="checkbox"]').
