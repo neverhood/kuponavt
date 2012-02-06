@@ -524,7 +524,7 @@ div#offers {
       width: 670px;
       bottom: 0px;
       left: 0px;
-      padding: 2px 0px;
+      /*padding: 2px 0px;*/
       border-radius: 0 0 10px 10px;
       border-top: 1px solid #97D0C9;
       cursor: pointer;
@@ -533,8 +533,9 @@ div#offers {
 
       .offer-bottom-inner-border {
           text-align: center; /*border-top: 1px solid white;*/
-          width: 23px;
-          height: 23px;
+          background: url(down-arrow.png);
+          width: 25px;
+          height: 25px;
           margin: 0 auto;
       }
 
