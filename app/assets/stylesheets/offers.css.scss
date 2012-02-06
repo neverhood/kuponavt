@@ -524,9 +524,9 @@ div#offers {
       width: 670px;
       bottom: 0px;
       left: 0px;
+      padding: 2px 0px;
       border-radius: 0 0 10px 10px;
       border-top: 1px solid #97D0C9;
-      padding: 0;
       cursor: pointer;
 
       /*&:hover { box-shadow: 0px 0px 3px white; }*/
@@ -540,11 +540,11 @@ div#offers {
       }
 
       &:active { box-shadow: inset 0px 1px 8px rgba(0, 120, 170, 0.8) }
-      img {
+      /*img {
         width: 23px;
         margin: 0;
         border: none;
-      }
+      } */
 
     }
 
