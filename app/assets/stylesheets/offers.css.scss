@@ -531,7 +531,13 @@ div#offers {
 
       /*&:hover { box-shadow: 0px 0px 3px white; }*/
 
-      .offer-bottom-inner-border { text-align: center; /*border-top: 1px solid white;*/ }
+      .offer-bottom-inner-border {
+          text-align: center; /*border-top: 1px solid white;*/
+          background: url(down-arrow.png);
+          width: 23px;
+          height: 23px;
+          margin: 0 auto;
+      }
 
       &:active { box-shadow: inset 0px 1px 8px rgba(0, 120, 170, 0.8) }
       img {
