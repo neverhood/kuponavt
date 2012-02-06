@@ -584,6 +584,23 @@ var allOffersClearClickHandler = function(event) {
 
 $('document').ready(function() {
 
+    var filter = $('#filter'),
+        filterOffset = filter.offset(),
+        filterHeight = filter.height(),
+        showScrollTopAt = filterOffset.top + filterHeight - 250;
+
+    $(window).scroll(function() {
+        if ( window.pageYOffset >= showScrollTopAt ) {
+            $('div#scroll-up').show();
+        } else {
+            $('div#scroll-up').hide();
+        }
+    });
+
+    $('div#scroll-up').click(function() {
+        $("html:not(:animated)"+( ! $.browser.opera ? ",body:not(:animated)" : "")).animate({scrollTop: 25}, 100);
+    });
+
     // Refresh
 
     if ( document.body.id == 'offers-controller' ) {
@@ -728,11 +745,11 @@ $('document').ready(function() {
     // Offer-bottom-more
 
     $("#offers-section .offer .offer-description-roll-up").live('click', function() {
-        $(this).parents('.offer').find('.offer-details').toggle(300);
+        $(this).parents('.offer').find('.offer-details').toggle(100);
     });
 
     $("#offers-section .offer .offer-bottom").live('click', function() {
-        $(this).parents('.offer').find('.offer-details').toggle(300);
+        $(this).parents('.offer').find('.offer-details').toggle(100);
     });
     // Categories
 
