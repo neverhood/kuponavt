@@ -648,6 +648,32 @@ div#offers {
 
 }
 
+#scroll-up-container-fixed {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+
+    #scroll-up {
+        margin: 0 auto;
+        position: relative;
+        bottom: 150px;
+        left: 354px;
+        background: url(scroll-up.png);
+        cursor: pointer;
+        width: 120px;
+        height: 121px;
+        opacity: .2;
+        border-radius: 65px;
+
+        &:hover { opacity: .4 }
+
+        &:active { opacity: .7 }
+
+    }
+
+}
+
 #offers-per-page, .offers-per-page {
     float: left;
     margin: 15px;

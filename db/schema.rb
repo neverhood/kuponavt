@@ -118,7 +118,7 @@ ActiveRecord::Schema.define(:version => 20120202113813) do
     t.integer  "category_id"
     t.integer  "country_id"
     t.integer  "city_id"
-    t.string   "title",         :limit => 400
+    t.string   "title"
     t.integer  "discount"
     t.integer  "price"
     t.integer  "cost"
@@ -126,7 +126,7 @@ ActiveRecord::Schema.define(:version => 20120202113813) do
     t.date     "ends_at"
     t.text     "description"
     t.string   "subway"
-    t.string   "address",       :limit => 400
+    t.string   "address"
     t.string   "url"
     t.datetime "created_at"
     t.boolean  "from_kupongid"
