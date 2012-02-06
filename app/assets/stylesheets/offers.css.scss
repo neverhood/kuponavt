@@ -533,10 +533,16 @@ div#offers {
 
       .offer-bottom-inner-border {
           text-align: center; /*border-top: 1px solid white;*/
-          background: url(down-arrow.png);
           width: 23px;
           height: 23px;
           margin: 0 auto;
+      }
+
+      .arrow-down {
+          background: url(down-arrow.png);
+      }
+      .arrow-up {
+          background: url(up-arrow.png);
       }
 
       &:active { box-shadow: inset 0px 1px 8px rgba(0, 120, 170, 0.8) }
