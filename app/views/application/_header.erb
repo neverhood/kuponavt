@@ -70,7 +70,8 @@
   <% end %>
 
   <div id='selected-deals-link'>
-    <%= link_to t('offers.selected_coupons'), favourites_offers_path %> <span id='favourites-count'>0</span>
+    <%= link_to t('offers.selected_coupons'), favourites_offers_path %>
+    <span id='favourites-count'> <%= cookies['favourites'] ? cookies['favourites'].split(',').count : 0 %> </span>
   </div>
 
   <div id='settings' class='hidden'>
