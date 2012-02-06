@@ -2,7 +2,13 @@
   <%= stylesheet_link_tag 'single_offer' %>
 <% end %>
 
+<div id='all-offers'>
+  <div id='offers'>
+    <div id='offers-section'>
+      <%= render partial: 'offer', locals: { offer: @offer } %>
+    </div>
+  </div>
+</div>
 
-<h1>HI</h1>
 
-<h2> <%= @offer.title %> </h2>
+
