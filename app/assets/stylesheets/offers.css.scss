@@ -658,6 +658,7 @@ div#offers {
   }
 
   #search {
+    position: relative;
     margin-bottom: 10px;
 
     input#search {
@@ -678,17 +679,16 @@ div#offers {
 
     span#search-button {
       position: absolute;
-      bottom: 19px;
+      top: 24px;
       right: 17px;
       background: url(search.png);
       display: inline-block;
       width: 30px;
       height: 30px;
       cursor: pointer;
-      -webkit-transition: all .1s linear;
-      -moz-transition: all .1s linear;
+
       &:active {
-        bottom: 18px;
+        top: 25px;
       }
     }
 
