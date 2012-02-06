@@ -96,9 +96,10 @@ class OffersController < ApplicationController
   end
 
   def show
-    respond_to do |format|
-      format.html
-      format.json { render :json => { description: @offer.description, address: @offer.address } }
+    if Offer.where(id: params[:id]).count > 0
+      @offer = Offer.find(params[:id])
+    else
+      redirect_to :back
     end
   end
 
