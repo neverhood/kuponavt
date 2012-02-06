@@ -598,7 +598,7 @@ $('document').ready(function() {
     });
 
     $('div#scroll-up').click(function() {
-        $("html:not(:animated)"+( ! $.browser.opera ? ",body:not(:animated)" : "")).animate({scrollTop: 25}, 100);
+        $("html:not(:animated)"+( ! $.browser.opera ? ",body:not(:animated)" : "")).animate({scrollTop: 0}, 100);
     });
 
     // Refresh
