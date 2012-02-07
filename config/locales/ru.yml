@@ -55,6 +55,7 @@ ru:
       yesterday: за вчера
 
   cities:
+    choose_city: ВЫБЕРИТЕ ГОРОД
     your_city: Ваш город
     # Ukraine
     kiev: Киев

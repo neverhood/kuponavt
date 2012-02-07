@@ -149,7 +149,7 @@ class OffersController < ApplicationController
 
   def validate_city
     @city = City.where(:name => params[:city]).first
-    session[:city] = @city.name if @city
+    cookies[:kuponavt_city] = @city.id if @city
     redirect_to root_path unless @city
   end
 

@@ -1,6 +1,12 @@
 class WelcomeController < ApplicationController
 
   def index
-    redirect_to offers_path(:city => City.default)
+    if cookies[:kuponavt_city]
+      @city = City.where(id: cookies[:kuponavt_city]).count > 0 ? City.find(cookies[:kuponavt_city]) : City.default
+    else
+      @city = Struct.new(:name).
+        new(:choose_city)
+    end
   end
+
 end
