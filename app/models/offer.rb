@@ -52,6 +52,8 @@ class Offer < ActiveRecord::Base
 
   before_create lambda { |offer| offer.url.gsub! /\/$/, '' if offer.url }
 
+  default_scope where('offers.category_id is NOT NULL')
+
   scope :by_categories, lambda { |categories|
     where(category_id: categories.join(','))
     #joins(:category).
@@ -102,6 +104,5 @@ class Offer < ActiveRecord::Base
     remove_image!
     FileUtils.rm_rf(directory) if directory
   end
-
 
 end

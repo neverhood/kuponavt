@@ -108,15 +108,13 @@ $.offers.utils.showFavourites = function() {
 
     if ( $.cookie('favourites') ) {
         var offers = $.cookie('favourites').split(',');
-
         $.each( offers, function() {
             $('div#offer-' + this.replace(/_.*/, '')).find('.add-button').addClass('add-button-added');
         });
 
-        if ( offers.length > 0 )
-            $('#favourites-count').text( offers.length );
-        else
-            $('#favourites-count').text( 0 );
+        offers.length > 0 ? $('#favourites-count').text( offers.length ) : $('#favourites-count').text( 0 );
+    } else {
+        $('#favourites-count').text( 0 );
     }
 };
 
@@ -449,10 +447,10 @@ var searchAjaxCompleteHandler = function(event, xhr, status) {
   $('#no-results-found').hide();
 
   if ( parseInt(response.total) == 0 ) {
-    $('#no-results-to-display').hide();
-    $('#sort-buttons').hide();
-    $('#no-results-for-time-period').hide();
-    $('#no-results-found').show();
+      $('#no-results-to-display').hide();
+      $('#sort-buttons').hide();
+      $('#no-results-for-time-period').hide();
+      $('#no-results-found').show();
   }
 };
 
@@ -584,7 +582,7 @@ var allOffersClearClickHandler = function(event) {
 
 $('document').ready(function() {
 
-    if ( document.body.id == 'offers-controller' && ! /favourites/.test(window.location.href) ) {
+    if ( document.body.id == 'offers-controller' && $('#filter').length ) {
         var filter = $('#filter'),
             filterOffset = filter.offset(),
             filterHeight = filter.height(),
@@ -604,6 +602,7 @@ $('document').ready(function() {
     }
 
     // Refresh
+
 
     if ( document.body.id == 'offers-controller' ) {
         var refreshFilter = function() {
@@ -651,7 +650,7 @@ $('document').ready(function() {
 
     // cookies
 
-    if ( $.cookie( $.offers.cookies_key ) && document.body.id == 'offers-controller' ) {
+    if ( $.cookie( $.offers.cookies_key ) && document.body.id == 'offers-controller' && ! /offers/.test(window.location.href)) {
         $.offers.utils.copyCookies();
 
         var page = $.offers.cookies.page == 0 ? false : $.offers.cookies.page,
@@ -762,12 +761,6 @@ $('document').ready(function() {
         offer.find('div.offer-details').toggle(100);
     });
 
-    //$("#offers-section div.offer .offer-bottom").live('click', function() {
-        //var $this = $(this);
-
-        //$this.find('.offer-bottom-inner-border').toggleClass('arrow-down arrow-up');
-        //$this.parents('div.offer').find('div.offer-details').toggle(100);
-    //});
     // Categories
 
     $('#all-categories input[type="checkbox"]').
