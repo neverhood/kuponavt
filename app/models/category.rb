@@ -5,7 +5,7 @@ class Category < ActiveRecord::Base
   has_many :offers, :dependent => :destroy
   has_many :nested_categories, :class_name => 'Category', :foreign_key => 'parent_category_id', :dependent => :destroy
 
-  scope :parent_categories, where(:parent_category_id => nil, special: nil)
+  scope :parent_categories, where(:parent_category_id => nil).where('special is NULL or special is FALSE')
   scope :nested_categories, where(['parent_category_id IS NOT NULL'])
 
   scope :food_and_fun, find_by_parent_category_id(1)

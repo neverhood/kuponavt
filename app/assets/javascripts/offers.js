@@ -650,6 +650,8 @@ $('document').ready(function() {
 
     // cookies
 
+    // TODO: Refactor condition
+    
     if ( $.cookie( $.offers.cookies_key ) && document.body.id == 'offers-controller' && ! /offers/.test(window.location.href)) {
         $.offers.utils.copyCookies();
 

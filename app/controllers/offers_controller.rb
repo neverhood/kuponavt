@@ -117,6 +117,21 @@ class OffersController < ApplicationController
     else
       redirect_to :back
     end
+
+    scope = Offer.unscoped.select('row_number() OVER () AS rownum, id').from("(#{@offers.except(:limit, :offset).to_sql}) as scope")
+    index = Offer.unscoped.select('rownum').from("(#{scope.to_sql}) as outer_scope").
+      where("id = #{@offer.id}")[0].rownum.to_i
+
+    if index > 51
+      before_offset = index - 51
+      before_limit, after_offset, after_limit = (index - before_offset - 1), index, 50
+    else
+      before_offset, before_limit = 0, index - 1
+      after_offset, after_limit = index, 50
+    end
+    before = scope.select('id').offset(before_offset).limit(before_limit).map(&:id)
+    after = scope.select('id').offset(after_offset).limit(after_limit).map(&:id)
+    
   end
 
   def search
