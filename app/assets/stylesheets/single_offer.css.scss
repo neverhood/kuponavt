@@ -17,11 +17,10 @@
 
 #arrow-left {
 	position: absolute;
-	top: 100px;
 	left: -125px;
 	width: 121px;
-	height: 120px;
-	background: url(side-arrow-left.png);
+	height: 100%;
+	background: url(side-arrow-left.png) no-repeat 0px 100px;
 	cursor: pointer;
 	opacity: 0.2;
 	-moz-opacity: 0.2;
@@ -37,11 +36,10 @@
 
 #arrow-right {
 	position: absolute;
-	top: 100px;
 	right: -125px;	
 	width: 121px;
-	height: 120px;
-	background: url(side-arrow-right.png);
+	height: 100%;
+	background: url(side-arrow-right.png) no-repeat 0px 100px;
 	cursor: pointer;
 	opacity: 0.2;
 	-moz-opacity: 0.2;
