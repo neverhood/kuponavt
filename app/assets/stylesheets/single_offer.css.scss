@@ -1,6 +1,243 @@
+.clear {
+	clear:both;
+}
+
+#offer-plus-arrows {
+	width: 960px;
+	border-radius: 5px;
+	box-shadow: 0 0 2px #007fad;
+	background: url(semi-tsp.png) repeat;
+}
+
+.offer {
+	width: 700px;
+	margin: 0 auto;
+	position: relative;
+}
+
+#arrow-left {
+	position: absolute;
+	top: 100px;
+	left: -125px;
+	width: 121px;
+	height: 120px;
+	background: url(side-arrow-left.png);
+	cursor: pointer;
+	opacity: 0.2;
+	-moz-opacity: 0.2;
+	filter:alpha(opacity=2);
+
+	&:hover {
+		opacity: 0.4;
+		-moz-opacity: 0.4;
+		filter:alpha(opacity=4);;
+	}
+}
+
+
+#arrow-right {
+	position: absolute;
+	top: 100px;
+	right: -125px;	
+	width: 121px;
+	height: 120px;
+	background: url(side-arrow-right.png);
+	cursor: pointer;
+	opacity: 0.2;
+	-moz-opacity: 0.2;
+	filter:alpha(opacity=2);
+
+	&:hover {
+		opacity: 0.4;
+		-moz-opacity: 0.4;
+		filter:alpha(opacity=4);;
+	}
+}
+
+
 
 h1 {
-  font-weight: bold;
-  font-size: 100px;
-  color: red;
+	float: left;
+	margin: 10px 0px 14px;
+	font-size: 20px;
+	font-weight: bold;
+	text-align: justify;
+	color: #007FAD;
+	text-shadow: 0px 1px 1px white;
+}
+
+
+    .offer-left-side {
+      float: left;
+      position: relative;
+
+      .offer-image {
+        border: 1px solid #F3F3F3;
+        padding: 2px;
+        width: 390px;
+        height: 216px;
+      }
+
+      .offer-image-bottom {
+        opacity: .7;
+        position: absolute;
+        left: 3px;
+        bottom: 4px;
+        width: 390px;
+        height: 30px;
+        background: url(metro-tsp.png);
+        overflow: hidden;
+        /*-webkit-transition: height 200ms linear;*/
+        /*-moz-transition: height 200ms linear;*/
+
+        &:hover {
+          overflow: visible;
+          height: auto;
+          opacity: 1;
+          /*padding: 0 0 3px 0;*/
+        }
+
+        .subway {
+          margin: 5px 0 0 6px;
+          float: left;
+          background: url(metro-red.png);
+          width: 20px;
+          height: 20px;
+        } 
+
+        .subway-station {
+          float: left;
+          max-width: 220px;
+          margin: 6px 0 6px 6px;
+        }
+
+        .provider {
+          float: right;
+          width: auto;
+          height: 30px;
+        }
+      }
+
+    }
+
+    .offer-right-side {
+      float: right;
+      margin-left: 5px;
+      width: 235px;
+      height: 220px;
+      position: relative;
+      margin-bottom: 10px;
+
+      .info-container { margin-left: 7px }
+
+      .price {
+        color: green;
+        font-weight: bold;
+        text-align: center;
+        font-size: 30px;
+        .currency { font-weight: normal; }
+
+        .starts-at {
+          font-weight: normal;
+          text-transform: lowercase;
+        }
+      }
+
+      .info {
+        font-size: 12px;
+        color: grey;
+        text-align: center;
+      }
+
+      table {
+        text-align: center;
+        margin: -3px auto 15px;
+        color: grey;
+
+        td { padding: 0 10px; font-size: 12px }
+        
+        .offer-cost, .offer-discount, .offer-savings { color: black; font-size: 14px }
+      } /* Table */
+
+      .time-left { margin-top: 3px; text-align: center; font-size: 14px }
+      .time-left-red { margin-top: 3px; text-align: center; font-size: 14px; color: #ee3f41 }
+
+      .add-button {
+        position: absolute;
+        bottom: 5px;
+        left: 10px;
+        width: 35px;
+        height: 35px;
+        background: url(add-icons.png);
+        cursor: pointer;
+
+        &:hover {
+          background: url(add-icons.png);
+          background-position: -35px;
+        }
+
+        &:active {
+          bottom: 4px;
+          background: url(add-icons.png);
+          background-position: -70px;
+        }
+      }
+
+      .add-button-added {
+        bottom: 4px;
+        background: url(add-icons.png);
+        background-position: -70px;
+      
+        &:hover {
+          background-position: -70px;
+        }
+
+        &:active {
+          bottom: 5px;
+          background-position: -35px;
+        }
+      }
+
+      .buy-button {
+        display: block;
+        text-align: center;
+        text-decoration: none;
+        font-weight: bold;
+        color: white;
+        padding: 8px;
+        width: 150px;
+        line-height: 30px;
+        position: absolute;
+        bottom: -1px;
+        left: 64px;
+        background: #007fac;
+        background:-webkit-linear-gradient(#47AACC,#007fac);
+        background:-moz-linear-gradient(#47AACC,#007fac);
+        background:-o-linear-gradient(#47AACC,#007fac);
+        border: 1px solid #007fac;
+        border-radius: 4px;
+        text-shadow: 0px 1px 1px #007fac;
+
+        &:hover {
+          border: 1px solid #006f91;
+          border-right: 1px solid #00a1d6;
+          border-bottom: 1px solid #00a1d6;
+          background: #007fac;
+          text-shadow: 0 0 10px #7addff;
+        }
+
+        &:active {
+          bottom: -2px;
+          box-shadow:  inset 0px 1px 8px rgba(0,0,0,0.6);
+        }
+      }
+    } /* Right Side */
+
+
+#offer-description {	
+	clear: left;
+	float: left;
+	margin: 10px 0 15px;
+	color: #505050;
+	text-shadow: 0px 1px white;
 }

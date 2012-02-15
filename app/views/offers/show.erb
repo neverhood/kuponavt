@@ -3,14 +3,12 @@
   <%= javascript_include_tag 'single_offer' %>
 <% end %>
 
-<h2> <%= @offer.title %> </h2>
-<div id='all-offers'>
-  <div id='offers'>
-    <div id='offers-section'>
-      <%= render partial: 'offer', locals: { offer: @offer } %>
-    </div>
+  <div id='offer-plus-arrows' style='width:960px'>
+
+      <%= render partial: 'single_offer', locals: { offer: @offer } %>
+
   </div>
-</div>
+
 
 <div id='neighbors'>
 	<%= { before: @before, after: @after }.to_json %>
