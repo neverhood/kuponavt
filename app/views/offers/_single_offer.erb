@@ -1,9 +1,9 @@
-<div class='offer'>
+<div class='offer' id='offer-<%= offer.id %>'>
 	<div class='side-arrows' id='left' title='<%= t('offers.next_offer_left') %>'></div>
 	<div class='side-arrows' id='right' title='<%= t('offers.next_offer_right') %>'></div>
 
 	<h1>
-		<%= @offer.title %>
+		<%= offer.title %>
 	</h1>
 
 	<div class='offer-left-side'>

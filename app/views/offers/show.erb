@@ -3,10 +3,8 @@
   <%= javascript_include_tag 'single_offer' %>
 <% end %>
 
-  <div id='offer-plus-arrows' style='width:960px'>
-
+  <div id='offer-plus-arrows' data-id='<%= @offer.id %>' style='width:960px'>
       <%= render partial: 'single_offer', locals: { offer: @offer } %>
-
   </div>
 
 
@@ -14,6 +12,13 @@
 	<%= { before: @before, after: @after }.to_json %>
 </div>
 
-<div id='offer-template' class='hidden'>
-	<%= render 'offer_template' %>
+<div id='before' class='hidden'>
+	<% if @before.count > 0 %>
+		<%= render(partial: 'single_offer', locals: { offer: Offer.find(@before.last) }) %>
+	<% end %>
+</div>
+<div id='after' class='hidden'>
+	<% if @after.count > 0 %>
+		<%= render(partial: 'single_offer', locals: { offer: Offer.find(@after.first) }) %>
+	<% end %>
 </div>

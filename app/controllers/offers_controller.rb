@@ -120,30 +120,27 @@ class OffersController < ApplicationController
 
       format.json do
         neighbors = @offer.neighbors( @offers, 1 )
-        json = {
-          id: @offer.id,
-          offer: render_to_string(partial: 'offer', locals: {offer: @offer})
-        }
+        json = {}
         unless neighbors[:before].first.nil?
           json[:before] = {
-            offer: render_to_string(partial: 'offer', locals: {offer: neighbors[:before].first}),
-            id: neighbors[:before].first.id
+            html: render_to_string(partial: 'single_offer', locals: {offer: Offer.find(neighbors[:before].last)}),
+            id: neighbors[:before].last
           }
         end
         unless neighbors[:after].first.nil?
           json[:after] = {
-            offer: render_to_string(partial: 'offer', locals: {offer: neighbors[:after].first}),
-            id: neighbors[:after].first.id
+            html: render_to_string(partial: 'single_offer', locals: {offer: Offer.find(neighbors[:after].first)}),
+            id: neighbors[:after].first
           }
         end
-        
+
         render json: json
       end
     end
   end
 
   def neighbors
-    neighbors = @offer.neighbors( @offers )
+    neighbors = @offer.neighbors( @offers, 50 )
     @before, @after = neighbors[:before], neighbors[:after]
 
     render json: { before: @before, after: @after }
