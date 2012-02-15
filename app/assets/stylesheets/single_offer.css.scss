@@ -15,12 +15,11 @@
 	position: relative;
 }
 
-#arrow-left {
+
+.side-arrows {
 	position: absolute;
-	left: -125px;
-	width: 121px;
+	width: 130px;
 	height: 100%;
-	background: url(side-arrow-left.png) no-repeat 0px 100px;
 	cursor: pointer;
 	opacity: 0.2;
 	-moz-opacity: 0.2;
@@ -33,26 +32,15 @@
 	}
 }
 
-
-#arrow-right {
-	position: absolute;
-	right: -125px;	
-	width: 121px;
-	height: 100%;
-	background: url(side-arrow-right.png) no-repeat 0px 100px;
-	cursor: pointer;
-	opacity: 0.2;
-	-moz-opacity: 0.2;
-	filter:alpha(opacity=2);
-
-	&:hover {
-		opacity: 0.4;
-		-moz-opacity: 0.4;
-		filter:alpha(opacity=4);;
+	#right {
+		right: -130px;
+		background: url(side-arrow-right.png) no-repeat 4px 100px;
 	}
-}
 
-
+	#left {
+		left: -130px;
+		background: url(side-arrow-left.png) no-repeat 4px 100px;
+	}
 
 h1 {
 	float: left;
@@ -72,8 +60,8 @@ h1 {
       .offer-image {
         border: 1px solid #F3F3F3;
         padding: 2px;
-        width: 390px;
-        height: 216px;
+        width: 450px;
+        height: auto;
       }
 
       .offer-image-bottom {
