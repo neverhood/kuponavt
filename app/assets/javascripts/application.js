@@ -15,7 +15,6 @@ if ( typeof $.api != 'undefined' ) {
     if ( typeof $.offers != 'undefined' ) $.api.offers = $.offers;
 }
 
-
 // Utils
 
 $.api.utils.appendNotification = function(notification) {
@@ -41,7 +40,7 @@ Array.prototype.equals = function(array) {
     };
 
     return true;
-}
+};
 
 Array.prototype.unique = function() {
     var uniqArray = [],
@@ -56,6 +55,14 @@ Array.prototype.unique = function() {
     }
 
     return uniqArray;
+};
+
+Array.prototype.last = function() {
+    return this[ this.length - 1 ];
+};
+
+Array.prototype.first = function() {
+    return this[0];
 };
 
 $('document').ready(function() {

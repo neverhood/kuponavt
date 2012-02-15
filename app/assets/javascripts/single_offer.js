@@ -7,6 +7,7 @@ $(document).ready(function() {
 		// "CONSTANTS"
 		LIMIT: 50, // Maximum number of before/after arrays elements
 		GET_MORE_AT: 5, // Get more offers from server if either before or after array contains "value" elements
+		NEIGHBORS_COUNT: 1, // Preload by "value" neighbors from both sides
 
 		// variables
 		id: parseInt($('.offer').attr('id').replace('offer-', '')),
@@ -15,8 +16,10 @@ $(document).ready(function() {
 		expectMore: true,
 		directions: ['before', 'after'],
 		neighbors: {
-			prev: [], next: []
+			before: [], after: []
 		},
+		loadingBefore: false,
+		loadingAfter: false,
 
 		// Functions
 		shouldExpectMore: function() {
@@ -45,7 +48,20 @@ $(document).ready(function() {
 
 			return false;
 		},
+		preloadOffer: function(direction) {
+			if ( direction == 'before' ) {
+				if ( api.neighbors.before.length >= api.NEIGHBORS_COUNT ) api.neighbors.before.shift();
+				api.loadingBefore = true;
+				api.neighbors.before.push( api.getOffer( api.before.last() ) );
+			} else if ( direction == 'after' ) {
+				if ( api.neighbors.after.length >= api.NEIGHBORS_COUNT ) api.neighbors.after.pop();
+				api.loadingAfter = true;
+				api.neighbors.after.push( api.getOffer( api.after.first() ) );
+			}
+		},
 		preloadOffers: function() {
+			api.preloadOffer('before');
+			api.preloadOffer('after');
 		},
 		refreshNeighbors: function() {
 			$.getJSON( '/offers/' + api.id + '/neighbors', function( data ) {
@@ -57,27 +73,36 @@ $(document).ready(function() {
 			});
 		},
 		getOffer: function(offerId) {
-			api.id = offerId;
+			var offer = {};
 
-			$.getJSON('/offers/' + offerId, function(data) {
-
-			});
+			$.getJSON('/offers/' + offerId, function(data) { offer.id = data.id, offer.html = data.offer });
+			return offer;
 		},
 		next: function() {
 			if ( api.after.length > 0 ) {
+				if ( api.neighbors.before.length >= api.NEIGHBORS_COUNT ) api.neighbors.before.shift();
+				api.neighbors.before.push( { id: api.id, html: $('#offers-section').html() } );
 				api.before.push( api.id );
-				api.getOffer( api.after.shift() );
+
+				var nextOfferId = api.id = api.after.shift();
+				api.preloadOffer('after');
+				api.getOffer( nextOfferId );
 
 				if ( api.directions.include('after') && api.timeToLoadMore() ) api.refreshNeighbors();
-			}
+			} else { alert('no'); }
 		},
 		prev: function() {
 			if ( api.before.length > 0 ) {
+				if ( api.neighbors.after.length >= api.NEIGHBORS_COUNT ) api.neighbors.after.pop(); // Delete the last cached offer
+				api.neighbors.after.unshift( { id: api.id, html: $('#offers-section').html() } );
 				api.after.unshift( api.id );
-				api.getOffer( api.before.pop() );
+
+				var prevOffer = api.id = api.before.pop();
+				api.preloadOffer('before');
+				api.getOffer( prevOffer );
 
 				if ( api.directions.include('before') && api.timeToLoadMore() ) api.refreshNeighbors();
-			}
+			} else { alert('no'); }
 		}
 	};
 

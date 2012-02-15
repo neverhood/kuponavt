@@ -1,7 +1,5 @@
 class Offer < ActiveRecord::Base
 
-  NEIGHBORS_LIMIT = 50
-
   include Tire::Model::Search
   include Tire::Model::Callbacks
 
@@ -51,18 +49,18 @@ class Offer < ActiveRecord::Base
     "category_id, offers.ends_at DESC"
   end
 
-  def neighbors(scope)
+  def neighbors(scope, limit)
     indexed_scope = Offer.unscoped.select('row_number() OVER () AS rownum, id').
         from("(#{scope.except(:limit, :offset).to_sql}) as scope")
     index = Offer.unscoped.select('rownum').from("(#{indexed_scope.to_sql}) as outer_scope").
       where("id = #{id}")[0].rownum.to_i
 
-    if index > NEIGHBORS_LIMIT + 1
-      before_offset = index - NEIGHBORS_LIMIT - 1
-      before_limit, after_offset, after_limit = (index - before_offset - 1), index, NEIGHBORS_LIMIT
+    if index > limit + 1
+      before_offset = index - limit - 1
+      before_limit, after_offset, after_limit = (index - before_offset - 1), index, limit
     else
       before_offset, before_limit = 0, index - 1
-      after_offset, after_limit = index, NEIGHBORS_LIMIT
+      after_offset, after_limit = index, limit
     end
 
     before = indexed_scope.offset(before_offset).limit(before_limit).map(&:id)

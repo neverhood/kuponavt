@@ -114,15 +114,30 @@ class OffersController < ApplicationController
   def show
     respond_to do |format|
       format.html do
-        neighbors = @offer.neighbors( @offers )
+        neighbors = @offer.neighbors( @offers, 50 )
         @before, @after = neighbors[:before], neighbors[:after]
       end
 
       format.json do
-        render json: {
+        neighbors = @offer.neighbors( @offers, 1 )
+        json = {
           id: @offer.id,
           offer: render_to_string(partial: 'offer', locals: {offer: @offer})
         }
+        unless neighbors[:before].first.nil?
+          json[:before] = {
+            offer: render_to_string(partial: 'offer', locals: {offer: neighbors[:before].first}),
+            id: neighbors[:before].first.id
+          }
+        end
+        unless neighbors[:after].first.nil?
+          json[:after] = {
+            offer: render_to_string(partial: 'offer', locals: {offer: neighbors[:after].first}),
+            id: neighbors[:after].first.id
+          }
+        end
+        
+        render json: json
       end
     end
   end
