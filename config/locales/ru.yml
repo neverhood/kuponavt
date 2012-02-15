@@ -29,7 +29,7 @@ ru:
     cost: Стоимость
     savings: Экономия
     coupon_price: Цена купона
-    buy: Приобрести
+    buy: Получить
     clear_filter: Очистить
     all_offers: Все категории
     all_tags: все
@@ -48,6 +48,8 @@ ru:
     choose_categories: Пожалуйста, выберите интересующие Вас купоны
     no_results_for_time_period: В выбраных категориях нет купонов
     this_only: только эти
+    next_offer_right: Следующий купон    
+    next_offer_left: Предыдущий купон
 
     lenses:
       all: все
