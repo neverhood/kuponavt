@@ -1,33 +1,9 @@
 class Offer < ActiveRecord::Base
 
+  NEIGHBORS_LIMIT = 50
+
   include Tire::Model::Search
   include Tire::Model::Callbacks
-
-  #settings :number_of_shards => 1,
-           #:number_of_replicas => 1,
-           #:analysis => {
-             #:filter => {
-               #:russian_stemmer => {
-                 #"type" => "stemmer",
-                 #"name" => "light_russian"
-               #}
-             #},
-             #:analyzer => {
-               #:russian_analyzer => {
-                 #"tokenizer" => "lowercase",
-                 #"filter" => ["standard", "lowercase", "russian_stemmer"],
-                 #"type" => "snowball",
-                 #"language" => "russian"
-               #}
-             #}
-           #} do
-             #mapping do
-               #indexes :title, :analyzer => :russian_analyzer, :boost => 2
-               #indexes :description, :analyzer => :rusian_analyzer
-               #indexes :subway, :analyzer => :russian_analyzer
-               #indexes :address, :analyzer => :russian_analyzer
-             #end
-           #end
 
   mapping do
     indexes :title, :analyzer => 'snowball'
@@ -75,11 +51,25 @@ class Offer < ActiveRecord::Base
     "category_id, offers.ends_at DESC"
   end
 
+  def neighbors(scope)
+    indexed_scope = Offer.unscoped.select('row_number() OVER () AS rownum, id').
+        from("(#{scope.except(:limit, :offset).to_sql}) as scope")
+    index = Offer.unscoped.select('rownum').from("(#{indexed_scope.to_sql}) as outer_scope").
+      where("id = #{id}")[0].rownum.to_i
 
-  #def price
-    #return read_attribute(:price) if read_attribute(:price)
+    if index > NEIGHBORS_LIMIT + 1
+      before_offset = index - NEIGHBORS_LIMIT - 1
+      before_limit, after_offset, after_limit = (index - before_offset - 1), index, NEIGHBORS_LIMIT
+    else
+      before_offset, before_limit = 0, index - 1
+      after_offset, after_limit = index, NEIGHBORS_LIMIT
+    end
 
-  #end
+    before = indexed_scope.offset(before_offset).limit(before_limit).map(&:id)
+    after = indexed_scope.offset(after_offset).limit(after_limit).map(&:id)
+
+    { before: before, after: after }
+  end
 
   def ends_at
     case read_attribute(:ends_at)

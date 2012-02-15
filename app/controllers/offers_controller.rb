@@ -5,8 +5,8 @@ class OffersController < ApplicationController
   layout Proc.new { |controller| controller.request.xhr?? false : 'application' }
 
   before_filter :validate_city, :only => [ :index, :search, :refresh ]
-  before_filter :prepare_cookies, :only => [ :index, :show, :search ]
-  before_filter :prepare_offers_scope, :only => [ :index, :show ]
+  before_filter :prepare_cookies, :only => [ :index, :show, :search, :neighbors ]
+  before_filter :prepare_offers_scope, :only => [ :index, :show, :neighbors ]
 
   caches_action :index, :cache_path => Proc.new { |controller|
     p = controller.params
@@ -25,7 +25,7 @@ class OffersController < ApplicationController
   # before_filter :prepare_categories_array, :only => :index
   # before_filter :prepare_sort_attributes, :only => :index
   # before_filter :prepare_time_period, :only => :index
-  before_filter :validate_offer, :only => :show
+  before_filter :validate_offer, :only => [:show, :neighbors]
   before_filter :validate_favourites, :only => :favourites, :if => lambda { |controller| controller.request.xhr? }
   before_filter :validate_search, :only => :search
 
@@ -112,26 +112,26 @@ class OffersController < ApplicationController
   end
 
   def show
-    if Offer.where(id: params[:id]).count > 0
-      @offer = Offer.find(params[:id])
-    else
-      redirect_to :back
-    end
+    respond_to do |format|
+      format.html do
+        neighbors = @offer.neighbors( @offers )
+        @before, @after = neighbors[:before], neighbors[:after]
+      end
 
-    scope = Offer.unscoped.select('row_number() OVER () AS rownum, id').from("(#{@offers.except(:limit, :offset).to_sql}) as scope")
-    index = Offer.unscoped.select('rownum').from("(#{scope.to_sql}) as outer_scope").
-      where("id = #{@offer.id}")[0].rownum.to_i
-
-    if index > 51
-      before_offset = index - 51
-      before_limit, after_offset, after_limit = (index - before_offset - 1), index, 50
-    else
-      before_offset, before_limit = 0, index - 1
-      after_offset, after_limit = index, 50
+      format.json do
+        render json: {
+          id: @offer.id,
+          offer: render_to_string(partial: 'offer', locals: {offer: @offer})
+        }
+      end
     end
-    before = scope.select('id').offset(before_offset).limit(before_limit).map(&:id)
-    after = scope.select('id').offset(after_offset).limit(after_limit).map(&:id)
-    
+  end
+
+  def neighbors
+    neighbors = @offer.neighbors( @offers )
+    @before, @after = neighbors[:before], neighbors[:after]
+
+    render json: { before: @before, after: @after }
   end
 
   def search
@@ -186,6 +186,10 @@ class OffersController < ApplicationController
   #     end
   #   end
   # end
+
+  def method_name
+    
+  end
 
   def validate_city
     @city = City.where(:name => params[:city]).first

@@ -12,3 +12,10 @@
   </div>
 </div>
 
+<div id='neighbors'>
+	<%= { before: @before, after: @after }.to_json %>
+</div>
+
+<div id='offer-template' class='hidden'>
+	<%= render 'offer_template' %>
+</div>

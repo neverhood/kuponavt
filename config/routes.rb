@@ -19,6 +19,7 @@ Kuponavt::Application.routes.draw do
 
   resources :offers, :only => :show do
     get 'favourites', :on => :collection
+    get 'neighbors', :on => :member
     get 'search', :on => :collection
     get 'refresh', :on => :collection
     #get 'out', :on => :member
