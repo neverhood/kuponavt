@@ -1,0 +1,70 @@
+<div class='offer'>
+	<div class='side-arrows' id='left' title='<%= t('offers.next_offer_left') %>'></div>
+	<div class='side-arrows' id='right' title='<%= t('offers.next_offer_right') %>'></div>
+
+	<h1>
+		<%= @offer.title %>
+	</h1>
+
+	<div class='offer-left-side'>
+	    <%= image_tag offer.image_url(:thumb), :class => 'offer-image' %>
+	    <div class="offer-image-bottom">
+	      <div class="subway"></div>
+	      <span class="subway-station">
+	        <%= offer.subway %>
+	      </span>
+	      <%= image_tag offer.provider.logo_url, :class => 'provider' %>
+	    </div>
+  	</div>
+
+	   <div class='offer-right-side'>
+	    <div class="info-container">
+	    <table>
+	      <tr>
+	        <td><%= t('offers.cost') %></td>
+	        <td><%= t('offers.discount') %></td>
+	        <td><%= t('offers.savings') %></td>
+	      </tr>
+	      <tr>
+	        <td class='offer-cost'> <%= offer.cost > 0 ? offer.cost : t('offers.unlimited').html_safe %> </td>
+	        <td class='offer-discount'> <%= offer.discount %>% </td>
+	        <td class='offer-savings'> <%= (offer.cost && offer.cost > 0) ? offer.cost/100 * offer.discount : t('offers.unlimited').html_safe %> </td>
+	      </tr>
+	    </table>
+
+	    <p class='info'> <%= t('offers.time_left') %>:
+	    </p>
+
+	    <% if offer.is_about_to_finish? %>
+	      <p class='time-left-red'> <%= offer.ends_at.to_js %> </p>
+	    <% else %>
+	      <p class='time-left'> <%= offer.finished?? 1.day.ago.to_date.to_js : offer.ends_at.to_js %> </p>
+	    <% end %>
+
+	    <br />
+
+	    <p class='info'>
+	    <%= t('offers.coupon_price') %>:
+	    </p>
+
+	    <p class='price'>
+	    <span class='offer-price'>
+	      <%= offer.price > 0 ? offer.price : t('common.free') %>
+	    </span>
+	      <span class='currency'> <%= offer.country.currency unless offer.price.zero? %> </span>
+	    </p>
+
+	    <div class='add-button' title="<%= t('offers.add_to_favourites') %>"></div>
+	    <%= link_to t('offers.buy'), out_path((@city || offer.city_id), offer), :target => '_blank', :class => 'buy-button' %>
+
+	    </div>
+	  </div>
+
+	<div id='offer-description'>
+		<div class='offer-address'> <%= raw(offer.address) %> </div>
+	    <div class='offer-description-overflow'> <%= raw(offer.description) %></div>
+	</div>
+
+	<div class='clear'></div>
+
+</div>
