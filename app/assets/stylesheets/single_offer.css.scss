@@ -7,12 +7,12 @@
 	border-radius: 5px;
 	box-shadow: 0 0 2px #007fad;
 	background: url(semi-tsp.png) repeat;
+	position: relative;
 }
 
 .offer {
 	width: 700px;
 	margin: 0 auto;
-	position: relative;
 }
 
 
@@ -24,22 +24,41 @@
 	opacity: 0.2;
 	-moz-opacity: 0.2;
 	filter:alpha(opacity=2);
+	-webkit-transition: all .2s;
 
 	&:hover {
 		opacity: 0.4;
 		-moz-opacity: 0.4;
-		filter:alpha(opacity=4);;
+		filter:alpha(opacity=4);
 	}
 }
 
 	#right {
-		right: -130px;
-		background: url(side-arrow-right.png) no-repeat 4px 50%;
+		right: 0px;
+		background: url(side-arrow-right.png) no-repeat 5px 50%;
+		border-radius: 0 5px 5px 0;
+
+		&:hover {
+			background: url(side-arrow-right.png) no-repeat 5px 50%, rgba(0, 120, 170, 0.1);
+		}
+
+		&:active {
+			background: url(side-arrow-right.png) no-repeat 5px 50%, rgba(0, 120, 170, 0.1);
+		}
 	}
 
 	#left {
-		left: -130px;
-		background: url(side-arrow-left.png) no-repeat 4px 50%;
+		left: 0px;
+		background: url(side-arrow-left.png) no-repeat 5px 50%;
+		border-radius: 5px 0 0 5px;
+
+		&:hover {
+			background: url(side-arrow-left.png) no-repeat 5px 50%, rgba(0, 120, 170, 0.1);
+		}
+
+		&:active {
+			background: url(side-arrow-left.png) no-repeat 5px 50%, rgba(0, 120, 170, 0.1);
+		}
 	}
 
 h1 {
@@ -110,7 +129,7 @@ h1 {
       float: right;
       margin-left: 5px;
       width: 235px;
-      height: 220px;
+      height: 254px;
       position: relative;
       margin-bottom: 10px;
 
