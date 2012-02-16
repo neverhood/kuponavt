@@ -10,7 +10,7 @@
   </div>
 
   <div id='site-description' class='hidden'>
-    <div style="position: relative"> <%= image_tag 'close.png', :class => 'close-popup' %> </div>
+    <%= image_tag 'close.png', :class => 'close-popup' %>
     <p>Мы собрали для вас купоны на скидку с сотен сайтов.</p>
     <p>Выберите свой город и получайте удовольствия с экономией ; )</p>
   </div>
@@ -20,6 +20,7 @@
       <span>Ваш город
         <span id="current-city"><%= @city ? t("cities.#{@city.name}") : '' %>
           <div id="all-cities">
+            <img alt="Close" class="close-popup" src="/assets/close.png">
 
             <div id="russia">
               <h3>Россия</h3>

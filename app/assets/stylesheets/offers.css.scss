@@ -203,14 +203,15 @@ div#offers {
   #no-results-to-display {
     position: relative;
     float: left;
-    margin: 110px 0px 110px 70px;
+    margin: 110px 0px 110px 95px;
     clear: both;
     color: #007FAD;
     font-weight: bold;
+    font-size: 20px;
 
     #no-results-arrow-right {
         position: absolute;
-        top: -9px;
+        top: -6px;
         right: -165px;
         background-image: url(arrow-right.png);
         width: 152px;
@@ -256,6 +257,7 @@ div#offers {
     border-radius: 5px 5px 10px 10px;
     box-shadow:  0 0 3px $main-color;
     background: url(offer-tsp.png);
+    -webkit-transition: box-shadow 0.1s;
 
     &:hover {
       box-shadow: 0 0 7px $main-color;
@@ -299,6 +301,7 @@ div#offers {
         height: 30px;
         background: url(metro-tsp.png);
         overflow: hidden;
+        -webkit-transition: opacity .2s;
         /*-webkit-transition: height 200ms linear;*/
         /*-moz-transition: height 200ms linear;*/
 
@@ -611,6 +614,7 @@ div#offers {
     margin: 20px 10px;
     padding: 2px 0 0;
     border-radius: 4px;
+    -webkit-transition: box-shadow .2s;
   }
 
   ul {
@@ -618,6 +622,7 @@ div#offers {
     border-radius: 3px;
     color: black;
     text-shadow: 0 1px white;
+    -webkit-transition: box-shadow .3s;
 
     li {
       margin-bottom: 3px;
