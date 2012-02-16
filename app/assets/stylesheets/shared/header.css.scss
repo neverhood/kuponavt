@@ -62,8 +62,8 @@
 
 .close-popup {
   position: absolute;
-  top: -17px;
-  right: -17px;
+  top: -8px;
+  right: -8px;
   cursor: pointer;
 }
 
@@ -74,10 +74,12 @@
   left: 13px;
   top: 65px;
   width: 265px;
-  border: 1px solid $main-color;
-  background: #F7FCF7;
   padding: 10px;
+  box-shadow: 0px 0px 2px #007fad;
+  background: url(semi-tsp.png) repeat, url(semi-tsp.png) repeat, url(semi-tsp.png) repeat, url(semi-tsp.png) repeat; 
   z-index: 10;
+  color: #404040;
+  text-shadow: 0px 1px white;
 }
 
 #settings-container {
@@ -123,7 +125,7 @@
     z-index: 100;
     position: absolute;
     top: 35px;
-    left: -380px;
+    left: -340px;
     padding-bottom: 15px;
     width: 785px;
     background: url(semi-tsp.png) repeat, url(semi-tsp.png) repeat, url(semi-tsp.png) repeat, url(semi-tsp.png) repeat;
