@@ -103,10 +103,21 @@ $(document).ready(function() {
 
 				if ( api.directions.include('before') && api.timeToLoadMore() ) api.refreshNeighbors();
 			}
+		},
+		toggleArrows: function() {
+			if ( api.before.length == 0 ) {
+				$('#left').hide();
+			} else { $('#left').show(); }
+
+			if ( api.after.length == 0 ) {
+				$('#right').hide();
+			} else { $('#right').show(); }
 		}
 	};
 
 	api.setExpectations();
+	api.toggleArrows();
+	
 	if ( $('#before div.offer').length ) {
 		api.neighbors.before = [ {html: $('#before').html(), id: parseInt($('#before div.offer').attr('id').replace('offer-', ''))} ];
 	}
@@ -116,10 +127,14 @@ $(document).ready(function() {
 
 	$('#right').live('click', function() {
 		$.api.offer.next();
+
+		$.api.offer.toggleArrows();
 	});
 
 	$('#left').live('click', function() {
 		$.api.offer.prev();
+
+		$.api.offer.toggleArrows();
 	});
 
 });

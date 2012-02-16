@@ -266,13 +266,12 @@ div#offers {
       text-align: justify;
       text-shadow: 0px 1px 1px white;
 
-
-
       a {
         font-size: 18px;
         text-decoration: none;
         color: $main-color;
         font-weight: bold;
+        -webkit-transition: all 0.15s;
 
         &:hover { color: #0099D1 };
 
