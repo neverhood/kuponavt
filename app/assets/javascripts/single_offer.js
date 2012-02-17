@@ -16,8 +16,7 @@ $(document).ready(function() {
 		expectMore: true,
 		directions: ['before', 'after'],
 		neighbors: {},
-		loadingBefore: false,
-		loadingAfter: false,
+		loading: false,
 
 		// Functions
 		shouldExpectMore: function() {
@@ -67,17 +66,19 @@ $(document).ready(function() {
 		},
 		getOffer: function(offerId) {
 			var offer = {};
+			api.loading = true;
 
 			$.getJSON('/offers/' + offerId, function(data) { 
 				offer.id = data.id, offer.html = data.offer;
 				if ( typeof data.before != 'undefined' ) api.neighbors.before = [data.before];
 				if ( typeof data.after != 'undefined' ) api.neighbors.after = [data.after];
+				api.loading = false;
 			});
 
 			return offer;
 		},
 		next: function() {
-			if ( api.after.length > 0 ) {
+			if ( api.after.length > 0 && ! api.loading ) {
 				// if ( api.neighbors.before.length >= api.NEIGHBORS_COUNT ) api.neighbors.before.shift();
 				// api.neighbors.before.push( { id: api.id, html: $('#offer-plus-arrows').html() } );
 				api.before.push( api.id );
@@ -88,10 +89,11 @@ $(document).ready(function() {
 				api.getOffer( nextOfferId );
 
 				if ( api.directions.include('after') && api.timeToLoadMore() ) api.refreshNeighbors();
+				$.api.offer.toggleArrows();
 			}
 		},
 		prev: function() {
-			if ( api.before.length > 0 ) {
+			if ( api.before.length > 0 && ! api.loading ) {
 				// if ( api.neighbors.after.length >= api.NEIGHBORS_COUNT ) api.neighbors.after.pop(); // Delete the last cached offer
 				// api.neighbors.after.unshift( { id: api.id, html: $('#offer-plus-arrows').html() } );
 				api.after.unshift( api.id );
@@ -102,6 +104,7 @@ $(document).ready(function() {
 				api.getOffer( prevOffer );
 
 				if ( api.directions.include('before') && api.timeToLoadMore() ) api.refreshNeighbors();
+				$.api.offer.toggleArrows();
 			}
 		},
 		toggleArrows: function() {
@@ -125,16 +128,19 @@ $(document).ready(function() {
 		api.neighbors.after = [ {html: $('#after').html(), id: parseInt($('#after div.offer').attr('id').replace('offer-', ''))} ]
 	}
 
+	$(document).keydown(function(event) {
+		var code = event.keyCode || event.which;
+
+		if ( code == 37 ) $.api.offer.prev();
+		if ( code == 39 ) $.api.offer.next();
+	});
+
 	$('#right').live('click', function() {
 		$.api.offer.next();
-
-		$.api.offer.toggleArrows();
 	});
 
 	$('#left').live('click', function() {
 		$.api.offer.prev();
-
-		$.api.offer.toggleArrows();
 	});
 
 });

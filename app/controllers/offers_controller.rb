@@ -205,7 +205,7 @@ class OffersController < ApplicationController
 
   def validate_city
     @city = City.where(:name => params[:city]).first
-    cookies[:kuponavt_city] = @city.id if @city
+    cookies[:kuponavt_city] = { value: @city.id, expires: 14.days.from_now } if @city
     redirect_to root_path unless @city
   end
 
