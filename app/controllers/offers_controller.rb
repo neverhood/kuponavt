@@ -113,20 +113,21 @@ class OffersController < ApplicationController
 
   def show
     respond_to do |format|
+      limit = request.xhr?? 1 : 50
+
+      if @offers.where(id: @offer.id).count > 0
+        neighbors = @offer.neighbors( @offers, limit )
+      else
+        neighbors = @offer.neighbors( @city.offers.
+          where(category_id: @offer.category_id ).
+          order("offers.created_at desc"), limit )
+      end
+
       format.html do
-        neighbors = @offer.neighbors( @offers, 50 )
-        if neighbors
-          @before, @after = neighbors[:before], neighbors[:after]
-        else
-          neighbors = @offer.neighbors( @city.offers.
-            where(category_id: @offer.category_id).
-            order("offers.created_at desc"), 50 )
-          @before, @after = neighbors[:before], neighbors[:after]
-        end
+        @before, @after = neighbors[:before], neighbors[:after]
       end
 
       format.json do
-        neighbors = @offer.neighbors( @offers, 1 )
         json = {}
         unless neighbors[:before].first.nil?
           json[:before] = {
