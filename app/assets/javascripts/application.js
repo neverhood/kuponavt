@@ -108,10 +108,12 @@ $('document').ready(function() {
         $('#settings-container').toggle();
     });
 
-    $.each( $('.time-left, .time-left-red'), function() {
+    $.each( $('#offer-plus-arrows div.offer p.time-left, #offer-plus-arrows div.offer p.time-left-red #offers-section div.offer p.time-left, #offers-section div.offer p.time-left-red').filter(':visible'), function() {
         var $this = $(this);
 
-        if ( $this.data('countdown') === undefined ) $this.countdown( new Date($this.text().trim()), { prefix: '', finish: 'Завершено' } )
+        if ( $this.data('countdown') === undefined && $this.is(':visible') ) {
+            $this.countdown( new Date($this.text().trim()), { prefix: '', finish: 'Завершено' } );
+        }
     });
 
     $('#site-description-help').click( function() {

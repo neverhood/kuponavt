@@ -53,7 +53,10 @@ class Offer < ActiveRecord::Base
     indexed_scope = Offer.unscoped.select('row_number() OVER () AS rownum, id').
         from("(#{scope.except(:limit, :offset).to_sql}) as scope")
     index = Offer.unscoped.select('rownum').from("(#{indexed_scope.to_sql}) as outer_scope").
-      where("id = #{id}")[0].rownum.to_i
+      where("id = #{id}")[0]
+    index = index.rownum.to_i if index
+
+    return nil if index.nil?
 
     if index > limit + 1
       before_offset = index - limit - 1

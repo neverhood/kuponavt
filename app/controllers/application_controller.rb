@@ -43,7 +43,7 @@ class ApplicationController < ActionController::Base
       kuponavt_cookies
 
     else
-      nil
+      {}
     end
   end
 

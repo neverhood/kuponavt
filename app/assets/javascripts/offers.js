@@ -46,7 +46,7 @@ $.offers.utils.setCookie = function(key, value) {
 }
 
 $.offers.utils.startCountDown = function() {
-    $.each( $('.time-left, .time-left-red'), function() {
+    $.each( $('#offers-section div.offer p.time-left, #offers-section div.offer p.time-left-red').filter(':visible'), function() {
         var $this = $(this);
 
         if ( $this.data('countdown') === undefined ) $this.countdown( new Date($this.text().trim()), { prefix: '', finish: 'Завершено' } )

@@ -115,6 +115,12 @@ $(document).ready(function() {
 			if ( api.after.length == 0 ) {
 				$('#right').hide();
 			} else { $('#right').show(); }
+
+			$.each( $('#offer-plus-arrows div.offer p.time-left, #offer-plus-arrows div.offer p.time-left-red'), function() {
+			    $this = $(this);
+
+			    if ( $this.data('countdown') === undefined && $this.is(':visible') ) $this.countdown( new Date($this.text().trim()), { prefix: '', finish: 'Завершено' } );
+			});
 		}
 	};
 
