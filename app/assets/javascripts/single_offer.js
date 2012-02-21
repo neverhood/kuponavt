@@ -7,15 +7,17 @@ $(document).ready(function() {
 		// "CONSTANTS"
 		LIMIT: 50, // Maximum number of before/after arrays elements
 		GET_MORE_AT: 5, // Get more offers from server if either before or after array contains "value" elements
-		NEIGHBORS_COUNT: 1, // Preload by "value" neighbors from both sides
+		NEIGHBORS_COUNT: 3, // Preload by "value" neighbors from both sides
+		MIN_PRELOADED_OFFERS: 2,
 
 		// variables
 		id: parseInt($('#offer-plus-arrows div.offer').attr('id').replace('offer-', '')),
+		html: $('#offer-plus-arrows').html(),
 		before: neighbors.before,
 		after: neighbors.after,
 		expectMore: true,
 		directions: ['before', 'after'],
-		neighbors: {},
+		neighbors: { before: [], after: [] },
 		loading: false,
 
 		// Functions
@@ -45,17 +47,6 @@ $(document).ready(function() {
 
 			return false;
 		},
-		// preloadOffer: function(direction) {
-		// 	if ( direction == 'before' ) {
-		// 		if ( api.neighbors.before.length >= api.NEIGHBORS_COUNT ) api.neighbors.before.shift();
-		// 		api.loadingBefore = true;
-		// 		api.neighbors.before.push( api.getOffer( api.before.last() ) );
-		// 	} else if ( direction == 'after' ) {
-		// 		if ( api.neighbors.after.length >= api.NEIGHBORS_COUNT ) api.neighbors.after.pop();
-		// 		api.loadingAfter = true;
-		// 		api.neighbors.after.push( api.getOffer( api.after.first() ) );
-		// 	}
-		// },
 		refreshNeighbors: function() {
 			$.getJSON( '/offers/' + api.id + '/neighbors', function( data ) {
 				api.before = data.before;
@@ -64,55 +55,74 @@ $(document).ready(function() {
 				api.setExpectations();
 			});
 		},
-		getOffer: function(offerId) {
+		getOffers: function(offerId) {
 			var offer = {};
 			api.loading = true;
 
 			$.getJSON('/offers/' + offerId, function(data) { 
 				offer.id = data.id, offer.html = data.offer;
-				if ( typeof data.before != 'undefined' ) api.neighbors.before = [data.before];
-				if ( typeof data.after != 'undefined' ) api.neighbors.after = [data.after];
+				if ( typeof data.before != 'undefined' ) api.neighbors.before = data.before;
+				if ( typeof data.after != 'undefined' ) api.neighbors.after = data.after;
 				api.loading = false;
+
+                $('#loader').remove();
+                $('#left, #right').show();
 			});
 
 			return offer;
 		},
-		next: function() {
-			if ( api.after.length > 0 && ! api.loading ) {
-				// if ( api.neighbors.before.length >= api.NEIGHBORS_COUNT ) api.neighbors.before.shift();
-				// api.neighbors.before.push( { id: api.id, html: $('#offer-plus-arrows').html() } );
-				api.before.push( api.id );
+		show: function(direction) {
+			if ( direction != 'after' && direction != 'before' ) return;
 
-				var nextOfferId = api.id = api.after.shift();
+			if ( api[direction].length ) {
+				var inverseDirection = direction == 'after' ? 'before' : 'after',
+					currentOffer = { id: api.id, html: api.html },
+					offerId = direction == 'after' ? api.after.first() : api.before.last(),
+					offerIndex = direction == 'after' ? 0 : (api.neighbors.before.length - 1);
 
-				$('#offer-plus-arrows').html( api.neighbors.after.first().html );
-				api.getOffer( nextOfferId );
+				if ( api.neighbors[direction].length && api.neighbors[direction][offerIndex].id == offerId ) {
+					var offer = direction == 'after' ? api.neighbors.after.shift() : api.neighbors.before.pop();
+					console.log(offer);
 
-				if ( api.directions.include('after') && api.timeToLoadMore() ) api.refreshNeighbors();
-				$.api.offer.toggleArrows();
-			}
-		},
-		prev: function() {
-			if ( api.before.length > 0 && ! api.loading ) {
-				// if ( api.neighbors.after.length >= api.NEIGHBORS_COUNT ) api.neighbors.after.pop(); // Delete the last cached offer
-				// api.neighbors.after.unshift( { id: api.id, html: $('#offer-plus-arrows').html() } );
-				api.after.unshift( api.id );
+					// ready to move
+					if ( api[inverseDirection].length >= api.LIMIT )
+						inverseDirection == 'after' ? api.neighbors.after.pop() : api.neighbors.before.shift();
 
-				var prevOffer = api.id = api.before.pop();
+					// store current offer
+					direction == 'after' ? api.neighbors.before.push( currentOffer ) :
+												 api.neighbors.after.unshift( currentOffer );
 
-				$('#offer-plus-arrows').html( api.neighbors.before.last().html );
-				api.getOffer( prevOffer );
+					// store current offer id to inverseDirection and set a new offer
+					if ( direction == 'after' ) {
+						api.after.shift();
+						api.before.push( api.id );
+					} else {
+						api.before.pop();
+						api.after.unshift( api.id );
+					}
+					api.id = offer.id; api.html = offer.html;
+					$('#offer-plus-arrows').html( api.html );
 
-				if ( api.directions.include('before') && api.timeToLoadMore() ) api.refreshNeighbors();
-				$.api.offer.toggleArrows();
+					if ( api[direction] > api.neighbors[direction] && api.neighbors[direction].length <= api.MIN_PRELOADED_OFFERS ) {
+						api.getOffers( api.id );
+					}
+					if ( api.directions.include(direction) && api.timeToLoadMore() ) api.refreshNeighbors();
+					api.toggleArrows();
+				} else {
+					console.log('not ready yet');
+					
+                    if ( $('#loader').length == 0 ) $('#loader-container').append('<img src="/assets/loader.gif" id="loader" />');
+					$('#left, #right').hide();
+					return;
+				}
 			}
 		},
 		toggleArrows: function() {
-			if ( api.before.length == 0 ) {
+			if ( api.before.length == 0 && api.neighbors.before.length == 0 ) {
 				$('#left').hide();
 			} else { $('#left').show(); }
 
-			if ( api.after.length == 0 ) {
+			if ( api.after.length == 0 && api.neighbors.after.length == 0 ) {
 				$('#right').hide();
 			} else { $('#right').show(); }
 
@@ -125,28 +135,40 @@ $(document).ready(function() {
 	};
 
 	api.setExpectations();
+	$.api.offer.html = $('#offer-plus-arrows').html();
 	api.toggleArrows();
 	
-	if ( $('#before div.offer').length ) {
-		api.neighbors.before = [ {html: $('#before').html(), id: parseInt($('#before div.offer').attr('id').replace('offer-', ''))} ];
+	var beforeOffers = $('#before div.offer'),
+		afterOffers = $('#after div.offer');
+
+	if ( beforeOffers.length ) {
+		$.each( beforeOffers, function() {
+			var offer = $(this);
+			api.neighbors.before.push( {html: offer.wrap('<div>').parent().html(), id: this.id.replace('offer-', '')} );
+		});
 	}
-	if ( $('#after div.offer').length ) {
-		api.neighbors.after = [ {html: $('#after').html(), id: parseInt($('#after div.offer').attr('id').replace('offer-', ''))} ]
+	if ( afterOffers.length ) {
+		$.each( afterOffers, function() {
+			var offer = $(this);
+			api.neighbors.after.push( {html: offer.wrap('<div>').parent().html(), id: this.id.replace('offer-', '')} );
+		});
 	}
+	// if ( $('#before div.offer').length > 1 ) api.neighbors.before = $.parseJSON( $('#before').html() );
+	// if ( $('#after div.offer').length > 1 ) api.neighbors.after = $.parseJSON( $('#after').html() );
 
 	$(document).keydown(function(event) {
 		var code = event.keyCode || event.which;
 
-		if ( code == 37 ) $.api.offer.prev();
-		if ( code == 39 ) $.api.offer.next();
+		if ( code == 37 ) $.api.offer.show('before');
+		if ( code == 39 ) $.api.offer.show('after');
 	});
 
 	$('#right').live('click', function() {
-		$.api.offer.next();
+		$.api.offer.show('after');
 	});
 
 	$('#left').live('click', function() {
-		$.api.offer.prev();
+		$.api.offer.show('before');
 	});
 
 });

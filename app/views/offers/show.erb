@@ -14,11 +14,16 @@
 
 <div id='before' class='hidden'>
 	<% if @before.count > 0 %>
-		<%= render(partial: 'single_offer', locals: { offer: Offer.find(@before.last) }) %>
+		<% @before.last(3).each do |id| %>
+			<%= render(partial: 'single_offer', locals: { offer: Offer.find(id) }) %>
+		<% end %>
 	<% end %>
 </div>
+
 <div id='after' class='hidden'>
 	<% if @after.count > 0 %>
-		<%= render(partial: 'single_offer', locals: { offer: Offer.find(@after.first) }) %>
+		<% @after.first(3).each do |id| %>
+			<%= render(partial: 'single_offer', locals: { offer: Offer.find(id) }) %>
+		<% end %>
 	<% end %>
 </div>

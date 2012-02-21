@@ -113,14 +113,21 @@ class OffersController < ApplicationController
 
   def show
     respond_to do |format|
-      limit = request.xhr?? 1 : 50
+      limit = request.xhr?? 3 : 50
 
-      if @offers.where(id: @offer.id).count > 0
+      if @offers.except(:limit, :offset).where(id: @offer.id).count > 0
         neighbors = @offer.neighbors( @offers, limit )
       else
         neighbors = @offer.neighbors( @city.offers.
           where(category_id: @offer.category_id ).
           order("offers.created_at desc"), limit )
+      end
+
+      if neighbors.nil?
+        neighbors = @offer.neighbors( City.find( @offer.city_id ).offers.
+                                     where(category_id: @offer.category_id ).
+                                     order('offers.created_at desc'), limit )
+        @foreign = true if neighbors
       end
 
       format.html do
@@ -130,16 +137,14 @@ class OffersController < ApplicationController
       format.json do
         json = {}
         unless neighbors[:before].first.nil?
-          json[:before] = {
-            html: render_to_string(partial: 'single_offer', locals: {offer: Offer.find(neighbors[:before].last)}),
-            id: neighbors[:before].last
-          }
+          json[:before] = neighbors[:before].map do |id|
+            {id: id, html: render_to_string(partial: 'single_offer', locals: { offer: Offer.find(id) })}
+          end
         end
         unless neighbors[:after].first.nil?
-          json[:after] = {
-            html: render_to_string(partial: 'single_offer', locals: {offer: Offer.find(neighbors[:after].first)}),
-            id: neighbors[:after].first
-          }
+          json[:after] = neighbors[:after].map do |id|
+            {id: id, html: render_to_string(partial: 'single_offer', locals: { offer: Offer.find(id) })}
+          end
         end
 
         render json: json
@@ -163,54 +168,6 @@ class OffersController < ApplicationController
 
   private
 
-  # def prepare_categories_array
-  #   if params[:categories] == 'all'
-  #     @categories = Category.all.map(&:id)
-  #   else
-  #     @categories = params[:categories] && params[:categories].split(',')
-  #   end
-  # end
-
-  # def prepare_sort_attributes
-  #   return Offer.default_sort if params[:sort].nil?
-
-  #   @sort_direction, @sort_attribute = params[:sort][:direction], params[:sort][:attribute]
-
-  #   if @sort_attribute && @sort_direction
-  #     if @sort_attribute == 'category_id'
-  #       @sort_by = "offers.category_id #{@sort_direction}, offers.created_at desc"
-  #     else
-  #       @sort_by = "offers.#{@sort_attribute} #{@sort_direction}"
-  #     end
-  #   else
-  #     @sort_by = Offer.default_sort
-  #   end
-  # end
-
-  # def prepare_time_period
-  #   time_period = params[:time_period] && params[:time_period].to_i
-
-  #   @time_period = case time_period
-  #                    when 1 then [Time.now.utc.to_date]
-  #                    when 2 then [1.day.ago.utc.to_date, Time.now.utc.to_date]
-  #                  end
-  # end
-
-  # def prepare_page_index
-  #   @page = params[:page] ? params[:page].to_i : 1
-  #   if cookies['kuponavt_params']
-  #     if cookies['kuponavt_params'].split('|').last =~ /\d+/
-  #       @per_page = cookies['kuponavt_params'].split('|').last.to_i
-  #     else
-  #       @per_page = 25
-  #     end
-  #   end
-  # end
-
-  def method_name
-    
-  end
-
   def validate_city
     @city = City.where(:name => params[:city]).first
     cookies[:kuponavt_city] = { value: @city.id, expires: 14.days.from_now } if @city
@@ -223,14 +180,12 @@ class OffersController < ApplicationController
         redirect_to root_path unless City.where(id: (cookies[:kuponavt_city] ? cookies[:kuponavt_city] : @offer.city_id) ).count > 0
         @city = cookies[:kuponavt_city] ? City.find( cookies[:kuponavt_city] ) : City.find( @offer.city_id )
       end
-      
 
       @offers = @kuponavt_cookies[:categories] ? @city.offers.with_dependencies.
         where(category_id: @kuponavt_cookies[:categories]).
         order(@kuponavt_cookies[:sort]).
         page( @kuponavt_cookies[:page] ).per( @kuponavt_cookies[:per_page] )
       : []
-      
       @offers = @city.offers.order( "offers.category_id desc, offers.created_at desc" ) if @offers == [] && action_name == 'show'
 
       if @kuponavt_cookies[:time_period] && @kuponavt_cookies[:categories] # Looks like categories check is redundant here

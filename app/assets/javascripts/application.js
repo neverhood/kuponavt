@@ -67,7 +67,8 @@ Array.prototype.first = function() {
 
 $('document').ready(function() {
 
-
+    $.api.controller = document.body.id.replace(/-controller/, '');
+    $.api.action = document.body.attributes['data-action'].value;
 
     // Init settings
 
@@ -108,13 +109,15 @@ $('document').ready(function() {
         $('#settings-container').toggle();
     });
 
-    $.each( $('#offer-plus-arrows div.offer p.time-left, #offer-plus-arrows div.offer p.time-left-red #offers-section div.offer p.time-left, #offers-section div.offer p.time-left-red').filter(':visible'), function() {
-        var $this = $(this);
+    if ( $.api.action == 'index' ) {
+        $.each( $('#offer-plus-arrows div.offer p.time-left, #offer-plus-arrows div.offer p.time-left-red #offers-section div.offer p.time-left, #offers-section div.offer p.time-left-red').filter(':visible'), function() {
+            var $this = $(this);
 
-        if ( $this.data('countdown') === undefined && $this.is(':visible') ) {
-            $this.countdown( new Date($this.text().trim()), { prefix: '', finish: 'Завершено' } );
-        }
-    });
+            if ( $this.data('countdown') === undefined && $this.is(':visible') ) {
+                $this.countdown( new Date($this.text().trim()), { prefix: '', finish: 'Завершено' } );
+            }
+        });
+    }
 
     $('#site-description-help').click( function() {
         $('div#site-description').show();

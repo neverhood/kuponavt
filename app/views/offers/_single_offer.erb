@@ -2,7 +2,14 @@
 	<div class='side-arrows' id='left' title='<%= t('offers.next_offer_left') %>'></div>
 	<div class='side-arrows' id='right' title='<%= t('offers.next_offer_right') %>'></div>
 
-<div class='offer'>
+    <% if @foreign %>
+      <div class='notice'>
+        К сожалению, купон не доступен для Вашего города
+      </div>
+    <% end %>
+
+    <div id='loader-container' class='center-aligned'>
+    </div>
 
 	<h1>
 		<%= offer.title %>
