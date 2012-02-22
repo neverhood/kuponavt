@@ -8,7 +8,7 @@ $(document).ready(function() {
 		LIMIT: 50, // Maximum number of before/after arrays elements
 		GET_MORE_AT: 5, // Get more offers from server if either before or after array contains "value" elements
 		NEIGHBORS_COUNT: 3, // Preload by "value" neighbors from both sides
-		MIN_PRELOADED_OFFERS: 2,
+		MIN_PRELOADED_OFFERS: 1,
 
 		// variables
 		id: parseInt($('#offer-plus-arrows div.offer').attr('id').replace('offer-', '')),
@@ -48,22 +48,28 @@ $(document).ready(function() {
 			return false;
 		},
 		refreshNeighbors: function() {
+            api.loading = true;
 			$.getJSON( '/offers/' + api.id + '/neighbors', function( data ) {
 				api.before = data.before;
 				api.after = data.after;
 
 				api.setExpectations();
+                api.loading = false;
+
+                $('#loader').remove();
+                $('#left, #right').show();
 			});
 		},
 		getOffers: function(offerId) {
 			var offer = {};
-			api.loading = true;
+
+            //if ( $('#loader').length == 0 ) $('#loader-container').append('<img src="/assets/loader.gif" id="loader" />');
+            //$('#left, #right').hide();
 
 			$.getJSON('/offers/' + offerId, function(data) { 
 				offer.id = data.id, offer.html = data.offer;
 				if ( typeof data.before != 'undefined' ) api.neighbors.before = data.before;
 				if ( typeof data.after != 'undefined' ) api.neighbors.after = data.after;
-				api.loading = false;
 
                 $('#loader').remove();
                 $('#left, #right').show();
@@ -74,7 +80,7 @@ $(document).ready(function() {
 		show: function(direction) {
 			if ( direction != 'after' && direction != 'before' ) return;
 
-			if ( api[direction].length ) {
+			if ( api[direction].length && !api.loading ) {
 				var inverseDirection = direction == 'after' ? 'before' : 'after',
 					currentOffer = { id: api.id, html: api.html },
 					offerId = direction == 'after' ? api.after.first() : api.before.last(),
@@ -82,7 +88,6 @@ $(document).ready(function() {
 
 				if ( api.neighbors[direction].length && api.neighbors[direction][offerIndex].id == offerId ) {
 					var offer = direction == 'after' ? api.neighbors.after.shift() : api.neighbors.before.pop();
-					console.log(offer);
 
 					// ready to move
 					if ( api[inverseDirection].length >= api.LIMIT )
@@ -103,14 +108,12 @@ $(document).ready(function() {
 					api.id = offer.id; api.html = offer.html;
 					$('#offer-plus-arrows').html( api.html );
 
-					if ( api[direction] > api.neighbors[direction] && api.neighbors[direction].length <= api.MIN_PRELOADED_OFFERS ) {
+					if ( api[direction].length > api.neighbors[direction].length && api.neighbors[direction].length <= api.MIN_PRELOADED_OFFERS ) {
 						api.getOffers( api.id );
 					}
 					if ( api.directions.include(direction) && api.timeToLoadMore() ) api.refreshNeighbors();
 					api.toggleArrows();
 				} else {
-					console.log('not ready yet');
-					
                     if ( $('#loader').length == 0 ) $('#loader-container').append('<img src="/assets/loader.gif" id="loader" />');
 					$('#left, #right').hide();
 					return;
