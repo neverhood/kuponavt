@@ -29,7 +29,7 @@ class ApplicationController < ActionController::Base
         if sort.first == 'category_id'
           kuponavt_cookies[:sort] = "offers.category_id #{sort.last}, offers.created_at desc"
         else
-          kuponavt_cookies[:sort] = "offers.#{sort.first} #{sort.last}"
+          kuponavt_cookies[:sort] = "offers.#{sort.first} #{sort.last}, offers.id #{sort.last}"
         end
       else
         kuponavt_cookies[:sort] = Offer.default_sort

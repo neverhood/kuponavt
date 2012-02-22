@@ -79,6 +79,7 @@ class OffersController < ApplicationController
 
       if @offers.except(:limit, :offset).where(id: @offer.id).count > 0
         neighbors = @offer.neighbors( @offers, limit )
+        #binding.pry
       else
         neighbors = @offer.neighbors( @city.offers.
           where(category_id: @offer.category_id ).
