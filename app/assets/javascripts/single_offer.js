@@ -8,7 +8,7 @@ $(document).ready(function() {
 		LIMIT: 50, // Maximum number of before/after arrays elements
 		GET_MORE_AT: 5, // Get more offers from server if either before or after array contains "value" elements
 		NEIGHBORS_COUNT: 3, // Preload by "value" neighbors from both sides
-		MIN_PRELOADED_OFFERS: 1,
+		MIN_PRELOADED_OFFERS: 2,
 
 		// variables
 		id: parseInt($('#offer-plus-arrows div.offer').attr('id').replace('offer-', '')),
@@ -19,6 +19,7 @@ $(document).ready(function() {
 		directions: ['before', 'after'],
 		neighbors: { before: [], after: [] },
 		loading: false,
+        preloading: false,
 
 		// Functions
 		shouldExpectMore: function() {
@@ -73,6 +74,7 @@ $(document).ready(function() {
 
                 $('#loader').remove();
                 $('#left, #right').show();
+                api.preloading = false;
 			});
 
 			return offer;
@@ -80,14 +82,14 @@ $(document).ready(function() {
 		show: function(direction) {
 			if ( direction != 'after' && direction != 'before' ) return;
 
-			if ( api[direction].length && !api.loading ) {
+			if ( api[direction].length && !api.loading && $('#loader').length == 0 ) {
 				var inverseDirection = direction == 'after' ? 'before' : 'after',
 					currentOffer = { id: api.id, html: api.html },
 					offerId = direction == 'after' ? api.after.first() : api.before.last(),
 					offerIndex = direction == 'after' ? 0 : (api.neighbors.before.length - 1);
 
 				if ( api.neighbors[direction].length && api.neighbors[direction][offerIndex].id == offerId ) {
-					var offer = direction == 'after' ? api.neighbors.after.shift() : api.neighbors.before.pop();
+					var offer = direction == 'after' ? api.neighbors.after.first() : api.neighbors.before.last();
 
 					// ready to move
 					if ( api[inverseDirection].length >= api.LIMIT )
@@ -99,10 +101,10 @@ $(document).ready(function() {
 
 					// store current offer id to inverseDirection and set a new offer
 					if ( direction == 'after' ) {
-						api.after.shift();
+						api.after.shift() && api.neighbors.after.shift();
 						api.before.push( api.id );
 					} else {
-						api.before.pop();
+						api.before.pop() && api.neighbors.before.pop();
 						api.after.unshift( api.id );
 					}
 					api.id = offer.id; api.html = offer.html;
@@ -116,6 +118,7 @@ $(document).ready(function() {
 				} else {
                     if ( $('#loader').length == 0 ) $('#loader-container').append('<img src="/assets/loader.gif" id="loader" />');
 					$('#left, #right').hide();
+                    api.preloading = true;
 					return;
 				}
 			}
