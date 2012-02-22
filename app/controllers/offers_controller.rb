@@ -22,48 +22,10 @@ class OffersController < ApplicationController
     # ^ category ids ^ sort ^ page ^ per_page ^ city
   }
 
-  # before_filter :prepare_page_index, :only => [ :index, :search ]
-  # before_filter :prepare_categories_array, :only => :index
-  # before_filter :prepare_sort_attributes, :only => :index
-  # before_filter :prepare_time_period, :only => :index
   before_filter :validate_favourites, :only => :favourites, :if => lambda { |controller| controller.request.xhr? }
   before_filter :validate_search, :only => :search
 
   def index
-    # if request.xhr?
-    #   @offers = @categories ? @city.offers.with_dependencies.
-    #     where(category_id: @categories).
-    #     order(@sort_by).
-    #     page( @page ).per( @per_page )
-    #   : []
-    #   if @time_period && @categories
-    #     @offers = @offers.by_time_period(@time_period)
-    #   end
-
-    #   if @time_period
-    #     @offers_selected_count = @categories ? @city.offers.
-    #       where(category_id: @categories).by_time_period(@time_period).count : @city.offers.categorized.count
-    #   else
-    #     @offers_selected_count = @categories ? @city.offers.
-    #       where(category_id: @categories).count : @city.offers.where('offers.category_id is NOT NULL').count
-    #   end
-    # else
-    #   @offers = Offer.where('id < 0').page( params[:page] ) # empty scope for pagination
-    #   @offers_selected_count = 0
-    # end
-
-    # if request.xhr?
-    #   @offers_selected_count = @offers.total_count
-    #   # if @kuponavt_cookies[:time_period]
-    #   #   @offers_selected_count = @kuponavt_cookies[:categories] ? @city.offers.
-    #   #     where(category_id: @kuponavt_cookies[:categories]).by_time_period(@kuponavt_cookies[:time_period]).count : @city.offers.categorized.count
-    #   # else
-    #   #   @offers_selected_count = @categories ? @city.offers.
-    #   #     where(category_id: @categories).count : @city.offers.where('offers.category_id is NOT NULL').count
-    #   # end
-    # else
-    #   @offers_selected_count = 0
-    # end
 
     @offers_selected_count = request.xhr?? @offers.total_count : 0
     @offers_total_count = @city.offers.where('offers.category_id is NOT NULL').count
@@ -147,7 +109,7 @@ class OffersController < ApplicationController
           end
         end
 
-        render json: json
+        render json: json.merge({id: @offer.id})
       end
     end
   end

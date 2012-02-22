@@ -67,10 +67,25 @@ $(document).ready(function() {
             //if ( $('#loader').length == 0 ) $('#loader-container').append('<img src="/assets/loader.gif" id="loader" />');
             //$('#left, #right').hide();
 
-			$.getJSON('/offers/' + offerId, function(data) { 
+			$.getJSON('/offers/' + offerId, function(data) {
 				offer.id = data.id, offer.html = data.offer;
-				if ( typeof data.before != 'undefined' ) api.neighbors.before = data.before;
-				if ( typeof data.after != 'undefined' ) api.neighbors.after = data.after;
+                if ( api.id == offer.id ) {
+                    if ( typeof data.before != 'undefined' ) api.neighbors.before = data.before;
+                    if ( typeof data.after != 'undefined' ) api.neighbors.after = data.after;
+                    console.log('correct');
+                } else {
+                    //var index = api.after.indexOf( offer.id );
+                    //if ( index == -1 ) index = api.before.indexOf( offer.id );
+                    var direction = api.before.include( offer.id ) ? 'after' : 'before',
+                        required = direction == 'after' ? api.after.first() : api.before.last(),
+                        index;
+
+                    if ( typeof data[direction] != 'undefined' ) {
+                        index = $.map(data[direction], function(offer) { return offer.id }).indexOf( required );
+                        api.neighbors[direction] = data[direction].slice(index);
+                        console.log('synced');
+                    }
+                }
 
                 $('#loader').remove();
                 $('#left, #right').show();
